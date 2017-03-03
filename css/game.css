@@ -1,0 +1,56 @@
+*{
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  position: relative;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  }
+
+.row{
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.cell{
+  flex: 1;
+  overflow: hidden;
+}
+
+.debug{
+  border: 1px dotted #ccc;
+}
+
+.forest{
+  background-color: #1fad62;
+}
+
+.river{
+  background-color: #03a9f4;
+}
+
+.rock{
+  background-color: #888;
+}
+
+.player{
+  max-height: 100%;
+  height: 100%;
+  max-width: 100%;
+  width: 100%;
+  background-size: auto 100% !important;
+}
+
+.player_right{
+  background: url('/img/player_right.png') no-repeat center center transparent;
+}
+
+.player_left{
+  background: url('/img/player_left.png') no-repeat center center transparent;
+}
