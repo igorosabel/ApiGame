@@ -1,0 +1,33 @@
+{
+  "urls": [
+      {
+        "id": "cerrado",
+        "url": "/cerrado",
+        "module": "home",
+        "action": "closed",
+        "comment": "Página temporal, sitio cerrado",
+        "layout": "blank"
+      },
+      {
+        "id": "home",
+        "url": "/",
+        "module": "home",
+        "action": "index",
+        "comment": "Home pública"
+      },
+      {
+        "id": "edit",
+        "url": "/edit",
+        "module": "home",
+        "action": "edit",
+        "comment": "Página para editar escenarios"
+      },
+      {
+        "id": "saveScn",
+        "url": "/api/save-scn",
+        "module": "api",
+        "action": "saveScn",
+        "comment": "Función para añadir un nuevo escenario"
+      }
+  ]
+}

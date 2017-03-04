@@ -1,0 +1,152 @@
+body{
+  background-color: rgb(250,250,250);
+  font-family: Helvetica;
+}
+
+.select-scenario{
+  background-color: rgb(255,255,255);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  margin-left: -300px;
+  margin-top: -300px;
+}
+
+.select-scenario h3{
+  padding: 16px;
+  border-bottom: 1px solid #ccc;
+  margin: 0;
+  font-weight: normal;
+}
+
+.edit-list{
+  margin: 0;
+  height: calc(100% - 55px);
+  padding: 0;
+  overflow: auto;
+}
+
+.edit-list li{
+  border-bottom: 1px solid #eee;
+}
+
+.edit-list li a{
+  display: block;
+  color: #888;
+  text-decoration: none;
+  line-height: 30px;
+  padding: 16px;
+}
+
+.edit-list li a:hover{
+  color: #000;
+  background-color: #eee;
+}
+
+.add-btn{
+  color: rgba(255,255,255,0.87);
+  background-color: rgb(16,108,200);
+  z-index: 20;
+  line-height: 56px;
+  cursor: pointer;
+  min-width: 0;
+  width: 56px;
+  height: 56px;
+  vertical-align: middle;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+  border-radius: 50%;
+  background-clip: padding-box;
+  text-align: center;
+  overflow: hidden;
+  text-decoration: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.add-btn:hover{
+  background-color: rgb(1,89,162);
+}
+
+.add-box-overlay{
+  display: none;
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.add-box-show{
+  display: block;
+}
+
+.add-box{
+  background-color: #fff;
+  width: 400px;
+  position: absolute;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+  border-radius: 2px;
+  left: 50%;
+  margin-left: -200px;
+  top: 30%;
+}
+
+.add-box h3{
+  padding: 16px;
+  border-bottom: 1px solid #ccc;
+  margin: 0;
+  font-weight: normal;
+}
+
+.add-box h3 a{
+  color: #888;
+  text-decoration: none;
+  text-transform: uppercase;
+  float: right;
+}
+
+.add-box h3 a:hover{
+  color: #000;
+}
+
+.add-box-row{
+  padding: 16px;
+  clear: both;
+}
+
+.add-box-txt{
+  line-height: 30px;
+  padding-left: 16px;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.add-box-txt:focus{
+  border-bottom: 1px solid rgb(1,89,162);
+}
+
+.add-box-footer{
+  padding: 16px;
+  border-top: 1px solid #ccc;
+  text-align: right;
+}
+
+.add-box-btn{
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+  line-height: 24px;
+  cursor: pointer;
+  padding: 0 20px;
+}
+
+.add-box-btn:hover{
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+}
