@@ -23,11 +23,25 @@
         "comment": "Página para editar escenarios"
       },
       {
-        "id": "saveScn",
-        "url": "/api/save-scn",
+        "id": "newScenario",
+        "url": "/api/new-scenario",
         "module": "api",
-        "action": "saveScn",
+        "action": "newScenario",
         "comment": "Función para añadir un nuevo escenario"
+      },
+      {
+        "id": "editScenario",
+        "url": "/edit/:id/:slug",
+        "module": "home",
+        "action": "editScenario",
+        "comment": "Página para editar un escenario"
+      },
+      {
+        "id": "saveScenario",
+        "url": "/api/save-scenario",
+        "module": "api",
+        "action": "saveScenario",
+        "comment": "Función para guardar un escenario editado"
       }
   ]
 }

@@ -22,6 +22,28 @@
     
     $t->addJs('edit');
     $t->addCss('edit');
-    $t->addPartial('scenarios', 'public/scenarios', array('scenarios'=>$scenarios));
+    $t->addPartial('scenarios', 'edit/scenarios', array('scenarios'=>$scenarios));
+    $t->process();
+  }
+  
+  /*
+   * Página para editar un escenario
+   */
+  function executeEditScenario($req, $t){
+    $scn = new Scenario();
+    $scn->find(array('id'=>$req['id']));
+    
+    $backgrounds = stPublic::getBackgrounds();
+    
+    $t->add('scn_id',   $scn->get('id'));
+    $t->add('scn_name', $scn->get('name'));
+    $t->add('scn_data', $scn->get('data'));
+    $t->addPartial('backgrounds', 'edit/backgrounds', array('backgrounds'=>$backgrounds));
+    $t->add('bcks_data', json_encode(stPublic::getBackgroundsData($backgrounds)));
+
+    $t->setTitle('Game - '.$scn->get('name'));
+    $t->addJs('edit');
+    $t->addCss('edit');
+    $t->addCss('game');
     $t->process();
   }

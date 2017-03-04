@@ -8,6 +8,17 @@ CREATE TABLE `scenario` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+CREATE TABLE `background` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único de cada fondo',
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Nombre del fondo',
+  `class` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Nombre de la clase',
+  `crossable` tinyint(1) NOT NULL COMMENT 'Indica si la casilla se puede cruzar 1 o no 0',
+  `created_at` datetime NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` datetime NOT NULL COMMENT 'Fecha de última modificación del registro',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 CREATE TABLE `connection` (
   `id_from` int(11) NOT NULL COMMENT 'Id de la categoría en la que está el producto',
   `id_to` int(11) NOT NULL COMMENT 'Id del producto',

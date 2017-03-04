@@ -51,3 +51,7 @@
   
   /* Páginas de error customizadas */
   // $c->setErrorPage('403','/admin');
+  
+  /* Anchura y altura del escenario, en casillas */
+  $c->setExtra('width', 24);
+  $c->setExtra('height', 18);

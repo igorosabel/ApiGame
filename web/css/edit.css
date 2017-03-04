@@ -3,6 +3,7 @@ body{
   font-family: Helvetica;
 }
 
+/* EDIT */
 .select-scenario{
   background-color: rgb(255,255,255);
   border-radius: 2px;
@@ -149,4 +150,155 @@ body{
 
 .add-box-btn:hover{
   box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+}
+
+/* EDIT SCN */
+.scn-name{
+  margin: 16px;
+  line-height: 40px;
+  width: 300px;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  padding-left: 16px;
+  background-color: rgb(250,250,250);
+  font-size: 1.5em;
+  outline: 0;
+}
+
+.scn-name:focus{
+  background-color: #fff;
+  border-bottom: 1px solid #000;
+}
+
+.save-scn{
+  display: block;
+  position: fixed;
+  bottom: 30px;
+  background-color: rgb(59,153,252);
+  left: 30px;
+  color: #fff;
+  line-height: 50px;
+  text-decoration: none;
+  padding: 0 32px;
+  border-radius: 4px;
+}
+
+.save-scn:hover{
+  background-color: rgb(44,145,252);
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+}
+
+.save-scn-disabled{
+  color: #888;
+  background-color: #ccc;
+}
+
+.save-scn-disabled:hover{
+  background-color: #ccc;
+  box-shadow: none;
+  cursor: default;
+}
+
+.board-edit .cell:hover{
+  cursor: pointer;
+  border: 1px dotted #f00;
+}
+
+.cell-selected{
+  border: 1px dotted #00f !important;
+}
+
+.board-menu{
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  background-color: #fff;
+  border-left: 1px solid #ccc;
+  height: 100%;
+  transition: all .3s ease-in-out;
+}
+
+.board-menu-open{
+  right: 0;
+}
+
+.board-menu h3{
+  border-bottom: 1px solid #ccc;
+  margin: 0;
+  padding: 16px;
+}
+
+.board-menu h3 a{
+  color: #888;
+  text-decoration: none;
+  float: right;
+  text-transform: uppercase;
+}
+
+.board-menu h3 a:hover{
+  color: #000;
+}
+
+.board-menu-title{
+  border-bottom: 1px solid #ccc;
+  padding: 16px;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+
+.board-menu-title:hover{
+  background-color: #eee;
+}
+
+.board-menu-title img{
+  vertical-align: middle;
+  transition: all .3s ease-in-out;
+}
+
+.board-menu-title-open{
+  background-color: #ddd;
+}
+
+.board-menu-title-open img{
+  transform: rotate(90deg);
+}
+
+.board-menu-row{
+  transition: all .3s ease-in-out;
+  height: 0px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.board-menu-row:hover{
+  background-color: #eee;
+}
+
+.board-menu-row > *{
+  pointer-events: none;
+}
+
+.board-menu-row-content{
+  padding: 16px;
+  border-bottom: 1px solid #ccc;
+}
+
+.board-menu-row-open{
+  height: 61px;
+}
+
+.board-menu-bck-sample{
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.board-menu-row span{
+  
+}
+
+.board-menu-row img{
+  float: right;
 }
