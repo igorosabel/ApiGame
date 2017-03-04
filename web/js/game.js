@@ -9,6 +9,7 @@ window.onload = function(){
  * Función que inicia el juego: pinta el escenario, carga al jugador y atiende a los eventos del teclado
  */
 function start(){
+  board = document.getElementById('board');
   loadScenario();
   loadPlayer();
 
@@ -18,62 +19,18 @@ function start(){
 /*
  * Modo debug: muestra la cuadrícula
  */
-var debug = true;
+var debug = false;
 
 /*
- * Listado de casillas especiales y sus peculiaridades
+ * Mapa del juego
  */
-var tile_types = {
-  forest: {class: 'forest', cross: false},
-  river:  {class: 'river',  cross: false},
-  rock:   {class: 'rock',   cross: false}
-};
-
-/*
- * Escenario: cuadrícula de 32x32
- *   Objeto vacío: casilla normal, se puede recorrer
- *   Objeto con 'type': casilla especial, se aplica lo que ponga en tile_types
- */
-var scenario = [
-  [{type:'rock'},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{},{},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'},{type:'forest'}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{type:'river'},{type:'river'},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{type:'river'},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
-  [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
-];
+let board = null;
 
 /*
  * Objeto que contiene al jugador
  */
-var player = {
-  position: {x:20,y:15},
+const player = {
+  position: {x:14,y:13},
   orientation: 'right'
 }
 
@@ -81,42 +38,43 @@ var player = {
  * Función para dibujar el escenario
  */
 function loadScenario(){
-  document.body.innerHTML = '';
+  board.innerHTML = '';
   // Líneas
-  for (var i in scenario){
-    var scn_row = scenario[i];
-    var row = document.createElement('div');
+  for (let i in scenario){
+    const scn_row = scenario[i];
+    let row = document.createElement('div');
     row.id = 'row_'+i;
     row.className = 'row';
     // Columnas
-    for (var j in scn_row){
-      var scn_col = scn_row[j];
-      var col = document.createElement('div');
+    for (let j in scn_row){
+      const scn_col = scn_row[j];
+      let col = document.createElement('div');
 	    col.id = 'cell_'+i+'_'+j;
       col.classList.add('cell');
-	    // Si la casilla tiene algun tipo especial se lo añado
-	    if (scn_col.type){
-	      col.classList.add(tile_types[scn_col.type].class);
+	    // Si la casilla tiene fondo se lo añado
+	    if (scn_col.bck){
+	      col.classList.add(backgrounds['bck_'+scn_col.bck].class);
 	    }
 	    if (debug){
 	      col.classList.add('debug');
 	    }
       row.appendChild(col);
     }
-    document.body.appendChild(row);
+    board.appendChild(row);
   }
+  
 }
 
 /*
  * Función para cargar al jugador en el escenario
  */
 function loadPlayer(){
-  var obj = document.createElement('div');
+  let obj = document.createElement('div');
   obj.id = 'player';
   obj.className = 'player';
   obj.classList.add('player_'+player.orientation);
 
-  var where = document.getElementById('cell_'+player.position.x+'_'+player.position.y);
+  const where = document.getElementById('cell_'+player.position.x+'_'+player.position.y);
   where.appendChild(obj);
 }
 
@@ -158,6 +116,7 @@ function playerMove(e){
 	        return false;
 	      }
 	      new_pos.x--;
+	      orientation = 'up';
 	    }
 	    break;
 	    // Abajo
@@ -166,19 +125,18 @@ function playerMove(e){
 	        return false;
 	      }
 	      new_pos.x++;
+	      orientation = 'down';
 	    }
 	    break;
     }
     // Busco casilla de destino
     var new_pos_tile = scenario[new_pos.x][new_pos.y];
-    if (new_pos_tile.type){
-      // Si la casilla de destino no se puede cruzar, fuera
-      if (!tile_types[new_pos_tile.type].cross){
-	      return false;
-	    }
+    // Si la casilla de destino no se puede cruzar, fuera
+    if (!backgrounds['bck_'+new_pos_tile.bck].crossable){
+      return false;
     }
-    player.position    = new_pos;
-    var obj_player = document.getElementById('player');
+    player.position = new_pos;
+    var obj_player  = document.getElementById('player');
     
     obj_player.classList.remove('player_'+player.orientation);
     obj_player.classList.add('player_'+orientation);

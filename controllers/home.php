@@ -10,7 +10,15 @@
    * Home pública
    */
   function executeIndex($req, $t){
+    $scn = new Scenario();
+    $scn->find(array('id'=>1));
+    $backgrounds = stPublic::getBackgrounds();
+    
+    $t->add('scn_data', $scn->get('data'));
+    $t->add('bcks_data', json_encode(stPublic::getBackgroundsData($backgrounds)));
+    
     $t->addJs('game');
+    $t->addCss('game');
     $t->process();
   }
   
