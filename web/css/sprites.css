@@ -1,0 +1,113 @@
+.sprite{
+  width: 100%;
+  height: 100%;
+  background-size: auto 100% !important;
+}
+
+.bush{
+  background: url('/assets/sprite/bush.png') no-repeat center center transparent;
+}
+
+.bush-dry{
+  background: url('/assets/sprite/bush-dry.png') no-repeat center center transparent;
+}
+
+.fence-doble{
+  background: url('/assets/sprite/fence-doble.png') no-repeat center center transparent;
+}
+
+.fence-down{
+  background: url('/assets/sprite/fence-down.png') no-repeat center center transparent;
+}
+
+.fence-right{
+  background: url('/assets/sprite/fence-right.png') no-repeat center center transparent;
+}
+
+.fence-simple{
+  background: url('/assets/sprite/fence-simple.png') no-repeat center center transparent;
+}
+
+.fence-stone{
+  background: url('/assets/sprite/fence-stone.png') no-repeat center center transparent;
+}
+
+.grass-no-flower{
+  background: url('/assets/sprite/grass.png') no-repeat center center transparent;
+}
+
+.grass-flower{
+  background: url('/assets/sprite/grass-flower.png') no-repeat center center transparent;
+}
+
+.grass-flowers{
+  background: url('/assets/sprite/grass-flowers.png') no-repeat center center transparent;
+}
+
+.grass-dry{
+  background: url('/assets/sprite/grass-dry.png') no-repeat center center transparent;
+}
+
+.signal{
+  background: url('/assets/sprite/signal.png') no-repeat center center transparent;
+}
+
+.stone{
+  background: url('/assets/sprite/stone.png') no-repeat center center transparent;
+}
+
+.stone-heavy{
+  background: url('/assets/sprite/stone-heavy.png') no-repeat center center transparent;
+}
+
+.tile{
+  background: url('/assets/sprite/tile.png') no-repeat center center transparent;
+}
+
+.grass-more{
+  background: url('/assets/sprite/grass-more.png') no-repeat center center transparent;
+}
+
+.tall-grass{
+  background: url('/assets/sprite/tall-grass.png') no-repeat center center transparent;
+}
+
+.tall-grass-up-left{
+  background: url('/assets/sprite/tall-grass-up-left.png') no-repeat center center transparent;
+}
+
+.tall-grass-up-right{
+  background: url('/assets/sprite/tall-grass-up-right.png') no-repeat center center transparent;
+}
+
+.tall-grass-down-left{
+  background: url('/assets/sprite/tall-grass-down-left.png') no-repeat center center transparent;
+}
+
+.tall-grass-down-right{
+  background: url('/assets/sprite/tall-grass-down-right.png') no-repeat center center transparent;
+}
+
+.post{
+  background: url('/assets/sprite/post.png') no-repeat center center transparent;
+}
+
+.water-wave{
+  background: url('/assets/sprite/water-wave.png') no-repeat center center transparent;
+}
+
+.water-ripple{
+  background: url('/assets/sprite/water-ripple.png') no-repeat center center transparent;
+}
+
+.water-bubbles-1{
+  background: url('/assets/sprite/water-bubbles-1.png') no-repeat center center transparent;
+}
+
+.water-bubbles-2{
+  background: url('/assets/sprite/water-bubbles-2.png') no-repeat center center transparent;
+}
+
+.stone-water{
+  background: url('/assets/sprite/stone-water.png') no-repeat center center transparent;
+}

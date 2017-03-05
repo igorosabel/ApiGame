@@ -14,10 +14,16 @@
     Fondo
   </div>
   {{backgrounds}}
+  <div class="board-menu-title" id="board-menu-sprs">
+    <img src="/img/closed.svg" />
+    Sprites
+  </div>
+  {{sprites}}
 </aside>
 
 <script>
-  var idScenario = {{scn_id}};
-  var scenario = JSON.parse('{{scn_data}}');
+  var idScenario  = {{scn_id}};
+  var scenario    = JSON.parse('{{scn_data}}');
   var backgrounds = JSON.parse('{{bcks_data}}');
+  var sprites     = JSON.parse('{{sprs_data}}');
 </script>

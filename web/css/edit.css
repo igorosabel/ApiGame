@@ -215,6 +215,7 @@ body{
   width: 300px;
   background-color: #fff;
   border-left: 1px solid #ccc;
+  overflow: auto;
   height: 100%;
   transition: all .3s ease-in-out;
 }
@@ -260,19 +261,32 @@ body{
   background-color: #ddd;
 }
 
+.board-menu-subtitle-open > .board-menu-row-content{
+  background-color: #ddd;
+}
+
 .board-menu-title-open img{
   transform: rotate(90deg);
+}
+
+.board-menu-subtitle{
+  transition: all .3s ease-in-out;
+  padding-left: 20px;
+  height: 0px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.board-menu-subtitle > *{
+  pointer-events: none;
 }
 
 .board-menu-row{
   transition: all .3s ease-in-out;
   height: 0px;
   overflow: hidden;
+  padding-left: 40px;
   cursor: pointer;
-}
-
-.board-menu-row:hover{
-  background-color: #eee;
 }
 
 .board-menu-row > *{
@@ -281,11 +295,21 @@ body{
 
 .board-menu-row-content{
   padding: 16px;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
 
+.board-menu-subtitle:hover > .board-menu-row-content{
+  background-color: #eee;
+}
+
+.board-menu-row:hover > .board-menu-row-content{
+  background-color: #eee;
+}
+
 .board-menu-row-open{
-  height: 61px;
+  height: 62px;
 }
 
 .board-menu-bck-sample{

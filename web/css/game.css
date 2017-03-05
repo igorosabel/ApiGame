@@ -33,6 +33,7 @@ body, html {
 .cell{
   flex: 1;
   overflow: hidden;
+  position: relative;
 }
 
 .debug{
@@ -40,19 +41,25 @@ body, html {
 }
 
 .grass{
-  background-color: rgb(71,152,83);
+  background-color: #489848;
 }
 
 .dirt{
-  background-color: rgb(136,120,79);
+  /*background-color: #887848;*/
+  background: url('/assets/background/dirt.png') no-repeat center center transparent;
+  background-size: 100% 100% !important;
 }
 
 .forest{
   background-color: #1fad62;
 }
 
-.river{
-  background-color: #03a9f4;
+.water-not-deep{
+  background-color: #5880c0;
+}
+
+.water-deep{
+  background-color: #3860a8;
 }
 
 .rock{
@@ -63,6 +70,9 @@ body, html {
   max-height: 100%;
   height: 100%;
   max-width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 10;
   width: 100%;
   background-size: auto 100% !important;
 }

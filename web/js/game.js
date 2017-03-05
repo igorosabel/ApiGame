@@ -45,24 +45,36 @@ function loadScenario(){
     let row = document.createElement('div');
     row.id = 'row_'+i;
     row.className = 'row';
+    
+    board.appendChild(row);
+    
     // Columnas
     for (let j in scn_row){
       const scn_col = scn_row[j];
       let col = document.createElement('div');
 	    col.id = 'cell_'+i+'_'+j;
-      col.classList.add('cell');
-	    // Si la casilla tiene fondo se lo añado
-	    if (scn_col.bck){
-	      col.classList.add(backgrounds['bck_'+scn_col.bck].class);
-	    }
-	    if (debug){
-	      col.classList.add('debug');
-	    }
-      row.appendChild(col);
+	    
+	    row.appendChild(col);
+	    updateCell(i,j);
     }
-    board.appendChild(row);
   }
-  
+}
+
+/*
+ * Función para dibujar una casilla concreta
+ */
+function updateCell(x,y){
+  const cell = document.getElementById('cell_'+x+'_'+y);
+  cell.innerHTML = '';
+  cell.className = 'cell';
+  if (scenario[x][y].bck){
+    cell.classList.add(backgrounds.list['bck_'+scenario[x][y].bck].class);
+  }
+  if (scenario[x][y].spr){
+    const spr = document.createElement('div');
+    spr.className = 'sprite ' + sprites.list['spr_'+scenario[x][y].spr].class;
+    cell.appendChild(spr);
+  }
 }
 
 /*
@@ -132,7 +144,11 @@ function playerMove(e){
     // Busco casilla de destino
     var new_pos_tile = scenario[new_pos.x][new_pos.y];
     // Si la casilla de destino no se puede cruzar, fuera
-    if (!backgrounds['bck_'+new_pos_tile.bck].crossable){
+    if (!backgrounds.list['bck_'+new_pos_tile.bck].crossable){
+      return false;
+    }
+    // Si la casilla de destino no se puede cruzar, fuera
+    if (new_pos_tile.spr && !sprites.list['spr_'+new_pos_tile.spr].crossable){
       return false;
     }
     player.position = new_pos;

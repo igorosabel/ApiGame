@@ -4,8 +4,10 @@ window.onload = function(){
   const saveBtn  = document.getElementById('new-scn-go');
   const board    = document.getElementById('board');
   const boardMenuBtn   = document.getElementById('board-menu-close');
-  const boardMenuItems = document.querySelectorAll('.board-menu-title');
-  const bcks = document.querySelectorAll('.board-menu-bcks');
+  const boardMenuTitles = document.querySelectorAll('.board-menu-title');
+  const boardMenuSubTitles = document.querySelectorAll('.board-menu-subtitle');
+  const bcks = document.querySelectorAll('.board-menu-row-bck');
+  const sprs = document.querySelectorAll('.board-menu-row-spr');
   const saveScnBtn = document.getElementById('save-scn');
   
   addBtn   && addBtn.addEventListener('click', showAddBox);
@@ -15,8 +17,10 @@ window.onload = function(){
   board && loadScenario();
   
   boardMenuBtn && boardMenuBtn.addEventListener('click', boardMenuClose);
-  boardMenuItems.forEach(item => item.addEventListener('click', openMenuItem));
+  boardMenuTitles.forEach(item => item.addEventListener('click', openMenuTitle));
+  boardMenuSubTitles.forEach(item => item.addEventListener('click', openMenuSubtitle));
   bcks.forEach(item => item.addEventListener('click', selectBck));
+  sprs.forEach(item => item.addEventListener('click', selectSpr));
   saveScnBtn && saveScnBtn.addEventListener('click', saveScenario);
 };
 
@@ -78,22 +82,18 @@ function loadScenario(){
     let row = document.createElement('div');
     row.id = 'row_'+i;
     row.className = 'row';
+    
+    board.appendChild(row);
+    
     // Columnas
     for (let j in scn_row){
       const scn_col = scn_row[j];
       let col = document.createElement('div');
 	    col.id = 'cell_'+i+'_'+j;
-      col.classList.add('cell');
-	    // Si la casilla tiene fondo se lo añado
-	    if (scn_col.bck){
-	      col.classList.add(backgrounds['bck_'+scn_col.bck].class);
-	    }
-	    if (debug){
-	      col.classList.add('debug');
-	    }
-      row.appendChild(col);
+	    
+	    row.appendChild(col);
+	    updateCell(i,j,false);
     }
-    board.appendChild(row);
   }
   
   const cells = board.querySelectorAll('.cell');
@@ -146,7 +146,7 @@ function boardMenuClose(e){
   cells.forEach(cell => cell.classList.remove('cell-selected'));
 }
 
-function openMenuItem(e){
+function openMenuTitle(e){
   const title = e.target;
   const id = title.id.replace('board-menu-', '');
   const rows = document.querySelectorAll('.board-menu-'+id);
@@ -161,6 +161,21 @@ function openMenuItem(e){
   }
 }
 
+function openMenuSubtitle(e){
+  const title = e.target;
+  const id = title.id.replace('board-menu-', '');
+  const rows = document.querySelectorAll('.board-menu-'+id);
+  
+  if (!title.classList.contains('board-menu-subtitle-open')){
+    title.classList.add('board-menu-subtitle-open');
+    rows.forEach(row => row.classList.add('board-menu-row-open'));
+  }
+  else{
+    title.classList.remove('board-menu-subtitle-open');
+    rows.forEach(row => row.classList.remove('board-menu-row-open'));
+  }
+}
+
 /*
  * Función para añadir un fono a una casilla
  */
@@ -168,14 +183,45 @@ function selectBck(e){
   e.stopPropagation();
   var bck = e.target;
   var id = parseInt(bck.dataset.id);
-  console.log(id);
   
   scenario[selectedCell.x][selectedCell.y].bck = id;
-  const cell = document.getElementById('cell_'+selectedCell.x+'_'+selectedCell.y);
-  cell.className = 'cell debug cell-selected';
-  cell.classList.add(backgrounds['bck_'+id].class);
+  updateCell(selectedCell.x,selectedCell.y,true);
   
   setAllSaved(false);
+}
+
+/*
+ * Función para añadir un sprite a una casilla
+ */
+function selectSpr(e){
+  e.stopPropagation();
+  var spr = e.target;
+  var id = parseInt(spr.dataset.id);
+  
+  scenario[selectedCell.x][selectedCell.y].spr = id;
+  updateCell(selectedCell.x,selectedCell.y,true);
+  
+  setAllSaved(false);
+}
+
+/*
+ * Función para dibujar una casilla concreta
+ */
+function updateCell(x,y,sel){
+  const cell = document.getElementById('cell_'+x+'_'+y);
+  cell.innerHTML = '';
+  cell.className = 'cell debug';
+  if (sel){
+    cell.classList.add('cell-selected');
+  }
+  if (scenario[x][y].bck){
+    cell.classList.add(backgrounds.list['bck_'+scenario[x][y].bck].class);
+  }
+  if (scenario[x][y].spr){
+    const spr = document.createElement('div');
+    spr.className = 'sprite ' + sprites.list['spr_'+scenario[x][y].spr].class;
+    cell.appendChild(spr);
+  }
 }
 
 /*
