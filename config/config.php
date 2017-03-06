@@ -35,7 +35,7 @@
   $c->setAdminEmail('inigo.gorosabel@gmail.com');
   
   /* Lista de CSS por defecto */
-  $c->setCssList( array('game') );
+  $c->setCssList( array() );
   
   /* Lista de JavaScript por defecto */
   $c->setJsList( array('common') );
@@ -50,7 +50,7 @@
   //$c->setPaginaCerrada(true);
   
   /* Páginas de error customizadas */
-  // $c->setErrorPage('403','/admin');
+  $c->setErrorPage('403','/');
   
   /* Anchura y altura del escenario, en casillas */
   $c->setExtra('width', 24);

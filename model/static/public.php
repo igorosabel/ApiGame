@@ -3,6 +3,22 @@
    * Clase con funciones generales para usar a lo largo del sitio
    */
 class stPublic{
+  public static function getGames($id_user){
+    $ret = array();
+    $db = new ODB();
+    $sql = sprintf("SELECT * FROM `game` WHERE `id_user` = %s", $id_user);
+    $db->query($sql);
+    
+    while ($res = $db->next()){
+      $game = new Game();
+      $game->update($res);
+      
+      array_push($ret, $game);
+    }
+    
+    return $ret;
+  }
+  
   public static function getScenarios(){
     $ret = array();
     $db = new ODB();

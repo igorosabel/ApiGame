@@ -1,0 +1,38 @@
+html, body{
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica;
+  background: url('/img/game-bg.png');
+}
+
+*{
+  box-sizing: border-box;
+}
+
+.player-select-title{
+  position: absolute;
+  top: 50px;
+  left: 50px;
+}
+
+.player-select{
+  position: absolute;
+  width: 80%;
+  height: 66%;
+  background: url(/img/player-select-bg.png) no-repeat center center transparent;
+  background-size: 100% 100%;
+  top: 200px;
+  left: 10%;
+  padding-top: 5%;
+  padding-left: 10%;
+}
+
+.player-select-game{
+  margin-bottom: 30px;
+  padding-left: 10%;
+  position: relative;
+}
+
+.player-select-game-selected{
+  background: url(/img/fairy.png) no-repeat 40px center transparent;
+}

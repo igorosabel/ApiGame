@@ -8,8 +8,7 @@
     
     if ($s->getParam('logged')){      
       $req['filter']['status'] = 'ok';
-      $req['filter']['id'] = $s->getParam('id');
-      $req['filter']['name'] = $s->getParam('name');
+      $req['filter']['id']     = $s->getParam('id');
     }
     
     return $req;

@@ -13,7 +13,36 @@
         "url": "/",
         "module": "home",
         "action": "index",
-        "comment": "Home pública"
+        "comment": "Pantalla de inicio"
+      },
+      {
+        "id": "login",
+        "url": "/api/login",
+        "module": "api",
+        "action": "login",
+        "comment": "Función para iniciar sesión"
+      },
+      {
+        "id": "register",
+        "url": "/api/register",
+        "module": "api",
+        "action": "register",
+        "comment": "Función para registrar un nuevo usuario"
+      },
+      {
+        "id": "playerSelect",
+        "url": "/player-select",
+        "module": "home",
+        "action": "playerSelect",
+        "comment": "Página para elegir partida",
+        "filter": "sessionFilter"
+      },
+      {
+        "id": "game",
+        "url": "/game",
+        "module": "home",
+        "action": "game",
+        "comment": "Pantalla de juego"
       },
       {
         "id": "edit",

@@ -1,5 +1,88 @@
 <?php
   /*
+   * Función para iniciar sesión
+   */
+  function executeLogin($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $email  = Base::getParam('email', $req['url_params'], false);
+    $pass   = Base::getParam('pass',  $req['url_params'], false);
+    
+    if ($email===false || $pass===false){
+      $status = 'error';
+    }
+    
+    if ($status=='ok'){
+      $email = urldecode($email);
+      $pass  = urldecode($pass);
+      $u = new User();
+      if ($u->login($email,$pass)){
+        $s->addParam('logged', true);
+        $s->addParam('id',     $u->get('id'));
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->process();
+  }
+  
+  /*
+   * Función para registrar un nuevo usuario
+   */
+  function executeRegister($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $email  = Base::getParam('email', $req['url_params'], false);
+    $pass   = Base::getParam('pass',  $req['url_params'], false);
+    
+    if ($email===false || $pass===false){
+      $status = 'error';
+    }
+    
+    if ($status=='ok'){
+      $u = new User();
+      $email = urldecode($email);
+      $pass  = urldecode($pass);
+      
+      if ($u->find(array('email'=>$email))){
+        $status = 'error';
+      }
+      else{
+        $u->set('email', $email);
+        $u->set('pass',  sha1('gam_'.$pass.'_gam'));
+        $u->save();
+        
+        for ($i=0;$i<3;$i++){
+          $game = new Game();
+          $game->set('id_user', $u->get('id'));
+          $game->set('name', null);
+          $game->set('id_scenario', null);
+          $game->set('position_x', null);
+          $game->set('position_y', null);
+          $game->save();
+        }
+        
+        $s->addParam('logged', true);
+        $s->addParam('id',     $u->get('id'));
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->process();
+  }
+  
+  /*
    * Función para añadir un nuevo escenario
    */
   function executeNewScenario($req, $t){

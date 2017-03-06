@@ -1,7 +1,40 @@
-<div id="board" class="board"></div>
+<header>
+  <img src="/img/triforce.png" />
+  Legend Of Zelda
+</header>
 
-<script>
-  var scenario    = JSON.parse('{{scn_data}}');
-  var backgrounds = JSON.parse('{{bcks_data}}');
-  var sprites     = JSON.parse('{{sprs_data}}');
-</script>
+<div class="home-box">
+  <div class="home-tabs">
+    <div id="tab-login" class="home-tab home-tab-selected">Iniciar sesión</div>
+    <div id="tab-register" class="home-tab">Registro</div>
+  </div>
+  <div id="tab-content-login" class="home-tab-content home-tab-selected">
+    <form action="#" method="post" id="form-login">
+      <div class="home-row">
+        <input type="email" class="home-input" name="login-email" id="login-email" value="" placeholder="E-mail" />
+      </div>
+      <div class="home-row">
+        <input type="password" class="home-input" name="login-pass" id="login-pass" value="" placeholder="Contraseña" />
+      </div>
+      <div class="home-row">
+        <input type="submit" class="home-btn" id="login-go" value="Continuar" />
+      </div>
+    </form>
+  </div>
+  <div id="tab-content-register" class="home-tab-content">
+    <form action="#" method="post" id="form-register">
+      <div class="home-row">
+        <input type="email" class="home-input" name="register-email" id="register-email" value="" placeholder="E-mail" />
+      </div>
+      <div class="home-row">
+        <input type="email" class="home-input" name="register-conf" id="register-conf" value="" placeholder="Confirmar e-mail" />
+      </div>
+      <div class="home-row">
+        <input type="password" class="home-input" name="register-pass" id="register-pass" value="" placeholder="Contraseña" />
+      </div>
+      <div class="home-row">
+        <input type="submit" class="home-btn" id="register-go" value="Continuar" />
+      </div>
+    </form>
+  </div>
+</div>
