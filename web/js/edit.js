@@ -52,8 +52,7 @@ function newScenario(){
 
 function newScenarioSuccess(data){
   if (data.status=='ok'){
-    const scn = template('scn-tpl',{id: data.id, name: urldecode(data.name), slug: slugify(urldecode(data.name))});
-    document.getElementById('scn-list').innerHTML += scn;
+    document.getElementById('scn-list').innerHTML += template('scn-tpl',{id: data.id, name: urldecode(data.name), slug: slugify(urldecode(data.name))});
     closeAddBox();
   }
   else{
@@ -65,11 +64,6 @@ function newScenarioSuccess(data){
   800 - 24
   600 - 18
 */
-
-/*
- * Modo debug: muestra la cuadrícula
- */
-var debug = true;
 
 /*
  * Función para dibujar el escenario
@@ -117,7 +111,7 @@ function selectCell(e){
   const cell = e.target;
   
   const id = cell.id.replace('cell_', '');
-  var [x,y] = id.split('_');
+  const [x,y] = id.split('_');
   selectedCell.x = x;
   selectedCell.y = y;
   
@@ -181,10 +175,9 @@ function openMenuSubtitle(e){
  */
 function selectBck(e){
   e.stopPropagation();
-  var bck = e.target;
-  var id = parseInt(bck.dataset.id);
-  
-  scenario[selectedCell.x][selectedCell.y].bck = id;
+  const bck = e.target;
+
+  scenario[selectedCell.x][selectedCell.y].bck = parseInt(bck.dataset.id);
   updateCell(selectedCell.x,selectedCell.y,true);
   
   setAllSaved(false);
@@ -195,10 +188,9 @@ function selectBck(e){
  */
 function selectSpr(e){
   e.stopPropagation();
-  var spr = e.target;
-  var id = parseInt(spr.dataset.id);
-  
-  scenario[selectedCell.x][selectedCell.y].spr = id;
+  const spr = e.target;
+
+  scenario[selectedCell.x][selectedCell.y].spr = parseInt(spr.dataset.id);
   updateCell(selectedCell.x,selectedCell.y,true);
   
   setAllSaved(false);
@@ -258,6 +250,6 @@ function saveScenario(e){
 /*
  * Función de respuesta al guardar un escenario
  */
-function saveScenarioSuccess(data){
+function saveScenarioSuccess(){
   setAllSaved(true);
 }

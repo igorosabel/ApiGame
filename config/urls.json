@@ -39,16 +39,16 @@
       },
       {
         "id": "game",
-        "url": "/game",
+        "url": "/game/:id",
         "module": "home",
         "action": "game",
         "comment": "Pantalla de juego"
       },
       {
-        "id": "edit",
-        "url": "/edit",
-        "module": "home",
-        "action": "edit",
+        "id": "scenarios",
+        "url": "/admin/scenarios",
+        "module": "admin",
+        "action": "scenarios",
         "comment": "Página para editar escenarios"
       },
       {
@@ -60,8 +60,8 @@
       },
       {
         "id": "editScenario",
-        "url": "/edit/:id/:slug",
-        "module": "home",
+        "url": "/edit-scenario/:id/:slug",
+        "module": "admin",
         "action": "editScenario",
         "comment": "Página para editar un escenario"
       },

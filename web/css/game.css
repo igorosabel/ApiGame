@@ -78,17 +78,17 @@ body, html {
 }
 
 .player_right{
-  background: url('/assets/player/link_right.png') no-repeat center center transparent;
+  background: url('/assets/player/link-right.png') no-repeat center center transparent;
 }
 
 .player_left{
-  background: url('/assets/player/link_left.png') no-repeat center center transparent;
+  background: url('/assets/player/link-left.png') no-repeat center center transparent;
 }
 
 .player_up{
-  background: url('/assets/player/link_up.png') no-repeat center center transparent;
+  background: url('/assets/player/link-up.png') no-repeat center center transparent;
 }
 
 .player_down{
-  background: url('/assets/player/link_down.png') no-repeat center center transparent;
+  background: url('/assets/player/link-down.png') no-repeat center center transparent;
 }

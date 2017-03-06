@@ -36,3 +36,61 @@ html, body{
 .player-select-game-selected{
   background: url(/img/fairy.png) no-repeat 40px center transparent;
 }
+
+.new-game{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: none;
+}
+
+.new-game-show{
+  display: block;
+}
+
+.new-game-box{
+
+}
+
+.new-game-header{
+
+}
+
+.new-game-header a{
+
+}
+
+.new-game-header a:hover{
+
+}
+
+.new-game-info{
+
+}
+
+.new-game-info img{
+
+}
+
+.new-game-info input{
+
+}
+
+.new-game-info input:focus{
+
+}
+
+.new-game-footer{
+
+}
+
+.new-game-footer input{
+
+}
+
+.new-game-footer input:hover{
+
+}
