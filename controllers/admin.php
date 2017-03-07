@@ -1,13 +1,69 @@
 <?php
   /*
+   * Inicio de sesión en panel admin
+   */
+  function executeAdmin($req, $t){
+    global $s;
+
+    $msg = '';
+    if ($s->getParam('admin_error')){
+      $msg = 'El nombre de usuario o contraseña no son correctos.';
+      $s->removeParam('admin_error');
+    }
+
+    $t->add('msg', $msg);
+    $t->addCss('home');
+    $t->process();
+  }
+
+  /*
+   * Función para iniciar sesión en el panel admin
+   */
+  function executeLogin($req, $t){
+    global $c, $s;
+    $status = 'ok';
+    $user = Base::getParam('user', $req['url_params'], false);
+    $pass = Base::getParam('pass', $req['url_params'], false);
+
+    if ($user===false || $pass===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      if ($user=='admin' && $pass==$c->getExtra('admin_pass')){
+        $status = 'ok';
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    if ($status=='ok'){
+      $s->addParam('admin', true);
+      header('Location:'.OUrl::generateUrl('adminMain'));
+    }
+    else{
+      $s->addParam('admin_error',true);
+      header('Location:'.OUrl::generateUrl('admin'));
+    }
+  }
+
+  /*
+   * Página inicial en el panel admin
+   */
+  function executeMain($req, $t){
+    $t->addCss('admin');
+    $t->process();
+  }
+
+  /*
    * Página para editar escenarios
    */
   function executeScenarios($req, $t){
     $scenarios = stAdmin::getScenarios();
 
-    $t->addJs('edit');
-    $t->addCss('edit');
-    $t->addPartial('scenarios', 'edit/scenarios', array('scenarios'=>$scenarios));
+    $t->addCss('admin');
+    $t->addPartial('scenarios', 'admin/scenarios', array('scenarios'=>$scenarios));
     $t->process();
   }
 
@@ -24,14 +80,13 @@
     $t->add('scn_id',   $scn->get('id'));
     $t->add('scn_name', $scn->get('name'));
     $t->add('scn_data', $scn->get('data'));
-    $t->addPartial('backgrounds', 'edit/backgrounds', array('backgrounds'=>$backgrounds));
+    $t->addPartial('backgrounds', 'admin/backgrounds', array('backgrounds'=>$backgrounds));
     $t->add('bcks_data', json_encode(stPublic::getBackgroundsData($backgrounds)));
-    $t->addPartial('sprites', 'edit/sprites', array('sprites'=>$sprites));
+    $t->addPartial('sprites', 'admin/sprites', array('sprites'=>$sprites));
     $t->add('sprs_data', json_encode(stPublic::getSpritesData($sprites)));
 
     $t->setTitle('Game - '.$scn->get('name'));
-    $t->addJs('edit');
-    $t->addCss('edit');
+    $t->addCss('admin');
     $t->addCss('game');
     $t->addCss('sprites');
     $t->process();

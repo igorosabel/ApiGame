@@ -11,17 +11,14 @@ body, html {
 }
 
 .board{
-  position: absolute;
   width: 800px;
   height: 600px;
   background-color: #fff;
-  top: 50%;
-  left: 50%;
-  margin-left: -400px;
-  margin-top: -265px;
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
+  margin-left: calc(50% - 400px);
+  transition: all .3s ease-in-out;
 }
 
 .row{

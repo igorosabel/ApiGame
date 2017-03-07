@@ -1,22 +1,18 @@
-window.onload = function(){
-  const games = document.querySelectorAll('.player-select-game');
-  games.forEach(game => game.addEventListener('mouseover', overGame));
-  games.forEach(game => game.addEventListener('click', selectGame));
-  document.body.addEventListener('keydown',changeGame);
+const games = document.querySelectorAll('.player-select-game');
+games.forEach(game => game.addEventListener('mouseover', overGame, true));
+games.forEach(game => game.addEventListener('click', selectGame));
+document.body.addEventListener('keydown',changeGame);
 
-  const newClose = document.getElementById('new-game-close');
-  const newForm = document.getElementById('form-new-game');
-  newClose.addEventListener('click', closeAddGame);
-  newForm.addEventListener('submit', sendAddGame);
-
-  selectedGameId = document.querySelector('.player-select-game-selected').dataset.id;
-};
+const newClose = document.getElementById('new-game-close');
+const newForm = document.getElementById('form-new-game');
+newClose.addEventListener('click', closeAddGame);
+newForm.addEventListener('submit', sendAddGame);
 
 /*
  * Partida elegida
  */
 let selectedGame = 1;
-let selectedGameId = null;
+let selectedGameId = document.querySelector('.player-select-game-selected').dataset.id;
 
 /*
  * Función para mover entre las partidas disponibles
@@ -52,7 +48,7 @@ function changeGame(e){
  * Función que se ejecuta al pasar el ratón sobre cada partida
  */
 function overGame(e){
-  const game = e.target;
+  const game = this;
   const id = game.id.replace('player-select-game-','');
   selectedGame = parseInt(id);
   changeSelectedGame();
@@ -73,7 +69,7 @@ function changeSelectedGame(){
  * Función para seleccionar una partida
  */
 function selectGame(e){
-  const game = e.target;
+  const game = this;
   const name = game.querySelector('.player-select-name');
 
   // Partida existente

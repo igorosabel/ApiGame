@@ -1,0 +1,55 @@
+@font-face {
+  font-family: 'GraphicPixel';
+  src: url('../fonts/graphicpixel-webfont.eot');
+  src: url('../fonts/graphicpixel-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/graphicpixel-webfont.woff') format('woff'),
+  url('../fonts/graphicpixel-webfont.ttf') format('truetype'),
+  url('../fonts/graphicpixel-webfont.svg#GraphicPixelRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html, body{
+  margin: 0;
+  padding: 0;
+  font-family: 'GraphicPixel';
+  -webkit-text-size-adjust: 100%;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  -webkit-appearance: none;
+  background-color: #000;
+  color: #fff;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+header{
+  position: fixed;
+  line-height: 50px;
+  font-size: 1.5em;
+  height: 50px;
+  width: 100%;
+  top: 0;
+  padding-left: 16px;
+}
+
+header img{
+  height: 80%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+header a{
+  color: #fff;
+  text-decoration: none;
+}
+
+header a:hover{
+  color: #ff0;
+}
+
+.error-msg{
+
+}

@@ -45,32 +45,58 @@
         "comment": "Pantalla de juego"
       },
       {
+        "id": "admin",
+        "url": "/admin",
+        "module": "admin",
+        "action": "admin",
+        "comment": "Inicio de sesión en panel admin"
+      },
+      {
+        "id": "adminLogin",
+        "url": "/admin/login",
+        "module": "admin",
+        "action": "login",
+        "comment": "Función para iniciar sesión en el panel admin"
+      },
+      {
+        "id": "adminMain",
+        "url": "/admin/main",
+        "module": "admin",
+        "action": "main",
+        "comment": "Página inicial en el panel admin",
+        "filter": "adminFilter"
+      },
+      {
         "id": "scenarios",
         "url": "/admin/scenarios",
         "module": "admin",
         "action": "scenarios",
-        "comment": "Página para editar escenarios"
+        "comment": "Página para editar escenarios",
+        "filter": "adminFilter"
       },
       {
         "id": "newScenario",
         "url": "/api/new-scenario",
         "module": "api",
         "action": "newScenario",
-        "comment": "Función para añadir un nuevo escenario"
+        "comment": "Función para añadir un nuevo escenario",
+        "filter": "adminFilter"
       },
       {
         "id": "editScenario",
         "url": "/edit-scenario/:id/:slug",
         "module": "admin",
         "action": "editScenario",
-        "comment": "Página para editar un escenario"
+        "comment": "Página para editar un escenario",
+        "filter": "adminFilter"
       },
       {
         "id": "saveScenario",
         "url": "/api/save-scenario",
         "module": "api",
         "action": "saveScenario",
-        "comment": "Función para guardar un escenario editado"
+        "comment": "Función para guardar un escenario editado",
+        "filter": "adminFilter"
       }
   ]
 }

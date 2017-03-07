@@ -1,28 +1,3 @@
-html, body{
-  margin: 0;
-  padding: 0;
-  font-family: Helvetica;
-  background-color: #000;
-  color: #fff;
-}
-
-*{
-  box-sizing: border-box;
-}
-
-header{
-  position: fixed;
-  line-height: 50px;
-  height: 50px;
-  padding-left: 16px;
-}
-
-header img{
-  height: 80%;
-  display: inline-block;
-  vertical-align: middle;
-}
-
 .home-box{
   position: absolute;
   top: 50%;
@@ -64,6 +39,7 @@ header img{
 }
 
 .home-input{
+  font-family: 'GraphicPixel';
   line-height: 50px;
   font-size: 1.3em;
   padding-left: 16px;
@@ -71,6 +47,7 @@ header img{
   border: 0;
   border-bottom: 1px solid #ccc;
   outline: 0;
+  -webkit-appearance: none;
 }
 
 .home-input:focus{
@@ -78,6 +55,7 @@ header img{
 }
 
 .home-btn{
+  font-family: 'GraphicPixel';
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -88,6 +66,7 @@ header img{
   float: right;
   margin-bottom: 16px;
   font-size: 1.3em;
+  -webkit-appearance: none;
 }
 
 .home-btn:hover{

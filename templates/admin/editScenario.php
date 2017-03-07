@@ -1,3 +1,8 @@
+<header>
+  <img src="/img/triforce.png" />
+  <a href="/admin/main">Admin</a> > <a href="/admin/scenarios">Escenarios</a> > Editar escenario
+</header>
+
 <input type="text" class="scn-name" name="scn-name" id="scn-name" value="{{scn_name}}" placeholder="Nombre del escenario" />
 
 <a href="#" id="save-scn" class="save-scn save-scn-disabled">Guardar</a>
@@ -27,3 +32,4 @@
   var backgrounds = JSON.parse('{{bcks_data}}');
   var sprites     = JSON.parse('{{sprs_data}}');
 </script>
+<script src="/js/admin-edit-scenario.js"></script>

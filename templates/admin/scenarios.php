@@ -1,3 +1,8 @@
+<header>
+  <img src="/img/triforce.png" />
+  <a href="/admin/main">Admin</a> > Escenarios
+</header>
+
 <div class="select-scenario">
   <h3>Elige escenario</h3>
   <ul id="scn-list" class="edit-list">
@@ -27,3 +32,5 @@
     <a href="/edit/{{id}}/{{slug}}">{{name}}</a>
   </li>
 </script>
+
+<script src="/js/admin-scenarios.js"></script>

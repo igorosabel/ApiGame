@@ -35,7 +35,7 @@
   $c->setAdminEmail('inigo.gorosabel@gmail.com');
   
   /* Lista de CSS por defecto */
-  $c->setCssList( array() );
+  $c->setCssList( array('common') );
   
   /* Lista de JavaScript por defecto */
   $c->setJsList( array('common') );
@@ -55,3 +55,6 @@
   /* Anchura y altura del escenario, en casillas */
   $c->setExtra('width', 24);
   $c->setExtra('height', 18);
+
+  /* Contraseña del panel admin */
+  $c->setExtra('admin_pass', 'patata');

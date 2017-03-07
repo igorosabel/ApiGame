@@ -25,7 +25,6 @@
     $t->addPartial('games', 'public/games', array('games'=>$games));
     
     $t->addCss('player-select');
-    $t->addJs('player-select');
     $t->process();
   }
 

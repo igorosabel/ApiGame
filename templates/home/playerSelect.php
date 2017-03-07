@@ -21,3 +21,5 @@
     </div>
   </div>
 </form>
+
+<script src="/js/player-select.js"></script>
