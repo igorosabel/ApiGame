@@ -105,6 +105,14 @@
         "action": "saveScenario",
         "comment": "Función para guardar un escenario editado",
         "filter": "adminFilter"
+      },
+      {
+        "id": "backgrounds",
+        "url": "/admin/backgrounds",
+        "module": "admin",
+        "action": "backgrounds",
+        "comment": "Página para editar los fondos",
+        "filter": "adminFilter"
       }
   ]
 }

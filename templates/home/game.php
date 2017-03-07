@@ -1,6 +1,6 @@
 <header>
   <img src="/img/triforce.png" />
-  Admin
+  The Legend Of Zelda
 </header>
 
 <div class="game">

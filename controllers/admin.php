@@ -91,3 +91,15 @@
     $t->addCss('sprites');
     $t->process();
   }
+  
+  /*
+   * Página para editar los fondos
+   */
+  function executeBackgrounds($req, $t){
+    $backgrounds = stPublic::getBackgrounds();
+
+    $t->addCss('admin');
+    $t->addCss('game');
+    $t->addPartial('backgrounds', 'admin/backgrounds_edit', array('backgrounds'=>$backgrounds));
+    $t->process();
+  }

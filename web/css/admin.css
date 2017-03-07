@@ -19,7 +19,7 @@
   font-size: 1.6em;
 }
 
-/* EDIT */
+/* SCENARIOS */
 .select-scenario{
   background-color: rgb(255,255,255);
   border-radius: 2px;
@@ -358,4 +358,71 @@
 
 .board-menu-row img{
   float: right;
+}
+
+/* BACKGROUNDS */
+.backgrounds-list{
+  padding-top: 80px;
+}
+
+.background-category{
+  background-color: #fff;
+  color: #000;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  width: 600px;
+}
+
+.background-category-header{
+  line-height: 36px;
+  font-size: 1.2em;
+}
+
+.background-category-deploy{
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.background-category-btn{
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 10px;
+  margin-top: 10px;
+  float: right;
+}
+
+.background-category-edit{
+}
+
+.background-category-delete{
+}
+
+.background-category-list{
+  height: 0px;
+  overflow: hidden;
+}
+
+.background-item{
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.background-item-sample{
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+.background-item-name{
+  display: inline-block;
+}
+
+.background-item-options{
+  display: inline-block;
+  float: right;
+}
+
+.background-item-options img{
+  cursor: pointer;
 }
