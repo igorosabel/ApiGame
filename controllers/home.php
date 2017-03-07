@@ -34,17 +34,20 @@
   function executeGame($req, $t){
     $id_game = $req['id'];
 
+    $game = new Game();
+    $game->find(array('id'=>$req['id']));
     $scn = new Scenario();
-    $scn->find(array('id'=>1));
+    $scn->find(array('id'=>$game->get('id_scenario')));
+    
     $backgrounds = stPublic::getBackgrounds();
     $sprites     = stPublic::getSprites();
     
     $t->add('scn_data', $scn->get('data'));
+    $t->add('position_x', $game->get('position_x'));
+    $t->add('position_y', $game->get('position_y'));
     $t->add('bcks_data', json_encode(stPublic::getBackgroundsData($backgrounds)));
     $t->add('sprs_data', json_encode(stPublic::getSpritesData($sprites)));
     
-    $t->addJs('player');
-    $t->addJs('game');
     $t->addCss('game');
     $t->addCss('sprites');
     $t->process();

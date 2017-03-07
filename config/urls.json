@@ -38,6 +38,14 @@
         "filter": "sessionFilter"
       },
       {
+        "id": "newGame",
+        "url": "/api/new-game",
+        "module": "api",
+        "action": "newGame",
+        "comment": "Función para crear una nueva partida",
+        "filter": "sessionFilter"
+      },
+      {
         "id": "game",
         "url": "/game/:id",
         "module": "home",

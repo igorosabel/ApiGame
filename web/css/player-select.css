@@ -1,4 +1,7 @@
-body{
+.player-select-bg{
+  width: 100%;
+  height: 100%;
+  position: relative;
   background: url('/img/game-bg.png');
 }
 
@@ -22,11 +25,24 @@ body{
   margin-top: 50px;
   padding-left: 125px;
   position: relative;
+  overflow: hidden;
   width: 100%;
 }
 
 .player-select-game-selected{
   background: url(/img/fairy.png) no-repeat 40px center transparent;
+}
+
+.player-select-game img{
+  vertical-align: middle;
+  float: left;
+}
+
+.player-select-name{
+  display: inline-block;
+  font-size: 3em;
+  line-height: 46px;
+  float: left;
 }
 
 .new-game{
@@ -44,45 +60,72 @@ body{
 }
 
 .new-game-box{
-
+  width: 400px;
+  height: 232px;
+  position: absolute;
+  background-color: #000;
+  top: 50%;
+  left: 50%;
+  margin-top: -116px;
+  margin-left: -200px;
+  border: 4px solid #ff0;
 }
 
 .new-game-header{
-
+  padding: 16px;
+  font-size: 1.5em;
 }
 
 .new-game-header a{
-
+  color: #fff;
+  text-decoration: none;
+  float: right;
+  text-transform: uppercase;
 }
 
 .new-game-header a:hover{
-
+  color: #888;
 }
 
 .new-game-info{
-
+  padding: 16px;
 }
 
 .new-game-info img{
-
+  width: 32px;
+  display: inline-block;
+  margin-right: 16px;
+  vertical-align: middle;
 }
 
 .new-game-info input{
-
-}
-
-.new-game-info input:focus{
-
+  line-height: 32px;
+  width: 300px;
+  padding-left: 16px;
+  font-size: 1.2em;
+  outline: 0;
+  font-family: 'GraphicPixel';
 }
 
 .new-game-footer{
-
+  padding: 16px;
+  text-align: right;
 }
 
 .new-game-footer input{
-
+  font-family: 'GraphicPixel';
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  line-height: 50px;
+  display: inline-block;
+  padding: 0 16px;
+  margin-bottom: 16px;
+  font-size: 1.3em;
+  -webkit-appearance: none;
 }
 
 .new-game-footer input:hover{
-
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
 }

@@ -4,8 +4,8 @@
 const player = {
   name: 'dunedain',
   position: {
-    x: 14,
-    y: 13
+    x: position_x,
+    y: position_y
   },
   orientation: 'right',
   weapon: {

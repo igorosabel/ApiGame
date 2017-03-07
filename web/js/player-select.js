@@ -19,9 +19,18 @@ let selectedGameId = document.querySelector('.player-select-game-selected').data
  */
 function changeGame(e){
   const key = e.keyCode;
-  const controls = [38,40];
+  const controls = [13,27,38,40];
   if (controls.indexOf(key)!=-1){
     switch(key){
+      // Intro
+      case 13:{
+        selectGame(e,selectedGame);
+      }
+      break;
+      case 27:{
+        closeAddGame(e);
+      }
+      break;
       // Arriba
       case 38:{
         if (selectedGame==1){
@@ -68,8 +77,15 @@ function changeSelectedGame(){
 /*
  * Función para seleccionar una partida
  */
-function selectGame(e){
-  const game = this;
+function selectGame(e,num){
+  e.preventDefault();
+  let game;
+  if (typeof num == 'undefined'){
+    game = this;
+  }
+  else{
+    game = document.getElementById('player-select-game-'+num);
+  }
   const name = game.querySelector('.player-select-name');
 
   // Partida existente

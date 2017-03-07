@@ -83,6 +83,42 @@
   }
   
   /*
+   * Función para crear una nueva partida
+   */
+  function executeNewGame($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id',   $req['url_params'], false);
+    $name   = Base::getParam('name', $req['url_params'], false);
+    
+    if ($id===false || $name===false){
+      $status = 'error';
+    }
+    
+    if ($status=='ok'){
+      $name = urldecode($name);
+      $game = new Game();
+      if ($game->find(array('id'=>$id))){
+        $game->set('name', $name);
+        $game->set('id_scenario', 1);
+        $game->set('position_x', 14);
+        $game->set('position_y', 13);
+        $game->save();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->process();
+  }
+  
+  /*
    * Función para añadir un nuevo escenario
    */
   function executeNewScenario($req, $t){

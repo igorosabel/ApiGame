@@ -11,7 +11,7 @@
   <div id="tab-content-login" class="home-tab-content home-tab-selected">
     <form action="#" method="post" id="form-login">
       <div class="home-row">
-        <input type="email" class="home-input" name="login-email" id="login-email" value="" placeholder="E-mail" />
+        <input type="email" class="home-input" name="login-email" id="login-email" value="" placeholder="E-mail" autofocus />
       </div>
       <div class="home-row">
         <input type="password" class="home-input" name="login-pass" id="login-pass" value="" placeholder="Contraseña" />

@@ -1,25 +1,27 @@
-<img src="/img/player-select.png" class="player-select-title" />
+<div class="player-select-bg">
+  <img src="/img/player-select.png" class="player-select-title" />
 
-<div class="player-select">
-  {{games}}
-</div>
+  <div class="player-select">
+    {{games}}
+  </div>
 
-<form id="form-new-game" method="post" action="#">
-  <div class="new-game" id="new-game">
-    <div class="new-game-box">
-      <div class="new-game-header">
-        Nueva partida
-        <a href="#" id="new-game-close">x</a>
-      </div>
-      <div class="new-game-info">
-        <img src="/assets/player/link-down.png" />
-        <input type="text" name="new-game-name" id="new-game-name" value="" placeholder="Nombre del personaje" />
-      </div>
-      <div class="new-game-footer">
-        <input type="submit" class="new-game-go" value="Continuar" />
+  <form id="form-new-game" method="post" action="#">
+    <div class="new-game" id="new-game">
+      <div class="new-game-box">
+        <div class="new-game-header">
+          Nueva partida
+          <a href="#" id="new-game-close">x</a>
+        </div>
+        <div class="new-game-info">
+          <img src="/assets/player/link-down.png" />
+          <input type="text" name="new-game-name" id="new-game-name" value="" placeholder="Nombre del personaje" />
+        </div>
+        <div class="new-game-footer">
+          <input type="submit" class="new-game-go" value="Continuar" />
+        </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>
 
 <script src="/js/player-select.js"></script>

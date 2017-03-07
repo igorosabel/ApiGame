@@ -7,7 +7,7 @@
   <div id="tab-content-login" class="home-tab-content home-tab-selected">
     <form action="/admin/login" method="post" id="form-login">
       <div class="home-row">
-        <input type="text" class="home-input" name="user" id="user" value="" placeholder="E-mail" />
+        <input type="text" class="home-input" name="user" id="user" value="" placeholder="Usuario" autofocus />
       </div>
       <div class="home-row">
         <input type="password" class="home-input" name="pass" id="pass" value="" placeholder="Contraseña" />
