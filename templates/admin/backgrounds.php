@@ -72,7 +72,7 @@
       <img src="/img/delete.svg" class="obj-delete" title="Borrar fondo" />
     </div>
     <div class="obj-item-info">
-      <img src="/img/{{crs_img}}.svg" data-crossable="{{crossable}}" />
+      <img title="¿Se puede cruzar?" src="/img/{{crs_img}}.svg" data-crossable="{{crossable}}" />
     </div>
   </div>
 </script>

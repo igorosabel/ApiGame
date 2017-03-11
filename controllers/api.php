@@ -426,6 +426,8 @@
     $name        = Base::getParam('name',        $req['url_params'], false);
     $class       = Base::getParam('class',       $req['url_params'], false);
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
+    $breakable   = Base::getParam('breakable',   $req['url_params'], false);
+    $grabbable   = Base::getParam('grabbable',   $req['url_params'], false);
     $is_new      = 'true';
 
     if ($name===false || $class===false || $crossable===false){
@@ -446,6 +448,8 @@
       $spr->set('name',        $name);
       $spr->set('class',       $class);
       $spr->set('crossable',   ($crossable=='true'));
+      $spr->set('breakable',   ($breakable=='true'));
+      $spr->set('grabbable',   ($grabbable=='true'));
       $spr->save();
 
       $id = $spr->get('id');
@@ -460,6 +464,8 @@
     $t->add('name',        $name);
     $t->add('class',       $class);
     $t->add('crossable',   $crossable);
+    $t->add('breakable',   $breakable);
+    $t->add('grabbable',   $grabbable);
     $t->add('is_new',      $is_new);
     $t->process();
   }

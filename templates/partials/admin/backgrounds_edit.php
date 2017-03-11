@@ -17,7 +17,7 @@
           <img src="/img/delete.svg" class="obj-delete" title="Borrar fondo" />
         </div>
         <div class="obj-item-info">
-          <img src="/img/<?php echo ($bck->get('crossable')) ? 'yes':'no' ?>.svg" data-crossable="<?php echo ($bck->get('crossable')) ? '1':'0' ?>" />
+          <img title="¿Se puede cruzar?" src="/img/<?php echo ($bck->get('crossable')) ? 'yes':'no' ?>.svg" data-crossable="<?php echo ($bck->get('crossable')) ? '1':'0' ?>" />
         </div>
       </div>
       <?php endforeach ?>

@@ -5,5 +5,7 @@
   "name": "{{name}}",
   "class": "{{class}}",
   "crossable": {{crossable}},
+  "breakable": {{breakable}},
+  "grabbable": {{grabbable}},
   "is_new": {{is_new}}
 }

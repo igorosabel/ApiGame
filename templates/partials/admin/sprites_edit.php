@@ -17,7 +17,9 @@
           <img src="/img/delete.svg" class="obj-delete" title="Borrar sprite" />
         </div>
         <div class="obj-item-info">
-          <img src="/img/<?php echo ($spr->get('crossable')) ? 'yes':'no' ?>.svg" data-crossable="<?php echo ($spr->get('crossable')) ? '1':'0' ?>" />
+          <img class="obj-item-info-crossable" title="¿Se puede cruzar?" src="/img/<?php echo ($spr->get('crossable')) ? 'yes':'no' ?>.svg" data-crossable="<?php echo ($spr->get('crossable')) ? '1':'0' ?>" />
+          <img class="obj-item-info-breakable" title="¿Se puede romper?" src="/img/<?php echo ($spr->get('breakable')) ? 'yes':'no' ?>.svg" data-breakable="<?php echo ($spr->get('breakable')) ? '1':'0' ?>" />
+          <img class="obj-item-info-grabbable" title="¿Se puede coger?" src="/img/<?php echo ($spr->get('grabbable')) ? 'yes':'no' ?>.svg" data-grabbable="<?php echo ($spr->get('grabbable')) ? '1':'0' ?>" />
         </div>
       </div>
       <?php endforeach ?>

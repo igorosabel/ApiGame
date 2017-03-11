@@ -40,8 +40,16 @@
         <input type="text" class="add-box-txt" name="spr-class" id="spr-class" value="" placeholder="Clase CSS del sprite" />
       </div>
       <div class="add-box-row">
-        <label for="spr-crossable">Cruzable</label>
+        <label for="spr-crossable">Cruzar</label>
         <input type="checkbox" name="spr-crossable" id="spr-crossable" />
+      </div>
+      <div class="add-box-row">
+        <label for="spr-breakable">Romper</label>
+        <input type="checkbox" name="spr-breakable" id="spr-breakable" />
+      </div>
+      <div class="add-box-row">
+        <label for="spr-grabbable">Coger</label>
+        <input type="checkbox" name="spr-grabbable" id="spr-grabbable" />
       </div>
       <div class="add-box-footer">
         <input type="submit" class="add-box-btn" id="new-spr-go" value="Enviar" />
@@ -72,7 +80,9 @@
       <img src="/img/delete.svg" class="obj-delete" title="Borrar sprite" />
     </div>
     <div class="obj-item-info">
-      <img src="/img/{{crs_img}}.svg" data-crossable="{{crossable}}" />
+      <img class="obj-item-info-crossable" title="¿Se puede cruzar?" src="/img/{{crs_img}}.svg" data-crossable="{{crossable}}" />
+      <img class="obj-item-info-breakable" title="¿Se puede romper?" src="/img/{{brk_img}}.svg" data-crossable="{{breakable}}" />
+      <img class="obj-item-info-grabbable" title="¿Se puede coger?" src="/img/{{gra_img}}.svg" data-crossable="{{grabbable}}" />
     </div>
   </div>
 </script>

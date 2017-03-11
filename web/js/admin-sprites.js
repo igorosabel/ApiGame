@@ -142,7 +142,11 @@ function showAddSpriteBox(e){
   const cls = document.getElementById('spr-class');
   cls.value = '';
   const crossable = document.getElementById('spr-crossable');
-  crossable.checked = true;
+  crossable.checked = false;
+  const breakable = document.getElementById('spr-breakable');
+  breakable.checked = false;
+  const grabbable = document.getElementById('spr-grabbable');
+  grabbable.checked = false;
   
   editSpriteId = 0;
   editSpriteCategoryId = sprc.dataset.id;
@@ -171,13 +175,17 @@ function saveSprite(e){
     return false;
   }
   const crossable = document.getElementById('spr-crossable');
+  const breakable = document.getElementById('spr-breakable');
+  const grabbable = document.getElementById('spr-grabbable');
 
   const params = {
     id: editSpriteId,
     id_category: editSpriteCategoryId,
     name: urlencode(name.value),
     class: urlencode(cls.value),
-    crossable: crossable.checked
+    crossable: crossable.checked,
+    breakable: breakable.checked,
+    grabbable: grabbable.checked
   };
 
   postAjax('/api/save-sprite', params, saveSpriteSuccess);
@@ -192,7 +200,11 @@ function saveSpriteSuccess(data){
         name: urldecode(data.name),
         class: urldecode(data.class),
         crs_img: data.crossable ? 'yes' : 'no',
-        crossable: data.crossable ? '1': '0'
+        crossable: data.crossable ? '1': '0',
+        brk_img: data.breakable ? 'yes' : 'no',
+        breakable: data.breakable ? '1': '0',
+        gra_img: data.grabbable ? 'yes' : 'no',
+        grabbable: data.grabbable ? '1': '0',
       });
       updateEventListeners();
       if (!list.classList.contains('obj-category-list-open')){
@@ -205,9 +217,15 @@ function saveSpriteSuccess(data){
       const sample = spr.querySelector('.obj-item-sample');
       sample.className = 'obj-item-sample';
       sample.classList.add(urldecode(data.class));
-      const crs = spr.querySelector('.obj-item-info img');
+      const crs = spr.querySelector('.obj-item-info-crossable');
       crs.src = '/img/' + ((data.crossable) ? 'yes':'no') + '.svg';
       crs.dataset.crossable = ((data.crossable) ? '1':'0');
+      const brk = spr.querySelector('.obj-item-info-breakable');
+      brk.src = '/img/' + ((data.breakable) ? 'yes':'no') + '.svg';
+      brk.dataset.breakable = ((data.breakable) ? '1':'0');
+      const gra = spr.querySelector('.obj-item-info-grabbable');
+      gra.src = '/img/' + ((data.grabbable) ? 'yes':'no') + '.svg';
+      gra.dataset.grabbable = ((data.grabbable) ? '1':'0');
     }
     closeAddSpriteBox();
   }
@@ -236,7 +254,9 @@ function editSprite(){
   const spr   = this.parentNode.parentNode;
   const name  = spr.querySelector('.obj-item-name').innerHTML;
   const cls   = spr.querySelector('.obj-item-sample').className.replace('obj-item-sample ', '');
-  const crs   = spr.querySelector('.obj-item-info img').dataset.crossable;
+  const crs   = spr.querySelector('.obj-item-info-crossable').dataset.crossable;
+  const brk   = spr.querySelector('.obj-item-info-breakable').dataset.breakable;
+  const gra   = spr.querySelector('.obj-item-info-grabbable').dataset.grabbable;
 
   editSpriteCategoryId = parseInt(spr.parentNode.parentNode.dataset.id);
   editSpriteId = parseInt(spr.dataset.id);
@@ -247,6 +267,10 @@ function editSprite(){
   txt_cls.value = cls;
   const chk_crs = document.getElementById('spr-crossable');
   chk_crs.checked = (crs=='1');
+  const chk_brk = document.getElementById('spr-breakable');
+  chk_brk.checked = (brk=='1');
+  const chk_gra = document.getElementById('spr-grabbable');
+  chk_gra.checked = (gra=='1');
 
   ovl.classList.add('add-box-show');
   txt_name.focus();
