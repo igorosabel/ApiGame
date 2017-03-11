@@ -51,7 +51,7 @@
 </div>
 
 <script type="text/x-template" id="bckc-tpl">
-  <div class="background-category" data-id="{{id}}">
+  <div class="background-category" id="bckc-{{id}}" data-id="{{id}}">
     <div class="background-category-header">
       <img src="/img/closed.svg" class="background-category-deploy" />
       <span>{{name}}</span>
@@ -59,7 +59,7 @@
       <img src="/img/edit.svg" class="background-category-btn background-category-edit" title="Borrar categoría" />
       <img src="/img/add.svg" class="background-category-btn background-category-add" title="Añadir fondo" />
     </div>
-    <div class="background-category-list"></div>
+    <div class="background-category-list" id="bck-list-{{id}}"></div>
   </div>
 </script>
 
