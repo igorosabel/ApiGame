@@ -39,7 +39,7 @@
 }
 
 .home-input{
-  font-family: 'GraphicPixel';
+  font-family: 'GraphicPixel', Helvetica, sans-serif;
   line-height: 50px;
   font-size: 1.3em;
   padding-left: 16px;
@@ -55,7 +55,7 @@
 }
 
 .home-btn{
-  font-family: 'GraphicPixel';
+  font-family: 'GraphicPixel', Helvetica, sans-serif;
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 4px;

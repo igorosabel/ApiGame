@@ -113,6 +113,38 @@
         "action": "backgrounds",
         "comment": "Página para editar los fondos",
         "filter": "adminFilter"
+      },
+      {
+        "id": "saveBackgroundCategory",
+        "url": "/api/save-background-category",
+        "module": "api",
+        "action": "saveBackgroundCategory",
+        "comment": "Función para guardar una categoría de fondos",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "deleteBackgroundCategory",
+        "url": "/api/delete-background-category",
+        "module": "api",
+        "action": "deleteBackgroundCategory",
+        "comment": "Función para borrar una categoría de fondos",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "saveBackground",
+        "url": "/api/save-background",
+        "module": "api",
+        "action": "saveBackground",
+        "comment": "Función para guardar un fondo",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "deleteBackground",
+        "url": "/api/delete-background",
+        "module": "api",
+        "action": "deleteBackground",
+        "comment": "Función para borrar un fondo",
+        "filter": "adminFilter"
       }
   ]
 }

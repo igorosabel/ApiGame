@@ -40,4 +40,12 @@ class BackgroundCategory extends OBase{
     
     $this->setBackgrounds($list);
   }
+
+  public function deleteFull(){
+    $bcks = $this->getBackgrounds();
+    foreach ($bcks as $bck){
+      $bck->delete();
+    }
+    $this->delete();
+  }
 }

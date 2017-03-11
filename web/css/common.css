@@ -12,7 +12,7 @@
 html, body{
   margin: 0;
   padding: 0;
-  font-family: 'GraphicPixel';
+  font-family: 'GraphicPixel', Helvetica, sans-serif;
   -webkit-text-size-adjust: 100%;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
@@ -28,6 +28,7 @@ html, body{
 }
 
 header{
+  background-color: #000;
   position: fixed;
   line-height: 50px;
   font-size: 1.5em;

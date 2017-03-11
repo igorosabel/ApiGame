@@ -104,7 +104,7 @@
   padding-left: 16px;
   font-size: 1.2em;
   outline: 0;
-  font-family: 'GraphicPixel';
+  font-family: 'GraphicPixel', Helvetica, sans-serif;
 }
 
 .new-game-footer{
@@ -113,7 +113,7 @@
 }
 
 .new-game-footer input{
-  font-family: 'GraphicPixel';
+  font-family: 'GraphicPixel', Helvetica, sans-serif;
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 4px;

@@ -40,4 +40,12 @@ class SpriteCategory extends OBase{
     
     $this->setSprites($list);
   }
+
+  public function deleteFull(){
+    $sprs = $this->getSprites();
+    foreach ($sprs as $spr){
+      $spr->delete();
+    }
+    $this->delete();
+  }
 }

@@ -196,3 +196,152 @@
     $t->add('status', $status);
     $t->process();
   }
+  
+  /*
+   * Función para guardar una categoría de fondos
+   */
+  function executeSaveBackgroundCategory($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $name   = Base::getParam('name', $req['url_params'], false);
+    $id     = Base::getParam('id',   $req['url_params'], false);
+    $is_new = 'true';
+
+    if ($name===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $name = urldecode($name);
+      $id   = (int)$id;
+      $bckc = new BackgroundCategory();
+      if ($id!==0){
+        $bckc->find(array('id'=>$id));
+        $is_new = 'false';
+      }
+      $bckc->set('name', $name);
+      $bckc->save();
+
+      $id = $bckc->get('id');
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->add('name',   $name);
+    $t->add('is_new', $is_new);
+    $t->process();
+  }
+
+  /*
+   * Función para borrar una categoría de fondos
+   */
+  function executeDeleteBackgroundCategory($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id',   $req['url_params'], false);
+
+    if ($id===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $bckc = new BackgroundCategory();
+      if ($bckc->find(array('id'=>$id))){
+        $bckc->deleteFull();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->process();
+  }
+
+  /*
+   * Función para guardar un fondo
+   */
+  function executeSaveBackground($req, $t){
+    $status      = 'ok';
+    $id          = Base::getParam('id',          $req['url_params'], false);
+    $id_category = Base::getParam('id_category', $req['url_params'], false);
+    $name        = Base::getParam('name',        $req['url_params'], false);
+    $class       = Base::getParam('class',       $req['url_params'], false);
+    $crossable   = Base::getParam('crossable',   $req['url_params'], false);
+    $is_new      = 'true';
+
+    if ($name===false || $class===false || $crossable===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $id    = (int)$id;
+      $name  = urldecode($name);
+      $class = urldecode($class);
+
+      $bck = new Background();
+      if ($id!==0){
+        $bck->find(array('id'=>$id));
+        $is_new = 'false';
+      }
+      $bck->set('id_category', $id_category);
+      $bck->set('name',        $name);
+      $bck->set('class',       $class);
+      $bck->set('crossable',   ($crossable=='true'));
+      $bck->save();
+
+      $id = $bck->get('id');
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status',      $status);
+    $t->add('id',          $id);
+    $t->add('id_category', $id_category);
+    $t->add('name',        $name);
+    $t->add('class',       $class);
+    $t->add('crossable',   $crossable);
+    $t->add('is_new',      $is_new);
+    $t->process();
+  }
+  
+  /*
+   * Función para borrar un fondo
+   */
+  function executeDeleteBackground($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id',   $req['url_params'], false);
+
+    if ($id===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $bck = new Background();
+      if ($bck->find(array('id'=>$id))){
+        $bck->delete();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->process();
+  }
