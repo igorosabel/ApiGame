@@ -364,87 +364,81 @@
   float: right;
 }
 
-/* BACKGROUNDS */
-.backgrounds-list{
+/* BACKGROUNDS - SPRITES */
+.obj-list{
   padding-top: 80px;
 }
 
-.background-category{
+.obj-category{
   background-color: #fff;
   color: #000;
   margin: 0 auto 10px auto;
   width: 600px;
 }
 
-.background-category-header{
+.obj-category-header{
   line-height: 36px;
   font-size: 1.2em;
 }
 
-.background-category-deploy{
+.obj-category-deploy{
   vertical-align: middle;
   cursor: pointer;
   transition: all .3s ease-in-out;
 }
 
-.background-category-deployed{
+.obj-category-deployed{
   transform: rotate(90deg);
 }
 
-.background-category-btn{
+.obj-category-btn{
   cursor: pointer;
   display: inline-block;
   margin: 10px 10px 0 10px;
   float: right;
 }
 
-.background-category-edit{
-}
-
-.background-category-delete{
-}
-
-.background-category-list{
+.obj-category-list{
   height: 0;
   overflow: hidden;
   transition: all .3s ease-in-out;
 }
 
-.background-category-list.background-category-list-open{
+.obj-category-list.obj-category-list-open{
   height: auto;
 }
 
-.background-item{
+.obj-item{
   margin: 10px;
   border: 1px solid #ccc;
   padding: 10px;
 }
 
-.background-item-sample{
+.obj-item-sample{
   display: inline-block;
   width: 24px;
   height: 24px;
 }
 
-.background-item-name{
+.obj-item-name{
   display: inline-block;
 }
 
-.background-item-info{
+.obj-item-info{
   display: inline-block;
   float: right;
   margin-right: 22px;
 }
 
-.background-item-info img{
+.obj-item-info img{
   vertical-align: middle;
 }
 
-.background-item-options{
+.obj-item-options{
   display: inline-block;
   float: right;
 }
 
-.background-item-options img{
+.obj-item-options img{
   cursor: pointer;
 }

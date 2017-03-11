@@ -3,7 +3,7 @@
   <a href="/admin/main">Admin</a> > Fondos
 </header>
 
-<div class="backgrounds-list" id="bckc-list">
+<div class="obj-list" id="bckc-list">
   {{backgrounds}}
 </div>
 
@@ -51,27 +51,27 @@
 </div>
 
 <script type="text/x-template" id="bckc-tpl">
-  <div class="background-category" id="bckc-{{id}}" data-id="{{id}}">
-    <div class="background-category-header">
-      <img src="/img/closed.svg" class="background-category-deploy" />
+  <div class="obj-category" id="bckc-{{id}}" data-id="{{id}}">
+    <div class="obj-category-header">
+      <img src="/img/closed.svg" class="obj-category-deploy" />
       <span>{{name}}</span>
-      <img src="/img/delete.svg" class="background-category-btn background-category-delete" title="Editar categoría" />
-      <img src="/img/edit.svg" class="background-category-btn background-category-edit" title="Borrar categoría" />
-      <img src="/img/add.svg" class="background-category-btn background-category-add" title="Añadir fondo" />
+      <img src="/img/delete.svg" class="obj-category-btn obj-category-delete" title="Editar categoría" />
+      <img src="/img/edit.svg" class="obj-category-btn obj-category-edit" title="Borrar categoría" />
+      <img src="/img/add.svg" class="obj-category-btn obj-category-add" title="Añadir fondo" />
     </div>
-    <div class="background-category-list" id="bck-list-{{id}}"></div>
+    <div class="obj-category-list" id="bck-list-{{id}}"></div>
   </div>
 </script>
 
 <script type="text/x-template" id="bck-tpl">
-  <div class="background-item" id="bck-{{id}}" data-id="{{id}}">
-    <div class="background-item-sample {{class}}"></div>
-    <div class="background-item-name">{{name}}</div>
-    <div class="background-item-options">
-      <img src="/img/edit.svg" class="background-edit" title="Editar fondo" />
-      <img src="/img/delete.svg" class="background-delete" title="Borrar fondo" />
+  <div class="obj-item" id="bck-{{id}}" data-id="{{id}}">
+    <div class="obj-item-sample {{class}}"></div>
+    <div class="obj-item-name">{{name}}</div>
+    <div class="obj-item-options">
+      <img src="/img/edit.svg" class="obj-edit" title="Editar fondo" />
+      <img src="/img/delete.svg" class="obj-delete" title="Borrar fondo" />
     </div>
-    <div class="background-item-info">
+    <div class="obj-item-info">
       <img src="/img/{{crs_img}}.svg" data-crossable="{{crossable}}" />
     </div>
   </div>

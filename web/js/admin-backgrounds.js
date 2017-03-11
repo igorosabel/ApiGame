@@ -18,17 +18,17 @@ closeBckBtn.addEventListener('click', closeAddBackgroundBox);
 bckFrm.addEventListener('submit', saveBackground);
 
 function updateEventListeners(){
-  deploys = document.querySelectorAll('.background-category-deploy');
+  deploys = document.querySelectorAll('.obj-category-deploy');
   deploys.forEach(deploy => deploy.addEventListener('click', deployCategory));
-  deleteBckcs = document.querySelectorAll('.background-category-delete');
+  deleteBckcs = document.querySelectorAll('.obj-category-delete');
   deleteBckcs.forEach(del => del.addEventListener('click', deleteCategory));
-  editBckcs = document.querySelectorAll('.background-category-edit');
+  editBckcs = document.querySelectorAll('.obj-category-edit');
   editBckcs.forEach(bckc => bckc.addEventListener('click', editBackgroundCategory));
-  addBcks = document.querySelectorAll('.background-category-add');
+  addBcks = document.querySelectorAll('.obj-category-add');
   addBcks.forEach(bck => bck.addEventListener('click', showAddBackgroundBox));
-  deleteBcks = document.querySelectorAll('.background-delete');
+  deleteBcks = document.querySelectorAll('.obj-delete');
   deleteBcks.forEach(del => del.addEventListener('click', deleteBackground));
-  editBcks = document.querySelectorAll('.background-edit');
+  editBcks = document.querySelectorAll('.obj-edit');
   editBcks.forEach(bck => bck.addEventListener('click', editBackground));
 }
 
@@ -40,15 +40,15 @@ function deployCategory(e,id){
   else{
     item = document.getElementById('bckc-'+id);
   }
-  const deploy = item.querySelector('.background-category-deploy');
-  const list = item.querySelector('.background-category-list');
-  if (!list.classList.contains('background-category-list-open')){
-    deploy.classList.add('background-category-deployed');
-    list.classList.add('background-category-list-open');
+  const deploy = item.querySelector('.obj-category-deploy');
+  const list = item.querySelector('.obj-category-list');
+  if (!list.classList.contains('obj-category-list-open')){
+    deploy.classList.add('obj-category-deployed');
+    list.classList.add('obj-category-list-open');
   }
   else{
-    deploy.classList.remove('background-category-deployed');
-    list.classList.remove('background-category-list-open');
+    deploy.classList.remove('obj-category-deployed');
+    list.classList.remove('obj-category-list-open');
   }
 }
 
@@ -93,7 +93,7 @@ function saveBackgroundCategorySuccess(data){
     }
     else{
       const bckc = document.getElementById('bckc-'+data.id);
-      bckc.querySelector('.background-category-header span').innerHTML = urldecode(data.name);
+      bckc.querySelector('.obj-category-header span').innerHTML = urldecode(data.name);
     }
     closeAddCategoryBox();
   }
@@ -120,7 +120,7 @@ function editBackgroundCategory(){
   const ovl   = document.getElementById('add-bckc');
   const title = document.getElementById('add-bckc-title');
   const bckc  = this.parentNode.parentNode;
-  const name  = bckc.querySelector('.background-category-header span').innerHTML;
+  const name  = bckc.querySelector('.obj-category-header span').innerHTML;
 
   editBackgroundCategoryId = parseInt(bckc.dataset.id);
   title.innerHTML = 'Editar categoría';
@@ -195,24 +195,24 @@ function saveBackgroundSuccess(data){
         crossable: data.crossable ? '1': '0'
       });
       updateEventListeners();
-      if (!list.classList.contains('background-category-list-open')){
+      if (!list.classList.contains('obj-category-list-open')){
         deployCategory(null, data.id_category);
       }
     }
     else{
       const bck = document.getElementById('bck-'+data.id);
-      bck.querySelector('.background-item-name').innerHTML = urldecode(data.name);
-      const sample = bck.querySelector('.background-item-sample');
-      sample.className = 'background-item-sample';
+      bck.querySelector('.obj-item-name').innerHTML = urldecode(data.name);
+      const sample = bck.querySelector('.obj-item-sample');
+      sample.className = 'obj-item-sample';
       sample.classList.add(urldecode(data.class));
-      const crs = bck.querySelector('.background-item-info img');
+      const crs = bck.querySelector('.obj-item-info img');
       crs.src = '/img/' + ((data.crossable) ? 'yes':'no') + '.svg';
       crs.dataset.crossable = ((data.crossable) ? '1':'0');
     }
     closeAddBackgroundBox();
   }
   else{
-    alert('¡Ocurrió un error al guardar la nueva categoría!');
+    alert('¡Ocurrió un error al guardar el fondo!');
   }
 }
 
@@ -234,9 +234,9 @@ function editBackground(){
   const ovl   = document.getElementById('add-bck');
   const title = document.getElementById('add-bck-title');
   const bck   = this.parentNode.parentNode;
-  const name  = bck.querySelector('.background-item-name').innerHTML;
-  const cls   = bck.querySelector('.background-item-sample').className.replace('background-item-sample ', '');
-  const crs   = bck.querySelector('.background-item-info img').dataset.crossable;
+  const name  = bck.querySelector('.obj-item-name').innerHTML;
+  const cls   = bck.querySelector('.obj-item-sample').className.replace('obj-item-sample ', '');
+  const crs   = bck.querySelector('.obj-item-info img').dataset.crossable;
 
   editBackgroundCategoryId = parseInt(bck.parentNode.parentNode.dataset.id);
   editBackgroundId = parseInt(bck.dataset.id);

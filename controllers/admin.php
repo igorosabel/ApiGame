@@ -103,3 +103,15 @@
     $t->addPartial('backgrounds', 'admin/backgrounds_edit', array('backgrounds'=>$backgrounds));
     $t->process();
   }
+  
+  /*
+   * Página para editar los sprites
+   */
+  function executeSprites($req, $t){
+    $sprites = stPublic::getSprites();
+
+    $t->addCss('admin');
+    $t->addCss('sprites');
+    $t->addPartial('sprites', 'admin/sprites_edit', array('sprites'=>$sprites));
+    $t->process();
+  }

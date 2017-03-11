@@ -345,3 +345,152 @@
     $t->add('id',     $id);
     $t->process();
   }
+  
+  /*
+   * Función para guardar una categoría de sprites
+   */
+  function executeSaveSpriteCategory($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $name   = Base::getParam('name', $req['url_params'], false);
+    $id     = Base::getParam('id',   $req['url_params'], false);
+    $is_new = 'true';
+
+    if ($name===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $name = urldecode($name);
+      $id   = (int)$id;
+      $sprc = new SpriteCategory();
+      if ($id!==0){
+        $sprc->find(array('id'=>$id));
+        $is_new = 'false';
+      }
+      $sprc->set('name', $name);
+      $sprc->save();
+
+      $id = $sprc->get('id');
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->add('name',   $name);
+    $t->add('is_new', $is_new);
+    $t->process();
+  }
+
+  /*
+   * Función para borrar una categoría de sprites
+   */
+  function executeDeleteSpriteCategory($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id',   $req['url_params'], false);
+
+    if ($id===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $sprc = new SpriteCategory();
+      if ($sprc->find(array('id'=>$id))){
+        $sprc->deleteFull();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->process();
+  }
+
+  /*
+   * Función para guardar un fondo
+   */
+  function executeSaveSprite($req, $t){
+    $status      = 'ok';
+    $id          = Base::getParam('id',          $req['url_params'], false);
+    $id_category = Base::getParam('id_category', $req['url_params'], false);
+    $name        = Base::getParam('name',        $req['url_params'], false);
+    $class       = Base::getParam('class',       $req['url_params'], false);
+    $crossable   = Base::getParam('crossable',   $req['url_params'], false);
+    $is_new      = 'true';
+
+    if ($name===false || $class===false || $crossable===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $id    = (int)$id;
+      $name  = urldecode($name);
+      $class = urldecode($class);
+
+      $spr = new Sprite();
+      if ($id!==0){
+        $spr->find(array('id'=>$id));
+        $is_new = 'false';
+      }
+      $spr->set('id_category', $id_category);
+      $spr->set('name',        $name);
+      $spr->set('class',       $class);
+      $spr->set('crossable',   ($crossable=='true'));
+      $spr->save();
+
+      $id = $spr->get('id');
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status',      $status);
+    $t->add('id',          $id);
+    $t->add('id_category', $id_category);
+    $t->add('name',        $name);
+    $t->add('class',       $class);
+    $t->add('crossable',   $crossable);
+    $t->add('is_new',      $is_new);
+    $t->process();
+  }
+  
+  /*
+   * Función para borrar un sprite
+   */
+  function executeDeleteSprite($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id',   $req['url_params'], false);
+
+    if ($id===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $spr = new Sprite();
+      if ($spr->find(array('id'=>$id))){
+        $spr->delete();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->process();
+  }

@@ -145,6 +145,46 @@
         "action": "deleteBackground",
         "comment": "Función para borrar un fondo",
         "filter": "adminFilter"
+      },
+      {
+        "id": "sprites",
+        "url": "/admin/sprites",
+        "module": "admin",
+        "action": "sprites",
+        "comment": "Página para editar los sprites",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "saveSpriteCategory",
+        "url": "/api/save-sprite-category",
+        "module": "api",
+        "action": "saveSpriteCategory",
+        "comment": "Función para guardar una categoría de sprites",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "deleteSpriteCategory",
+        "url": "/api/delete-sprite-category",
+        "module": "api",
+        "action": "deleteSpriteCategory",
+        "comment": "Función para borrar una categoría de sprites",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "saveSprite",
+        "url": "/api/save-sprite",
+        "module": "api",
+        "action": "saveSprite",
+        "comment": "Función para guardar un sprite",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "deleteSprite",
+        "url": "/api/delete-sprite",
+        "module": "api",
+        "action": "deleteSprite",
+        "comment": "Función para borrar un sprite",
+        "filter": "adminFilter"
       }
   ]
 }
