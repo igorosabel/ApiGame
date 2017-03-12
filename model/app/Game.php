@@ -16,4 +16,24 @@ class Game extends OBase{
 
     parent::load($model_name,$tablename,$model);
   }
+  
+  private $scenario = null;
+  
+  public function setScenario($sce){
+    $this->scenario = $sce;
+  }
+  
+  public function getScenario(){
+    if (is_null($this->scenario)){
+      $this->loadScenario();
+    }
+    return $this->scenario;
+  }
+  
+  public function loadScenario(){
+    $sce = new Scenario();
+    $sce->find(array('id'=>$this->get('id_scenario')));
+    
+    $this->setScenario($sce);
+  }
 }

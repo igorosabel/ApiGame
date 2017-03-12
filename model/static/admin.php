@@ -18,4 +18,21 @@ class stAdmin{
 
     return $ret;
   }
+  
+  public static function getUsers(){
+    $ret = array();
+    $db = new ODB();
+    $sql = "SELECT * FROM `user` ORDER BY `email` ASC";
+    $db->query($sql);
+
+    while ($res=$db->next()){
+      $usr = new User();
+      $usr->update($res);
+      $usr->loadGames();
+
+      array_push($ret, $usr);
+    }
+
+    return $ret;
+  }
 }

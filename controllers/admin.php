@@ -115,3 +115,16 @@
     $t->addPartial('sprites', 'admin/sprites_edit', array('sprites'=>$sprites));
     $t->process();
   }
+  
+  /*
+   * Página para editar los usuarios
+   */
+  function executeUsers($req, $t){
+    $users = stAdmin::getUsers();
+    $scenarios = stAdmin::getScenarios();
+
+    $t->addCss('admin');
+    $t->addPartial('users',     'admin/users_edit',      array('users'=>$users));
+    $t->addPartial('scenarios', 'admin/scenarios_users', array('scenarios'=>$scenarios));
+    $t->process();
+  }

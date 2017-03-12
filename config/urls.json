@@ -185,6 +185,46 @@
         "action": "deleteSprite",
         "comment": "Función para borrar un sprite",
         "filter": "adminFilter"
+      },
+      {
+        "id": "users",
+        "url": "/admin/users",
+        "module": "admin",
+        "action": "users",
+        "comment": "Página para editar los usuarios",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "saveUser",
+        "url": "/api/save-user",
+        "module": "api",
+        "action": "saveUser",
+        "comment": "Función para guardar un usuario",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "deleteUser",
+        "url": "/api/delete-user",
+        "module": "api",
+        "action": "deleteUser",
+        "comment": "Función para borrar un usuario",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "saveGame",
+        "url": "/api/save-game",
+        "module": "api",
+        "action": "saveGame",
+        "comment": "Función para guardar una partida",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "deleteGame",
+        "url": "/api/delete-game",
+        "module": "api",
+        "action": "deleteGame",
+        "comment": "Función para borrar una partida",
+        "filter": "adminFilter"
       }
   ]
 }

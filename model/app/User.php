@@ -23,4 +23,40 @@ class User extends OBase{
     }
     return $ret;
   }
+  
+  private $games = null;
+  
+  public function setGames($g){
+    $this->games = $g;
+  }
+  
+  public function getGames(){
+    if (is_null($this->games)){
+      $this->loadGames();
+    }
+    return $this->games;
+  }
+  
+  public function loadGames(){
+    $sql = "SELECT * FROM `game` WHERE `id_user` = ".$this->get('id');
+    $this->db->query($sql);
+    $list = array();
+    
+    while ($res=$this->db->next()){
+      $gam = new Game();
+      $gam->update($res);
+      
+      array_push($list, $gam);
+    }
+    
+    $this->setGames($list);
+  }
+
+  public function deleteFull(){
+    $games = $this->getGames();
+    foreach ($games as $gam){
+      $gam->delete();
+    }
+    $this->delete();
+  }
 }

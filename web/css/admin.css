@@ -8,7 +8,7 @@
   border: 4px solid #ff0;
   line-height: 80px;
   font-size: 1.5em;
-  margin: 80px auto 0 auto;
+  margin: 60px auto 0 auto;
   transition: all .3s ease-in-out;
 }
 
@@ -156,6 +156,12 @@
 
 .add-box-txt:focus{
   border-bottom: 1px solid rgb(1,89,162);
+}
+
+.add-box-txt-sm{
+  width: 20%;
+  text-align: center;
+  padding: 0;
 }
 
 .add-box-footer{
@@ -440,5 +446,93 @@
 }
 
 .obj-item-options img{
+  cursor: pointer;
+}
+
+/* USERS */
+.usr-list{
+  padding-top: 60px;
+}
+
+.usr-item{
+  background-color: #fff;
+  color: #000;
+  margin: 0 auto 10px auto;
+  width: 600px;
+}
+
+.usr-header{
+  line-height: 36px;
+  font-size: 1.2em;
+}
+
+.usr-deploy{
+  vertical-align: middle;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+
+.usr-deployed{
+  transform: rotate(90deg);
+}
+
+.usr-btn{
+  cursor: pointer;
+  display: inline-block;
+  margin: 10px 10px 0 10px;
+  float: right;
+}
+
+.usr-games{
+  height: 0;
+  overflow: hidden;
+  transition: all .3s ease-in-out;
+}
+
+.usr-games-open{
+  height: auto;
+}
+
+.usr-game{
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.usr-game-order{
+  font-size: 1.3em;
+  display: inline-block;
+  width: 5%;
+}
+
+.usr-game-none{
+  display: none;
+}
+
+.usr-game-data{
+  display: none;
+  width: 90%;
+}
+
+.usr-game-show{
+  display: inline-block;
+}
+
+.usr-game-name{
+  display: inline-block;
+}
+
+.usr-game-scenario{
+  display: inline-block;
+  float: right;
+  margin-right: 30px;
+}
+
+.usr-game-options{
+  display: inline-block;
+  float: right;
+}
+
+.usr-game-options img{
   cursor: pointer;
 }

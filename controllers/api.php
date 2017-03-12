@@ -500,3 +500,158 @@
     $t->add('id',     $id);
     $t->process();
   }
+  
+  /*
+   * Función para guardar un usuario
+   */
+  function executeSaveUser($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id',    $req['url_params'], false);
+    $email  = Base::getParam('email', $req['url_params'], false);
+    $pass   = Base::getParam('pass',  $req['url_params'], false);
+
+    if ($id===false || $email===false || $pass===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $email = urldecode($email);
+      $pass  = urldecode($pass);
+      
+      $u = new User();
+      if ($u->find(array('id'=>$id))){
+        $u->set('email', $email);
+        if ($pass!=''){
+          $u->set('pass',  sha1('gam_'.$pass.'_gam'));
+        }
+        $u->save();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->add('email',  $email);
+    $t->process();
+  }
+  
+  /*
+   * Función para borrar un usuario
+   */
+  function executeDeleteUser($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id', $req['url_params'], false);
+
+    if ($id===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $u = new User();
+      if ($u->find(array('id'=>$id))){
+        $u->deleteFull();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->process();
+  }
+  
+  /*
+   * Función para guardar una partida
+   */
+  function executeSaveGame($req, $t){
+    global $c, $s;
+
+    $status      = 'ok';
+    $id          = Base::getParam('id',          $req['url_params'], false);
+    $name        = Base::getParam('name',        $req['url_params'], false);
+    $id_scenario = Base::getParam('id_scenario', $req['url_params'], false);
+    $x           = Base::getParam('x',           $req['url_params'], false);
+    $y           = Base::getParam('y',           $req['url_params'], false);
+    $scenario    = '';
+
+    if ($id===false || $name===false || $id_scenario===false || $x===false || $y===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $name = urldecode($name);
+      $game = new Game();
+      if ($game->find(array('id'=>$id))){
+        $game->set('name',        $name);
+        $game->set('id_scenario', $id_scenario);
+        $game->set('position_x',  $x);
+        $game->set('position_y',  $y);
+        $game->save();
+        
+        $scenario = $game->getScenario()->get('name');
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status',      $status);
+    $t->add('id',          $id);
+    $t->add('name',        $name);
+    $t->add('id_scenario', $id_scenario);
+    $t->add('scenario',    $scenario);
+    $t->add('x',           $x);
+    $t->add('y',           $y);
+    $t->process();
+  }
+  
+  /*
+   * Función para borrar una partida
+   */
+  function executeDeleteGame($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id', $req['url_params'], false);
+
+    if ($id===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $game = new Game();
+      if ($game->find(array('id'=>$id))){
+        $game->set('name',        null);
+        $game->set('id_scenario', null);
+        $game->set('position_x',  null);
+        $game->set('position_y',  null);
+        $game->save();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
+    $t->process();
+  }

@@ -3,8 +3,8 @@
     <div class="obj-category-header">
       <img src="/img/closed.svg" class="obj-category-deploy" />
       <span><?php echo $bckc->get('name') ?></span>
-      <img src="/img/delete.svg" class="obj-category-btn obj-category-delete" title="Editar categoría" />
-      <img src="/img/edit.svg" class="obj-category-btn obj-category-edit" title="Borrar categoría" />
+      <img src="/img/delete.svg" class="obj-category-btn obj-category-delete" title="Borrar categoría" />
+      <img src="/img/edit.svg" class="obj-category-btn obj-category-edit" title="Editar categoría" />
       <img src="/img/add.svg" class="obj-category-btn obj-category-add" title="Añadir fondo" />
     </div>
     <div class="obj-category-list" id="bck-list-<?php echo $bckc->get('id') ?>">
