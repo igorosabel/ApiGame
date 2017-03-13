@@ -147,6 +147,8 @@ function showAddSpriteBox(e){
   breakable.checked = false;
   const grabbable = document.getElementById('spr-grabbable');
   grabbable.checked = false;
+  const pickable = document.getElementById('spr-pickable');
+  pickable.checked = false;
   
   editSpriteId = 0;
   editSpriteCategoryId = sprc.dataset.id;
@@ -177,6 +179,7 @@ function saveSprite(e){
   const crossable = document.getElementById('spr-crossable');
   const breakable = document.getElementById('spr-breakable');
   const grabbable = document.getElementById('spr-grabbable');
+  const pickable  = document.getElementById('spr-pickable');
 
   const params = {
     id: editSpriteId,
@@ -185,7 +188,8 @@ function saveSprite(e){
     class: urlencode(cls.value),
     crossable: crossable.checked,
     breakable: breakable.checked,
-    grabbable: grabbable.checked
+    grabbable: grabbable.checked,
+    pickable: pickable.checked
   };
 
   postAjax('/api/save-sprite', params, saveSpriteSuccess);
@@ -205,6 +209,8 @@ function saveSpriteSuccess(data){
         breakable: data.breakable ? '1': '0',
         gra_img: data.grabbable ? 'yes' : 'no',
         grabbable: data.grabbable ? '1': '0',
+        pic_img: data.pickable ? 'yes' : 'no',
+        pickable: data.pickable ? '1': '0'
       });
       updateEventListeners();
       if (!list.classList.contains('obj-category-list-open')){
@@ -226,6 +232,9 @@ function saveSpriteSuccess(data){
       const gra = spr.querySelector('.obj-item-info-grabbable');
       gra.src = '/img/' + ((data.grabbable) ? 'yes':'no') + '.svg';
       gra.dataset.grabbable = ((data.grabbable) ? '1':'0');
+      const pic = spr.querySelector('.obj-item-info-pickable');
+      pic.src = '/img/' + ((data.pickable) ? 'yes':'no') + '.svg';
+      pic.dataset.pickable = ((data.pickable) ? '1':'0');
     }
     closeAddSpriteBox();
   }
@@ -257,6 +266,7 @@ function editSprite(){
   const crs   = spr.querySelector('.obj-item-info-crossable').dataset.crossable;
   const brk   = spr.querySelector('.obj-item-info-breakable').dataset.breakable;
   const gra   = spr.querySelector('.obj-item-info-grabbable').dataset.grabbable;
+  const pic   = spr.querySelector('.obj-item-info-pickable').dataset.pickable;
 
   editSpriteCategoryId = parseInt(spr.parentNode.parentNode.dataset.id);
   editSpriteId = parseInt(spr.dataset.id);
@@ -271,6 +281,8 @@ function editSprite(){
   chk_brk.checked = (brk=='1');
   const chk_gra = document.getElementById('spr-grabbable');
   chk_gra.checked = (gra=='1');
+  const chk_pic = document.getElementById('spr-pickable');
+  chk_pic.checked = (pic=='1');
 
   ovl.classList.add('add-box-show');
   txt_name.focus();

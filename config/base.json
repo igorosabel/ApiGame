@@ -1,5 +1,6 @@
 {
   "base_modules": {
+    "cache": true,
     "browser": false,
     "email": false,
     "email_smtp": false,

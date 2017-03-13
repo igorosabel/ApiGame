@@ -3,7 +3,7 @@
   <a href="/admin/main">Admin</a> > Sprites
 </header>
 
-<div class="sprites-list" id="sprc-list">
+<div class="obj-list" id="sprc-list">
   {{sprites}}
 </div>
 
@@ -51,6 +51,10 @@
         <label for="spr-grabbable">Coger</label>
         <input type="checkbox" name="spr-grabbable" id="spr-grabbable" />
       </div>
+      <div class="add-box-row">
+        <label for="spr-pickable">Coger (inv)</label>
+        <input type="checkbox" name="spr-pickable" id="spr-pickable" />
+      </div>
       <div class="add-box-footer">
         <input type="submit" class="add-box-btn" id="new-spr-go" value="Enviar" />
       </div>
@@ -81,8 +85,9 @@
     </div>
     <div class="obj-item-info">
       <img class="obj-item-info-crossable" title="¿Se puede cruzar?" src="/img/{{crs_img}}.svg" data-crossable="{{crossable}}" />
-      <img class="obj-item-info-breakable" title="¿Se puede romper?" src="/img/{{brk_img}}.svg" data-crossable="{{breakable}}" />
-      <img class="obj-item-info-grabbable" title="¿Se puede coger?" src="/img/{{gra_img}}.svg" data-crossable="{{grabbable}}" />
+      <img class="obj-item-info-breakable" title="¿Se puede romper?" src="/img/{{brk_img}}.svg" data-breakable="{{breakable}}" />
+      <img class="obj-item-info-grabbable" title="¿Se puede coger?" src="/img/{{gra_img}}.svg" data-grabbable="{{grabbable}}" />
+      <img class="obj-item-info-pickable" title="¿Se puede coger (inv)?" src="/img/{{pic_img}}.svg" data-pickable="{{pickable}}" />
     </div>
   </div>
 </script>

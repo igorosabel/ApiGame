@@ -10,6 +10,9 @@
   require($c->getDir('model_base').'OCookie.php');
   
   // Opcionales
+  if ($c->getDefaultModule('cache')){
+    require($c->getDir('model_base').'OCache.php');
+  }
   if ($c->getDefaultModule('browser')){
     require($c->getDir('model_base').'OBrowser.php');
   }

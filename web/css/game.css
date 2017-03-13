@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
   margin-left: calc(50% - 400px);
+  margin-top: 70px;
   transition: all .3s ease-in-out;
 }
 
@@ -30,11 +31,40 @@
 }
 
 .grass{
-  background-color: #489848;
+  background-color: #00994c;
+}
+
+.grass-water-up-left{
+  background: url('/assets/background/grass-water-up-left.png') no-repeat center center transparent;
+  background-size: 100% 100% !important;
+}
+
+.grass-water-up-right{
+  background: url('/assets/background/grass-water-up-right.png') no-repeat center center transparent;
+  background-size: 100% 100% !important;
+}
+
+.grass-water-connect-up-left{
+  background: url('/assets/background/grass-water-connect-up-left.png') no-repeat center center transparent;
+  background-size: 100% 100% !important;
+}
+
+.grass-water-up{
+  background: url('/assets/background/grass-water-up.png') no-repeat center center transparent;
+  background-size: 100% 100% !important;
+}
+
+.grass-water-right{
+  background: url('/assets/background/grass-water-right.png') no-repeat center center transparent;
+  background-size: 100% 100% !important;
+}
+
+.grass-water-left{
+  background: url('/assets/background/grass-water-left.png') no-repeat center center transparent;
+  background-size: 100% 100% !important;
 }
 
 .dirt{
-  /*background-color: #887848;*/
   background: url('/assets/background/dirt.png') no-repeat center center transparent;
   background-size: 100% 100% !important;
 }

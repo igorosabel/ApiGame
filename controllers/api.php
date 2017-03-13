@@ -428,9 +428,10 @@
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
     $breakable   = Base::getParam('breakable',   $req['url_params'], false);
     $grabbable   = Base::getParam('grabbable',   $req['url_params'], false);
+    $pickable    = Base::getParam('pickable',    $req['url_params'], false);
     $is_new      = 'true';
 
-    if ($name===false || $class===false || $crossable===false){
+    if ($name===false || $class===false || $crossable===false || $grabbable===false || $pickable===false){
       $status = 'error';
     }
 
@@ -450,6 +451,7 @@
       $spr->set('crossable',   ($crossable=='true'));
       $spr->set('breakable',   ($breakable=='true'));
       $spr->set('grabbable',   ($grabbable=='true'));
+      $spr->set('pickable',    ($pickable=='true'));
       $spr->save();
 
       $id = $spr->get('id');
@@ -466,6 +468,7 @@
     $t->add('crossable',   $crossable);
     $t->add('breakable',   $breakable);
     $t->add('grabbable',   $grabbable);
+    $t->add('pickable',    $pickable);
     $t->add('is_new',      $is_new);
     $t->process();
   }

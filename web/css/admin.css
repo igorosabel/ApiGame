@@ -187,9 +187,11 @@
 
 /* EDIT SCN */
 .scn-name{
-  margin: 80px 16px 0 16px;
   line-height: 40px;
-  width: 300px;
+  position: absolute;
+  top: 70px;
+  left: 16px;
+  width: 200px;
   border: 0;
   border-bottom: 1px solid #ccc;
   padding-left: 16px;
@@ -257,6 +259,7 @@
   overflow: auto;
   height: 100%;
   transition: all .3s ease-in-out;
+  z-index: 20;
 }
 
 .board-menu-open{

@@ -7,5 +7,6 @@
   "crossable": {{crossable}},
   "breakable": {{breakable}},
   "grabbable": {{grabbable}},
+  "pickable": {{pickable}},
   "is_new": {{is_new}}
 }
