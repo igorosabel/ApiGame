@@ -1,3 +1,4 @@
+{{sprites_css}}
 <header>
   <img src="/img/triforce.png" />
   <a href="/admin/main">Admin</a> > Sprites
@@ -40,20 +41,27 @@
         <input type="text" class="add-box-txt" name="spr-class" id="spr-class" value="" placeholder="Clase CSS del sprite" />
       </div>
       <div class="add-box-row">
-        <label for="spr-crossable">Cruzar</label>
-        <input type="checkbox" name="spr-crossable" id="spr-crossable" />
+        <textarea class="add-box-textarea" name="spr-css" id="spr-css" placeholder="CSS de la clase"></textarea>
       </div>
       <div class="add-box-row">
-        <label for="spr-breakable">Romper</label>
-        <input type="checkbox" name="spr-breakable" id="spr-breakable" />
+        <div class="add-box-col">
+          <label for="spr-crossable">Cruzar</label>
+          <input type="checkbox" name="spr-crossable" id="spr-crossable" />
+        </div>
+        <div class="add-box-col">
+          <label for="spr-breakable">Romper</label>
+          <input type="checkbox" name="spr-breakable" id="spr-breakable" />
+        </div>
       </div>
       <div class="add-box-row">
-        <label for="spr-grabbable">Coger</label>
-        <input type="checkbox" name="spr-grabbable" id="spr-grabbable" />
-      </div>
-      <div class="add-box-row">
-        <label for="spr-pickable">Coger (inv)</label>
-        <input type="checkbox" name="spr-pickable" id="spr-pickable" />
+        <div class="add-box-col">
+          <label for="spr-grabbable">Coger</label>
+          <input type="checkbox" name="spr-grabbable" id="spr-grabbable" />
+        </div>
+        <div class="add-box-col">
+          <label for="spr-pickable">Coger (inv)</label>
+          <input type="checkbox" name="spr-pickable" id="spr-pickable" />
+        </div>
       </div>
       <div class="add-box-footer">
         <input type="submit" class="add-box-btn" id="new-spr-go" value="Enviar" />

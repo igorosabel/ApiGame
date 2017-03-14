@@ -135,8 +135,15 @@
 }
 
 .add-box-row{
+  overflow: hidden;
   padding: 16px;
   clear: both;
+}
+
+.add-box-col{
+  display: inline-block;
+  width: 50%;
+  float: left;
 }
 
 .add-box-row label{
@@ -162,6 +169,21 @@
   width: 20%;
   text-align: center;
   padding: 0;
+}
+
+.add-box-textarea{
+  width: 100%;
+  height: 60px;
+  border: 0;
+  outline: 0;
+  border-bottom: 1px solid #ccc;
+  -webkit-appearance: none;
+  font-family: 'GraphicPixel', Helvetica, sans-serif;
+  resize: none;
+}
+
+.add-box-textarea:focus{
+  border-bottom: 1px solid rgb(1,89,162);
 }
 
 .add-box-footer{

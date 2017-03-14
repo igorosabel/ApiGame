@@ -4,6 +4,7 @@
   "id_category": {{id_category}},
   "name": "{{name}}",
   "class": "{{class}}",
+  "css": "{{css}}",
   "crossable": {{crossable}},
   "breakable": {{breakable}},
   "grabbable": {{grabbable}},

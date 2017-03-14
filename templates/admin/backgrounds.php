@@ -1,3 +1,4 @@
+{{backgrounds_css}}
 <header>
   <img src="/img/triforce.png" />
   <a href="/admin/main">Admin</a> > Fondos
@@ -38,6 +39,9 @@
       </div>
       <div class="add-box-row">
         <input type="text" class="add-box-txt" name="bck-class" id="bck-class" value="" placeholder="Clase CSS del fondo" />
+      </div>
+      <div class="add-box-row">
+        <textarea class="add-box-textarea" name="bck-css" id="bck-css" placeholder="CSS de la clase"></textarea>
       </div>
       <div class="add-box-row">
         <label for="bck-crossable">Cruzable</label>

@@ -27,7 +27,7 @@ class BackgroundCategory extends OBase{
   }
   
   public function loadBackgrounds(){
-    $sql = "SELECT * FROM `background` WHERE `id_category` = ".$this->get('id');
+    $sql = "SELECT * FROM `background` WHERE `id_category` = ".$this->get('id')." ORDER BY `name`";
     $this->db->query($sql);
     $list = array();
     

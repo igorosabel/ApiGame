@@ -27,7 +27,7 @@ class SpriteCategory extends OBase{
   }
   
   public function loadSprites(){
-    $sql = "SELECT * FROM `sprite` WHERE `id_category` = ".$this->get('id');
+    $sql = "SELECT * FROM `sprite` WHERE `id_category` = ".$this->get('id')." ORDER BY `name`";
     $this->db->query($sql);
     $list = array();
     

@@ -276,10 +276,11 @@
     $id_category = Base::getParam('id_category', $req['url_params'], false);
     $name        = Base::getParam('name',        $req['url_params'], false);
     $class       = Base::getParam('class',       $req['url_params'], false);
+    $css         = Base::getParam('css',       $req['url_params'], false);
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
     $is_new      = 'true';
 
-    if ($name===false || $class===false || $crossable===false){
+    if ($name===false || $class===false || $css===false || $crossable===false){
       $status = 'error';
     }
 
@@ -287,6 +288,7 @@
       $id    = (int)$id;
       $name  = urldecode($name);
       $class = urldecode($class);
+      $css   = urldecode($css);
 
       $bck = new Background();
       if ($id!==0){
@@ -296,6 +298,7 @@
       $bck->set('id_category', $id_category);
       $bck->set('name',        $name);
       $bck->set('class',       $class);
+      $bck->set('css',         $css);
       $bck->set('crossable',   ($crossable=='true'));
       $bck->save();
 
@@ -310,6 +313,7 @@
     $t->add('id_category', $id_category);
     $t->add('name',        $name);
     $t->add('class',       $class);
+    $t->add('css',         $css);
     $t->add('crossable',   $crossable);
     $t->add('is_new',      $is_new);
     $t->process();
@@ -425,13 +429,14 @@
     $id_category = Base::getParam('id_category', $req['url_params'], false);
     $name        = Base::getParam('name',        $req['url_params'], false);
     $class       = Base::getParam('class',       $req['url_params'], false);
+    $css         = Base::getParam('css',         $req['url_params'], false);
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
     $breakable   = Base::getParam('breakable',   $req['url_params'], false);
     $grabbable   = Base::getParam('grabbable',   $req['url_params'], false);
     $pickable    = Base::getParam('pickable',    $req['url_params'], false);
     $is_new      = 'true';
 
-    if ($name===false || $class===false || $crossable===false || $grabbable===false || $pickable===false){
+    if ($name===false || $class===false || $css===false || $crossable===false || $grabbable===false || $pickable===false){
       $status = 'error';
     }
 
@@ -439,6 +444,7 @@
       $id    = (int)$id;
       $name  = urldecode($name);
       $class = urldecode($class);
+      $css   = urldecode($css);
 
       $spr = new Sprite();
       if ($id!==0){
@@ -448,6 +454,7 @@
       $spr->set('id_category', $id_category);
       $spr->set('name',        $name);
       $spr->set('class',       $class);
+      $spr->set('css',         $css);
       $spr->set('crossable',   ($crossable=='true'));
       $spr->set('breakable',   ($breakable=='true'));
       $spr->set('grabbable',   ($grabbable=='true'));
@@ -465,6 +472,7 @@
     $t->add('id_category', $id_category);
     $t->add('name',        $name);
     $t->add('class',       $class);
+    $t->add('css',         $css);
     $t->add('crossable',   $crossable);
     $t->add('breakable',   $breakable);
     $t->add('grabbable',   $grabbable);

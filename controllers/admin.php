@@ -77,6 +77,8 @@
     $backgrounds = stPublic::getBackgrounds();
     $sprites     = stPublic::getSprites();
 
+    $t->addPartial('backgrounds_css', 'public/backgrounds_css', array('backgrounds'=>$backgrounds));
+    $t->addPartial('sprites_css',     'public/sprites_css',     array('sprites'=>$sprites));
     $t->add('scn_id',   $scn->get('id'));
     $t->add('scn_name', $scn->get('name'));
     $t->add('scn_data', $scn->get('data'));
@@ -88,7 +90,6 @@
     $t->setTitle('Game - '.$scn->get('name'));
     $t->addCss('admin');
     $t->addCss('game');
-    $t->addCss('sprites');
     $t->process();
   }
   
@@ -100,7 +101,8 @@
 
     $t->addCss('admin');
     $t->addCss('game');
-    $t->addPartial('backgrounds', 'admin/backgrounds_edit', array('backgrounds'=>$backgrounds));
+    $t->addPartial('backgrounds_css', 'public/backgrounds_css', array('backgrounds'=>$backgrounds));
+    $t->addPartial('backgrounds',     'admin/backgrounds_edit', array('backgrounds'=>$backgrounds));
     $t->process();
   }
   
@@ -111,8 +113,8 @@
     $sprites = stPublic::getSprites();
 
     $t->addCss('admin');
-    $t->addCss('sprites');
-    $t->addPartial('sprites', 'admin/sprites_edit', array('sprites'=>$sprites));
+    $t->addPartial('sprites_css', 'public/sprites_css', array('sprites'=>$sprites));
+    $t->addPartial('sprites',     'admin/sprites_edit', array('sprites'=>$sprites));
     $t->process();
   }
   

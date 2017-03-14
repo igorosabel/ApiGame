@@ -141,6 +141,8 @@ function showAddBackgroundBox(e){
   name.value = '';
   const cls = document.getElementById('bck-class');
   cls.value = '';
+  const css = document.getElementById('bck-css');
+  css.value = '';
   const crossable = document.getElementById('bck-crossable');
   crossable.checked = true;
   
@@ -170,6 +172,12 @@ function saveBackground(e){
     cls.focus();
     return false;
   }
+  const css = document.getElementById('bck-css');
+  if (css.value==''){
+    alert('¡No puedes dejar el CSS de la clase en blanco!');
+    css.focus();
+    return false;
+  }
   const crossable = document.getElementById('bck-crossable');
 
   const params = {
@@ -177,6 +185,7 @@ function saveBackground(e){
     id_category: editBackgroundCategoryId,
     name: urlencode(name.value),
     class: urlencode(cls.value),
+    css: urlencode(css.value),
     crossable: crossable.checked
   };
 
@@ -194,6 +203,7 @@ function saveBackgroundSuccess(data){
         crs_img: data.crossable ? 'yes' : 'no',
         crossable: data.crossable ? '1': '0'
       });
+      addCss(urldecode(data.class),urldecode(data.css));
       updateEventListeners();
       if (!list.classList.contains('obj-category-list-open')){
         deployCategory(null, data.id_category);
@@ -208,12 +218,34 @@ function saveBackgroundSuccess(data){
       const crs = bck.querySelector('.obj-item-info img');
       crs.src = '/img/' + ((data.crossable) ? 'yes':'no') + '.svg';
       crs.dataset.crossable = ((data.crossable) ? '1':'0');
+      updateCss(urldecode(data.class), urldecode(data.css));
     }
     closeAddBackgroundBox();
   }
   else{
     alert('¡Ocurrió un error al guardar el fondo!');
   }
+}
+
+function addCss(cls, css){
+  const obj = document.getElementById('backgrounds-css');
+  obj.innerHTML += '.'+cls+'{'+css+'}';
+}
+
+function updateCss(cls, css){
+  const obj = document.getElementById('backgrounds-css');
+  const classes = obj.innerHTML;
+  
+  const exp = new RegExp('.'+cls+'{([\\s\\S]*?)}','g');
+  obj.innerHTML = classes.replace(exp, '.'+cls+'{'+css+'}');
+}
+
+function getCss(cls){
+  const obj = document.getElementById('backgrounds-css').innerHTML;
+  const exp = new RegExp('.'+cls+'{([\\s\\S]*?)}','ig');
+  const res = obj.match(exp);
+  const ret = res[0].replace('.'+cls+'{','').replace('}','').replace(/^\s+|\s+$/g, '');
+  return trim(ret);
 }
 
 function deleteBackground(){
@@ -236,6 +268,7 @@ function editBackground(){
   const bck   = this.parentNode.parentNode;
   const name  = bck.querySelector('.obj-item-name').innerHTML;
   const cls   = bck.querySelector('.obj-item-sample').className.replace('obj-item-sample ', '');
+  const css   = getCss(cls);
   const crs   = bck.querySelector('.obj-item-info img').dataset.crossable;
 
   editBackgroundCategoryId = parseInt(bck.parentNode.parentNode.dataset.id);
@@ -245,6 +278,8 @@ function editBackground(){
   txt_name.value = name;
   const txt_cls = document.getElementById('bck-class');
   txt_cls.value = cls;
+  const txt_css = document.getElementById('bck-css');
+  txt_css.value = css;
   const chk_crs = document.getElementById('bck-crossable');
   chk_crs.checked = (crs=='1');
 

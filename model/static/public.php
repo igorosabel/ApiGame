@@ -22,7 +22,7 @@ class stPublic{
   public static function getBackgrounds(){
     $ret = array();
     $db = new ODB();
-    $sql = "SELECT * FROM `background_category`";
+    $sql = "SELECT * FROM `background_category` ORDER BY `name`";
     $db->query($sql);
     
     while ($res=$db->next()){
@@ -67,7 +67,7 @@ class stPublic{
   public static function getSprites(){
     $ret = array();
     $db = new ODB();
-    $sql = "SELECT * FROM `sprite_category`";
+    $sql = "SELECT * FROM `sprite_category` ORDER BY `name`";
     $db->query($sql);
     
     while ($res=$db->next()){

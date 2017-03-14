@@ -1,3 +1,5 @@
+{{backgrounds_css}}
+{{sprites_css}}
 <header>
   <img src="/img/triforce.png" />
   <a href="/admin/main">Admin</a> > <a href="/admin/scenarios">Escenarios</a> > Editar escenario
