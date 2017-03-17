@@ -5,33 +5,82 @@
   <a href="/admin/main">Admin</a> > <a href="/admin/scenarios">Escenarios</a> > Editar escenario
 </header>
 
-<input type="text" class="scn-name" name="scn-name" id="scn-name" value="{{scn_name}}" placeholder="Nombre del escenario" />
+<div class="scenario-main">
+  <div class="scenario-menu">
+    <input type="text" class="scn-name" name="scn-name" id="scn-name" value="{{scn_name}}" placeholder="Nombre del escenario" />
 
-<a href="#" id="save-scn" class="save-scn save-scn-disabled">Guardar</a>
+    <div class="scenario-menu-options">
+      <div class="scenario-menu-option scenario-menu-option-selected" data-id="select">
+        <img src="/img/cursor.svg" title="Seleccionar" />
+      </div>
+      <div class="scenario-menu-option" data-id="paint">
+        <img src="/img/paint.svg" title="Pintar" />
+      </div>
+      <div class="scenario-menu-option" data-id="clear">
+        <img src="/img/clear.svg" title="Limpiar" />
+      </div>
+    </div>
 
-<div id="board" class="board board-edit"></div>
+    <div class="scenario-menu-option-label">Seleccionar</div>
 
-<aside class="board-menu" id="menu">
-  <h3>
-    Casilla <span id="cell-x"></span>-<span id="cell-y"></span>
-    <a href="#" id="board-menu-close">x</a>
-  </h3>
-  <div class="board-menu-title" id="board-menu-bcks">
-    <img src="/img/closed.svg" />
-    Fondo
+    <div class="scenario-menu-paint-sample"></div>
+    <div class="scenario-menu-paint-sample-name">Hierba alta</div>
+
+    <a href="#" id="save-scn" class="save-scn save-scn-disabled">Guardar</a>
+
   </div>
-  {{backgrounds}}
-  <div class="board-menu-title" id="board-menu-sprs">
-    <img src="/img/closed.svg" />
-    Sprites
+
+  <div class="scenario-board">
+    <div id="board" class="board board-edit"></div>
   </div>
-  {{sprites}}
-</aside>
+</div>
+
+<div class="scenario-overlay"></div>
+<div class="over-box" id="cell-detail">
+  <div class="over-header">
+    <span id="cell-detail-name"></span>
+    <img id="cell-detail-close" src="/img/clear.svg" />
+  </div>
+  <div class="over-body">
+    <div class="cell-detail-option" id="cell-detail-background">
+      <div class="cell-detail-option-title">Fondo</div>
+      <div class="cell-detail-option-sample"></div>
+      <div class="cell-detail-option-name"></div>
+      <img class="cell-detail-option-delete" src="/img/clear.svg" title="Quitar fondo" />
+    </div>
+    <div class="cell-detail-option" id="cell-detail-sprite">
+      <div class="cell-detail-option-title">Sprite</div>
+      <div class="cell-detail-option-sample"></div>
+      <div class="cell-detail-option-name"></div>
+      <img class="cell-detail-option-delete" src="/img/clear.svg" title="Quitar sprite" />
+    </div>
+  </div>
+</div>
+
+<div class="over-box" id="select-background">
+  <div class="over-header">
+    <span>Fondos</span>
+    <img id="select-background-close" src="/img/clear.svg" />
+  </div>
+  <div class="over-body-long">
+    {{backgrounds}}
+  </div>
+</div>
+
+<div class="over-box" id="select-sprite">
+  <div class="over-header">
+    <span>Sprites</span>
+    <img id="select-sprite-close" src="/img/clear.svg" />
+  </div>
+  <div class="over-body-long">
+    {{sprites}}
+  </div>
+</div>
 
 <script>
-  var idScenario  = {{scn_id}};
-  var scenario    = JSON.parse('{{scn_data}}');
-  var backgrounds = JSON.parse('{{bcks_data}}');
-  var sprites     = JSON.parse('{{sprs_data}}');
+  const idScenario  = {{scn_id}};
+  const scenario    = JSON.parse('{{scn_data}}');
+  const backgrounds = JSON.parse('{{bcks_data}}');
+  const sprites     = JSON.parse('{{sprs_data}}');
 </script>
 <script src="/js/admin-edit-scenario.js"></script>
