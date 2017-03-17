@@ -294,6 +294,25 @@
   display: none;
 }
 
+.scenario-menu-paint-last{
+  height: 240px;
+  display: none;
+  border-bottom: 1px solid #ccc;
+}
+
+.scenario-menu-paint-item{
+  width: 80px;
+  float: left;
+  cursor: pointer;
+  height: 80px;
+  background-size: 100% 100% !important;
+  border: 1px solid #ccc;
+}
+
+.scenario-menu-paint-item:hover{
+  border: 1px solid #000;
+}
+
 .save-scn{
   display: block;
   position: absolute;

@@ -10,6 +10,7 @@ const detailItems     = document.querySelectorAll('.cell-detail-item');
 const detailDelBck    = cellDetailBck.querySelector('.cell-detail-option-delete');
 const detailDelSpr    = cellDetailSpr.querySelector('.cell-detail-option-delete');
 const menuPaint       = document.querySelector('.scenario-menu-paint-sample');
+const menuPaintLast   = document.querySelector('.scenario-menu-paint-last');
 const saveScnBtn      = document.getElementById('save-scn');
 
 options.forEach(opt => opt.addEventListener('click', changeOption));
@@ -138,6 +139,11 @@ let allSaved = true;
  * Fondo que se quiere pintar
  */
 let paintBck = null;
+
+/*
+ * Lista de últimos fondos usados
+ */
+const paintBckList = [];
 
 /*
  * Función para interactuar con una casilla
@@ -308,6 +314,20 @@ function selectItem(){
       const menuPaintName = document.querySelector('.scenario-menu-paint-sample-name');
       menuPaintName.innerHTML = urldecode(obj.name);
       menuPaintName.style.display = 'block';
+      
+      let inList = false;
+      for (let i in paintBckList){
+        if (paintBckList[i].id==obj.id){
+          inList = true;
+        }
+      }
+      if (!inList){
+        paintBckList.unshift(obj);
+        if (paintBckList.length>9){
+          paintBckList.splice(9, 1);
+        }
+      }
+      updatePaintBckList();
     }
     closeSelectBck();
   }
@@ -328,6 +348,38 @@ function selectItem(){
     setAllSaved(false);
     closeSelectSpr();
   }
+}
+
+/*
+ * Función para cargar la lista de últimos fondos usados
+ */
+function updatePaintBckList(){
+  menuPaintLast.innerHTML = '';
+  for (let i in paintBckList){
+    let bck = document.createElement('div');
+    bck.id = 'paint-last-bck-'+paintBckList[i].id;
+    bck.className = 'scenario-menu-paint-item '+paintBckList[i].class;
+    bck.addEventListener('click', selectFromPaintList);
+
+    menuPaintLast.appendChild(bck);
+  }
+  menuPaintLast.style.display = 'block';
+}
+
+/*
+ * Función para seleccionar un elemento de la lista de últimos
+ */
+function selectFromPaintList(){
+  var item = this;
+  console.log(item);
+  const id = item.id.replace('paint-last-bck-','');
+  
+  const obj = backgrounds.list['bck_'+id];
+  
+  paintBck = obj;
+  menuPaint.className = 'scenario-menu-paint-sample '+paintBck.class;
+  const menuPaintName = document.querySelector('.scenario-menu-paint-sample-name');
+  menuPaintName.innerHTML = urldecode(obj.name);
 }
 
 /*

@@ -1,3 +1,5 @@
+{{backgrounds_css}}
+{{sprites_css}}
 <header>
   <img src="/img/triforce.png" />
   The Legend Of Zelda

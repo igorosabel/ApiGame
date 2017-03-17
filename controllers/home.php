@@ -41,6 +41,9 @@
     
     $backgrounds = stPublic::getBackgrounds();
     $sprites     = stPublic::getSprites();
+
+    $t->addPartial('backgrounds_css', 'public/backgrounds_css', array('backgrounds'=>$backgrounds));
+    $t->addPartial('sprites_css',     'public/sprites_css',     array('sprites'=>$sprites));
     
     $t->add('scn_data', $scn->get('data'));
     $t->add('position_x', $game->get('position_x'));
@@ -49,6 +52,5 @@
     $t->add('sprs_data', json_encode(stPublic::getSpritesData($sprites)));
     
     $t->addCss('game');
-    $t->addCss('sprites');
     $t->process();
   }
