@@ -6,11 +6,19 @@ window.onload = function(){
 };
 
 /*
+ * Valores generales
+ */
+const Val = {
+  step: 10
+};
+
+/*
  * Función que inicia el juego: pinta el escenario, carga al jugador y atiende a los eventos del teclado
  */
 function start(){
   board = document.getElementById('board');
   loadScenario();
+  loadBlockers();
   player.load();
 
   document.body.addEventListener('keydown',controller);
@@ -22,27 +30,34 @@ function start(){
 let board = null;
 
 /*
+ * Objetos del escenario bloqueantes
+ */
+const blockers = [];
+
+/*
  * Función para dibujar el escenario
  */
 function loadScenario(){
   board.innerHTML = '';
   // Líneas
-  for (let i in scenario){
-    const scn_row = scenario[i];
+  for (let y in scenario){
+    const scn_row = scenario[y];
     let row = document.createElement('div');
-    row.id = 'row_'+i;
+    row.id = 'row_'+y;
     row.className = 'row';
     
     board.appendChild(row);
     
     // Columnas
-    for (let j in scn_row){
-      const scn_col = scn_row[j];
+    for (let x in scn_row){
+      const scn_col = scn_row[x];
       let col = document.createElement('div');
-	    col.id = 'cell_'+i+'_'+j;
+	    col.id = 'cell_'+x+'_'+y;
+	    col.dataset.x = x;
+	    col.dataset.y = y;
 	    
 	    row.appendChild(col);
-	    updateCell(i,j);
+	    updateCell(x,y);
     }
   }
 }
@@ -54,14 +69,45 @@ function updateCell(x,y){
   const cell = document.getElementById('cell_'+x+'_'+y);
   cell.innerHTML = '';
   cell.className = 'cell';
-  if (scenario[x][y].bck){
-    cell.classList.add(backgrounds.list['bck_'+scenario[x][y].bck].class);
+  if (scenario[y][x].bck){
+    cell.classList.add(backgrounds.list['bck_'+scenario[y][x].bck].class);
   }
-  if (scenario[x][y].spr){
+  if (scenario[y][x].spr){
     const spr = document.createElement('div');
-    spr.className = 'sprite ' + sprites.list['spr_'+scenario[x][y].spr].class;
+    spr.className = 'sprite ' + sprites.list['spr_'+scenario[y][x].spr].class;
     cell.appendChild(spr);
   }
+}
+
+let modo_debug = false;
+
+/*
+ * Función para crear la lista de objetos bloqueantes
+ */
+function loadBlockers(){
+  const cells = board.querySelectorAll('.cell');
+  cells.forEach((cell) => {
+    const bck = scenario[cell.dataset.y][cell.dataset.x].bck;
+    const spr = scenario[cell.dataset.y][cell.dataset.x].spr;
+    let isBlocker = false;
+    if (bck && backgrounds.list['bck_'+bck] && backgrounds.list['bck_'+bck].crossable===false){
+      isBlocker = true;
+    }
+    if (spr && sprites.list['spr_'+spr] && sprites.list['spr_'+spr].crossable===false){
+      isBlocker = true;
+    }
+    if (isBlocker){
+      blockers.push({
+        pos_x: parseInt(cell.dataset.x),
+        pos_y: parseInt(cell.dataset.y),
+        x: cell.offsetLeft,
+        width: cell.offsetWidth,
+        y: cell.offsetTop,
+        height: cell.offsetHeight,
+        cell: cell
+      })
+    }
+  });
 }
 
 /*
