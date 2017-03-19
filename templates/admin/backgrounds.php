@@ -2,6 +2,7 @@
 <header>
   <img src="/img/triforce.png" />
   <a href="/admin/main">Admin</a> > Fondos
+  <a href="#" class="admin-header-add">Añadir categoría</a>
 </header>
 
 <div class="obj-list" id="bckc-list">
@@ -21,6 +22,7 @@
         <input type="text" class="add-box-txt" name="bckc-name" id="bckc-name" value="" placeholder="Nombre de la categoría" />
       </div>
       <div class="add-box-footer">
+        <input type="button" class="add-box-btn add-box-btn-del" id="bckc-delete" value="Borrar" />
         <input type="submit" class="add-box-btn" id="new-bckc-go" value="Enviar" />
       </div>
     </div>
@@ -48,24 +50,12 @@
         <input type="checkbox" name="bck-crossable" id="bck-crossable" />
       </div>
       <div class="add-box-footer">
+        <input type="button" class="add-box-btn add-box-btn-del" id="bck-delete" value="Borrar" />
         <input type="submit" class="add-box-btn" id="new-bck-go" value="Enviar" />
       </div>
     </div>
   </form>
 </div>
-
-<script type="text/x-template" id="bckc-tpl">
-  <div class="obj-category" id="bckc-{{id}}" data-id="{{id}}">
-    <div class="obj-category-header">
-      <img src="/img/closed.svg" class="obj-category-deploy" />
-      <span>{{name}}</span>
-      <img src="/img/delete.svg" class="obj-category-btn obj-category-delete" title="Editar categoría" />
-      <img src="/img/edit.svg" class="obj-category-btn obj-category-edit" title="Borrar categoría" />
-      <img src="/img/add.svg" class="obj-category-btn obj-category-add" title="Añadir fondo" />
-    </div>
-    <div class="obj-category-list" id="bck-list-{{id}}"></div>
-  </div>
-</script>
 
 <script type="text/x-template" id="bck-tpl">
   <div class="obj-item" id="bck-{{id}}" data-id="{{id}}">

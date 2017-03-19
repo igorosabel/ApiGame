@@ -189,7 +189,7 @@
 .add-box-footer{
   padding: 16px;
   border-top: 1px solid #ccc;
-  text-align: right;
+  min-height: 60px;
 }
 
 .add-box-btn{
@@ -201,10 +201,21 @@
   padding: 0 20px;
   -webkit-appearance: none;
   font-family: 'GraphicPixel', Helvetica, sans-serif;
+  transition: all .3s ease-in-out;
 }
 
 .add-box-btn:hover{
   box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+}
+
+.add-box-btn-del:hover{
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+
+.add-box-footer input[type="submit"]{
+  float: right;
 }
 
 /* EDIT SCN */
@@ -503,6 +514,118 @@
 }
 
 /* BACKGROUNDS - SPRITES */
+.admin-header-add{
+  display: inline-block;
+  float: right;
+  margin-right: 16px;
+  padding: 0 16px;
+  font-size: 0.8em;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.admin-header-add:hover{
+  background-color: rgba(255,255,255,0.3);
+}
+
+.admin-tabs{
+  margin: 0;
+  padding: 0;
+  border-bottom: 2px solid #fff;
+  list-style-type: none;
+}
+
+.admin-tabs li:first-child{
+  margin-left: 16px;
+}
+
+.admin-tabs li{
+  cursor: pointer;
+  display: inline-block;
+  line-height: 40px;
+  padding: 0 16px;
+}
+
+.admin-tabs li:hover{
+  background-color: #fff;
+  color: #000;
+}
+
+.admin-tabs li.admin-tab-selected{
+  background-color: #fff;
+  color: #000;
+}
+
+.admin-tabs li img{
+  width: 16px;
+  visibility: hidden;
+}
+
+.admin-tabs li:hover img{
+  visibility: visible;
+}
+
+.admin-tab{
+  display: none;
+}
+
+.admin-tab.admin-tab-selected{
+  display: block;
+}
+
+.item-list{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.item-list li{
+  cursor: pointer;
+  float: left;
+  margin: 8px;
+  display: inline-block;
+  background-color: #fff;
+  color: #000;
+  width: 130px;
+  height: 166px;
+  position: relative;
+}
+
+.item-list li:hover{
+  background-color: #ccc;
+}
+
+.item-list-sample{
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.item-list li span{
+  display: block;
+  font-size: 0.8em;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.item-list-info{
+  clear: both;
+  position: absolute;
+  overflow: hidden;
+  padding: 2px;
+  bottom: 0;
+}
+
+.item-list-info-item{
+  width: 25%;
+  float: left;
+  text-align: center;
+}
+
+.item-list-info-item img{
+  width: 24px;
+}
+
 .obj-list{
   padding-top: 80px;
 }
