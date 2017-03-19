@@ -614,6 +614,7 @@
   overflow: hidden;
   padding: 2px;
   bottom: 0;
+  width: 100%;
 }
 
 .item-list-info-item{

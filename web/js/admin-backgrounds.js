@@ -249,10 +249,6 @@ function saveBackgroundSuccess(data){
         crossable: data.crossable ? '1': '0'
       });
       addCss(urldecode(data.class),urldecode(data.css));
-      updateEventListeners();
-      if (!list.classList.contains('obj-category-list-open')){
-        deployCategory(null, data.id_category);
-      }
     }
     else{
       const bck = document.getElementById('bck-'+data.id);

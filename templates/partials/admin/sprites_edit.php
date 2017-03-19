@@ -1,29 +1,35 @@
-<?php foreach ($values['sprites'] as $sprc): ?>
-  <div class="obj-category" id="sprc-<?php echo $sprc->get('id') ?>" data-id="<?php echo $sprc->get('id') ?>">
-    <div class="obj-category-header">
-      <img src="/img/closed.svg" class="obj-category-deploy" />
-      <span><?php echo $sprc->get('name') ?></span>
-      <img src="/img/delete.svg" class="obj-category-btn obj-category-delete" title="Borrar categoría" />
-      <img src="/img/edit.svg" class="obj-category-btn obj-category-edit" title="Editar categoría" />
-      <img src="/img/add.svg" class="obj-category-btn obj-category-add" title="Añadir sprite" />
-    </div>
-    <div class="obj-category-list" id="spr-list-<?php echo $sprc->get('id') ?>">
+<ul class="admin-tabs">
+  <?php foreach ($values['sprites'] as $i => $sprc): ?>
+  <li<?php if ($i==0): ?> class="admin-tab-selected"<?php endif ?> id="sprc-<?php echo $sprc->get('id') ?>" data-id="<?php echo $sprc->get('id') ?>">
+    <span><?php echo $sprc->get('name') ?></span>
+    <img src="/img/edit.svg" />
+  </li>
+  <?php endforeach ?>
+</ul>
+
+<?php foreach ($values['sprites'] as $i => $sprc): ?>
+  <div class="admin-tab<?php if ($i==0): ?> admin-tab-selected<?php endif ?>" id="sprc-tab-<?php echo $sprc->get('id') ?>">
+    <ul class="item-list">
       <?php foreach ($sprc->getSprites() as $spr): ?>
-      <div class="obj-item" id="spr-<?php echo $spr->get('id') ?>" data-id="<?php echo $spr->get('id') ?>">
-        <div class="obj-item-sample <?php echo $spr->get('class') ?>"></div>
-        <div class="obj-item-name"><?php echo $spr->get('name') ?></div>
-        <div class="obj-item-options">
-          <img src="/img/edit.svg" class="obj-edit" title="Editar sprite" />
-          <img src="/img/delete.svg" class="obj-delete" title="Borrar sprite" />
+      <li id="spr-<?php echo $spr->get('id') ?>" data-id="<?php echo $spr->get('id') ?>">
+        <div class="item-list-sample <?php echo $spr->get('class') ?>"></div>
+        <span><?php echo $spr->get('name') ?></span>
+        <div class="item-list-info">
+          <div class="item-list-info-item">
+            <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_<?php echo $spr->get('crossable')?'on':'off' ?>.png" data-crossable="<?php echo $spr->get('crossable')?'1':'0' ?>" />
+          </div>
+          <div class="item-list-info-item">
+            <img class="breakable" title="¿Se puede romper?" src="/img/breakable_<?php echo $spr->get('breakable')?'on':'off' ?>.png" data-breakable="<?php echo $spr->get('breakable')?'1':'0' ?>" />
+          </div>
+          <div class="item-list-info-item">
+            <img class="grabbable" title="¿Se puede coger?" src="/img/grabbable_<?php echo $spr->get('grabbable')?'on':'off' ?>.png" data-grabbable="<?php echo $spr->get('grabbable')?'1':'0' ?>" />
+          </div>
+          <div class="item-list-info-item">
+            <img class="pickable" title="¿Se puede coger (inv)?" src="/img/pickable_<?php echo $spr->get('pickable')?'on':'off' ?>.png" data-pickable="<?php echo $spr->get('pickable')?'1':'0' ?>" />
+          </div>
         </div>
-        <div class="obj-item-info">
-          <img class="obj-item-info-crossable" title="¿Se puede cruzar?" src="/img/<?php echo ($spr->get('crossable')) ? 'yes':'no' ?>.svg" data-crossable="<?php echo ($spr->get('crossable')) ? '1':'0' ?>" />
-          <img class="obj-item-info-breakable" title="¿Se puede romper?" src="/img/<?php echo ($spr->get('breakable')) ? 'yes':'no' ?>.svg" data-breakable="<?php echo ($spr->get('breakable')) ? '1':'0' ?>" />
-          <img class="obj-item-info-grabbable" title="¿Se puede coger?" src="/img/<?php echo ($spr->get('grabbable')) ? 'yes':'no' ?>.svg" data-grabbable="<?php echo ($spr->get('grabbable')) ? '1':'0' ?>" />
-          <img class="obj-item-info-pickable" title="¿Se puede coger (inv)?" src="/img/<?php echo ($spr->get('pickable')) ? 'yes':'no' ?>.svg" data-pickable="<?php echo ($spr->get('pickable')) ? '1':'0' ?>" />
-        </div>
-      </div>
+      </li>
       <?php endforeach ?>
-    </div>
+    </ul>
   </div>
 <?php endforeach ?>

@@ -1,78 +1,76 @@
-let deploys     = null;
-let deleteSprcs = null;
-let editSprcs   = null;
-let addSprs     = null;
-let deleteSprs  = null;
-let editSprs    = null;
+const addCat = document.querySelector('.admin-header-add');
+addCat.addEventListener('click', showAddCategoryBox);
+const addCatClose = document.getElementById('add-sprc-close');
+addCatClose.addEventListener('click', closeAddCategoryBox);
+const frmSprc = document.getElementById('frm-sprc');
+frmSprc.addEventListener('submit', saveSpriteCategory);
+const sprcDel = document.getElementById('sprc-delete');
+sprcDel.addEventListener('click', deleteCategory);
+const tabs = document.querySelectorAll('.admin-tabs li');
+tabs.forEach(tab => tab.addEventListener('click',selectTab));
+const tabsEdit = document.querySelectorAll('.admin-tabs li img');
+tabsEdit.forEach(img => img.addEventListener('click', editSpriteCategory));
+const items = document.querySelectorAll('.item-list li');
+items.forEach(item => item.addEventListener('click', editSprite));
+const addSprClose = document.getElementById('add-spr-close');
+addSprClose.addEventListener('click', closeAddSpriteBox);
+const frmSpr = document.getElementById('frm-spr');
+frmSpr.addEventListener('submit', saveSprite);
+const sprDel = document.getElementById('spr-delete');
+sprDel.addEventListener('click', deleteSprite);
+const addBtn = document.getElementById('add-btn');
+addBtn.addEventListener('click', showAddSpriteBox);
 
-const addSprcBtn   = document.getElementById('add-btn');
-const closeSprcBtn = document.getElementById('add-sprc-close');
-const sprcFrm      = document.getElementById('frm-sprc');
-const closeSprBtn  = document.getElementById('add-spr-close');
-const sprFrm       = document.getElementById('frm-spr');
+/*
+ * Función para cambiar entre pestañas
+ */
+function selectTab(){
+  const tab = this;
+  const id = tab.dataset.id;
 
-addSprcBtn.addEventListener('click', showAddCategoryBox);
-closeSprcBtn.addEventListener('click', closeAddCategoryBox);
-sprcFrm.addEventListener('submit', saveSpriteCategory);
-closeSprBtn.addEventListener('click', closeAddSpriteBox);
-sprFrm.addEventListener('submit', saveSprite);
+  const tabs = document.querySelectorAll('.admin-tabs li');
+  tabs.forEach(tab => tab.classList.remove('admin-tab-selected'));
+  tab.classList.add('admin-tab-selected');
 
-function updateEventListeners(){
-  deploys = document.querySelectorAll('.obj-category-deploy');
-  deploys.forEach(deploy => deploy.addEventListener('click', deployCategory));
-  deleteSprcs = document.querySelectorAll('.obj-category-delete');
-  deleteSprcs.forEach(del => del.addEventListener('click', deleteCategory));
-  editSprcs = document.querySelectorAll('.obj-category-edit');
-  editSprcs.forEach(sprc => sprc.addEventListener('click', editSpriteCategory));
-  addSprs = document.querySelectorAll('.obj-category-add');
-  addSprs.forEach(spr => spr.addEventListener('click', showAddSpriteBox));
-  deleteSprs = document.querySelectorAll('.obj-delete');
-  deleteSprs.forEach(del => del.addEventListener('click', deleteSprite));
-  editSprs = document.querySelectorAll('.obj-edit');
-  editSprs.forEach(spr => spr.addEventListener('click', editSprite));
+  const tabContents = document.querySelectorAll('.admin-tab');
+  tabContents.forEach(tabContent => tabContent.classList.remove('admin-tab-selected'));
+  document.getElementById('sprc-tab-'+id).classList.add('admin-tab-selected');
 }
 
-function deployCategory(e,id){
-  let item;
-  if (typeof id == 'undefined'){
-    item = this.parentNode.parentNode;
-  }
-  else{
-    item = document.getElementById('sprc-'+id);
-  }
-  const deploy = item.querySelector('.obj-category-deploy');
-  const list = item.querySelector('.obj-category-list');
-  if (!list.classList.contains('obj-category-list-open')){
-    deploy.classList.add('obj-category-deployed');
-    list.classList.add('obj-category-list-open');
-  }
-  else{
-    deploy.classList.remove('obj-category-deployed');
-    list.classList.remove('obj-category-list-open');
-  }
-}
-
+/*
+ * Id de la categoría que se está editando
+ */
 let editSpriteCategoryId = 0;
 
+/*
+ * Función para mostrar el cuadro de añadir categoría
+ */
 function showAddCategoryBox(e){
   e.preventDefault();
   const ovl   = document.getElementById('add-sprc');
   const title = document.getElementById('add-sprc-title');
   const name  = document.getElementById('sprc-name');
-  
+
   editSpriteCategoryId = 0;
   title.innerHTML = 'Añadir categoría';
   name.value = '';
+  sprcDel.style.display = 'none';
 
   ovl.classList.add('add-box-show');
   name.focus();
 }
 
+/*
+ * Función para cerrar el cuadro de añadir categoría
+ */
 function closeAddCategoryBox(e){
   if (e){ e.preventDefault(); }
   document.getElementById('add-sprc').classList.remove('add-box-show');
 }
 
+/*
+ * Función para guardar una categoría
+ */
 function saveSpriteCategory(e){
   e.preventDefault();
   const txt = document.getElementById('sprc-name');
@@ -85,15 +83,33 @@ function saveSpriteCategory(e){
   postAjax('/api/save-sprite-category', {id: editSpriteCategoryId, name: urlencode(txt.value)}, saveSpriteCategorySuccess);
 }
 
+/*
+ * Función callback tras guardar una categoría
+ */
 function saveSpriteCategorySuccess(data){
   if (data.status=='ok'){
     if (data.is_new){
-      document.getElementById('sprc-list').innerHTML += template('sprc-tpl', {id: data.id, name: urldecode(data.name)});
-      updateEventListeners();
+      const tab = document.createElement('li');
+      tab.innerHTML = '<span>'+urldecode(data.name)+'</span>';
+      tab.id = 'sprc-'+data.id;
+      tab.dataset.id = data.id;
+      tab.addEventListener('click',selectTab);
+      
+      const img = document.createElement('img');
+      img.src = '/img/edit.svg';
+      img.addEventListener('click', editSpriteCategory);
+      tab.appendChild(img);
+      
+      document.querySelector('.admin-tabs').appendChild(tab);
+      
+      const tabContent = document.createElement('div');
+      tabContent.className = 'admin-tab';
+      tabContent.id = 'sprc-tab-'+data.id;
+      tabContent.innerHTML = '<ul class="item-list"></ul>';
+      document.getElementById('sprc-list').appendChild(tabContent);
     }
     else{
-      const sprc = document.getElementById('sprc-'+data.id);
-      sprc.querySelector('.obj-category-header span').innerHTML = urldecode(data.name);
+      document.querySelector('#sprc-'+data.id+' span').innerHTML = urldecode(data.name);
     }
     closeAddCategoryBox();
   }
@@ -102,47 +118,66 @@ function saveSpriteCategorySuccess(data){
   }
 }
 
+/*
+ * Función para borrar una categoría
+ */
 function deleteCategory(){
-  const sprc = this;
-  const id = parseInt(sprc.parentNode.parentNode.dataset.id);
   const conf = confirm('¿Estás seguro de querer borrar esta categoría con todos sus sprites?');
   if (conf){
-    postAjax('/api/delete-sprite-category', {id: id}, deleteSpriteCategorySuccess);
+    postAjax('/api/delete-sprite-category', {id: editSpriteCategoryId}, deleteSpriteCategorySuccess);
   }
 }
 
+/*
+ * Función callback tras borrar una categoría
+ */
 function deleteSpriteCategorySuccess(data){
   const sprc = document.getElementById('sprc-'+data.id);
   sprc.parentNode.removeChild(sprc);
+  const sprcContent = document.getElementById('sprc-tab-'+data.id);
+  sprcContent.parentNode.removeChild(sprcContent);
+  closeAddCategoryBox();
 }
 
-function editSpriteCategory(){
+/*
+ * Función para editar el nombre de una categoría
+ */
+function editSpriteCategory(e){
+  e.stopPropagation();
   const ovl   = document.getElementById('add-sprc');
   const title = document.getElementById('add-sprc-title');
-  const sprc  = this.parentNode.parentNode;
-  const name  = sprc.querySelector('.obj-category-header span').innerHTML;
+  const sprc  = this.parentNode;
+  const name  = sprc.querySelector('span').innerHTML;
 
   editSpriteCategoryId = parseInt(sprc.dataset.id);
   title.innerHTML = 'Editar categoría';
   let txt = document.getElementById('sprc-name');
   txt.value = name;
+  sprcDel.style.display = 'inline-block';
   
   ovl.classList.add('add-box-show');
   txt.focus();
 }
 
+/*
+ * Id del sprite que se está editando
+ */
 let editSpriteId = 0;
 
+/*
+ * Función para mostrar el cuadro de añadir sprite
+ */
 function showAddSpriteBox(e){
   e.preventDefault();
-  const sprc = this.parentNode.parentNode;
-  const ovl = document.getElementById('add-spr');
-  const name = document.getElementById('spr-name');
-  name.value = '';
-  const cls = document.getElementById('spr-class');
-  cls.value = '';
-  const css = document.getElementById('spr-css');
-  css.value = '';
+  const sprc  = document.querySelector('.admin-tabs li.admin-tab-selected');
+  const ovl   = document.getElementById('add-spr');
+  const title = document.getElementById('add-spr-title');
+  const name  = document.getElementById('spr-name');
+  name.value  = '';
+  const cls   = document.getElementById('spr-class');
+  cls.value   = '';
+  const css   = document.getElementById('spr-css');
+  css.value   = '';
   const crossable = document.getElementById('spr-crossable');
   crossable.checked = false;
   const breakable = document.getElementById('spr-breakable');
@@ -151,7 +186,10 @@ function showAddSpriteBox(e){
   grabbable.checked = false;
   const pickable = document.getElementById('spr-pickable');
   pickable.checked = false;
+  const del  = document.getElementById('spr-delete');
+  del.style.display = 'none';
   
+  title.innerHTML = 'Añadir sprite';
   editSpriteId = 0;
   editSpriteCategoryId = sprc.dataset.id;
   
@@ -159,11 +197,17 @@ function showAddSpriteBox(e){
   name.focus();
 }
 
+/*
+ * Función para cerrar el cuadro de añadir sprite
+ */
 function closeAddSpriteBox(e){
   if (e){ e.preventDefault(); }
   document.getElementById('add-spr').classList.remove('add-box-show');
 }
 
+/*
+ * Función para guardar un sprite
+ */
 function saveSprite(e){
   e.preventDefault();
   const name = document.getElementById('spr-name');
@@ -204,46 +248,51 @@ function saveSprite(e){
   postAjax('/api/save-sprite', params, saveSpriteSuccess);
 }
 
+/*
+ * Función callback tras guardar un sprite
+ */
 function saveSpriteSuccess(data){
   if (data.status=='ok'){
     if (data.is_new){
-      const list = document.getElementById('spr-list-'+data.id_category);
-      list.innerHTML += template('spr-tpl', {
+      const list = document.querySelector('#sprc-tab-'+data.id_category+' ul');
+      
+      const item = document.createElement('li');
+      item.id = 'spr-'+data.id;
+      item.dataset.id = data.id;
+      item.innerHTML += template('spr-tpl', {
         id: data.id,
         name: urldecode(data.name),
         class: urldecode(data.class),
-        crs_img: data.crossable ? 'yes' : 'no',
-        crossable: data.crossable ? '1': '0',
-        brk_img: data.breakable ? 'yes' : 'no',
-        breakable: data.breakable ? '1': '0',
-        gra_img: data.grabbable ? 'yes' : 'no',
-        grabbable: data.grabbable ? '1': '0',
-        pic_img: data.pickable ? 'yes' : 'no',
-        pickable: data.pickable ? '1': '0'
+        crossable: data.crossable ? 'on': 'off',
+        crs: data.crossable ? '1': '0',
+        breakable: data.breakable ? 'on': 'off',
+        bre: data.breakable ? '1': '0',
+        grabbable: data.grabbable ? 'on': 'off',
+        gra: data.grabbable ? '1': '0',
+        pickable: data.pickable ? 'on': 'off',
+        pic: data.pickable ? '1': '0'
       });
+      item.addEventListener('click', editSprite);
+      list.appendChild(item);
       addCss(urldecode(data.class),urldecode(data.css));
-      updateEventListeners();
-      if (!list.classList.contains('obj-category-list-open')){
-        deployCategory(null, data.id_category);
-      }
     }
     else{
       const spr = document.getElementById('spr-'+data.id);
-      spr.querySelector('.obj-item-name').innerHTML = urldecode(data.name);
-      const sample = spr.querySelector('.obj-item-sample');
-      sample.className = 'obj-item-sample';
+      spr.querySelector('span').innerHTML = urldecode(data.name);
+      const sample = spr.querySelector('.item-list-sample');
+      sample.className = 'item-list-sample';
       sample.classList.add(urldecode(data.class));
-      const crs = spr.querySelector('.obj-item-info-crossable');
-      crs.src = '/img/' + ((data.crossable) ? 'yes':'no') + '.svg';
+      const crs = spr.querySelector('.crossable');
+      crs.src = '/img/crossable_' + ((data.crossable) ? 'on':'off') + '.png';
       crs.dataset.crossable = ((data.crossable) ? '1':'0');
-      const brk = spr.querySelector('.obj-item-info-breakable');
-      brk.src = '/img/' + ((data.breakable) ? 'yes':'no') + '.svg';
-      brk.dataset.breakable = ((data.breakable) ? '1':'0');
-      const gra = spr.querySelector('.obj-item-info-grabbable');
-      gra.src = '/img/' + ((data.grabbable) ? 'yes':'no') + '.svg';
+      const bre = spr.querySelector('.breakable');
+      bre.src = '/img/breakable_' + ((data.breakable) ? 'on':'off') + '.png';
+      bre.dataset.breakable = ((data.breakable) ? '1':'0');
+      const gra = spr.querySelector('.grabbable');
+      gra.src = '/img/grabbable_' + ((data.grabbable) ? 'on':'off') + '.png';
       gra.dataset.grabbable = ((data.grabbable) ? '1':'0');
-      const pic = spr.querySelector('.obj-item-info-pickable');
-      pic.src = '/img/' + ((data.pickable) ? 'yes':'no') + '.svg';
+      const pic = spr.querySelector('.pickable');
+      pic.src = '/img/pickable_' + ((data.pickable) ? 'on':'off') + '.png';
       pic.dataset.pickable = ((data.pickable) ? '1':'0');
       updateCss(urldecode(data.class), urldecode(data.css));
     }
@@ -254,27 +303,40 @@ function saveSpriteSuccess(data){
   }
 }
 
+/*
+ * Función para añadir una nueva clase CSS
+ */
 function addCss(cls, css){
   const obj = document.getElementById('sprites-css');
   obj.innerHTML += '.'+cls+'{'+css+'}';
 }
 
+/*
+ * Función para actualizar una clase CSS
+ */
 function updateCss(cls, css){
   const obj = document.getElementById('sprites-css');
   const classes = obj.innerHTML;
-
+  
   const exp = new RegExp('.'+cls+'{([\\s\\S]*?)}','g');
   obj.innerHTML = classes.replace(exp, '.'+cls+'{'+css+'}');
 }
 
+/*
+ * Función para leer el contenido de una clase CSS
+ */
 function getCss(cls){
   const obj = document.getElementById('sprites-css').innerHTML;
   const exp = new RegExp('.'+cls+'{([\\s\\S]*?)}','ig');
+  console.log(exp);
   const res = obj.match(exp);
   const ret = res[0].replace('.'+cls+'{','').replace('}','').replace(/^\s+|\s+$/g, '');
   return trim(ret);
 }
 
+/*
+ * Función para borrar un sprite
+ */
 function deleteSprite(){
   const spr = this;
   const id = parseInt(spr.parentNode.parentNode.dataset.id);
@@ -284,24 +346,31 @@ function deleteSprite(){
   }
 }
 
+/*
+ * Función callback tras borrar un sprite
+ */
 function deleteSpriteSuccess(data){
   const spr = document.getElementById('spr-'+data.id);
   spr.parentNode.removeChild(spr);
 }
 
+/*
+ * Función para editar un sprite
+ */
 function editSprite(){
+  const spr   = this;
+  const sprc  = document.querySelector('.admin-tabs li.admin-tab-selected');
   const ovl   = document.getElementById('add-spr');
   const title = document.getElementById('add-spr-title');
-  const spr   = this.parentNode.parentNode;
-  const name  = spr.querySelector('.obj-item-name').innerHTML;
-  const cls   = spr.querySelector('.obj-item-sample').className.replace('obj-item-sample ', '');
+  const name  = spr.querySelector('span').innerHTML;
+  const cls   = spr.querySelector('.item-list-sample').className.replace('item-list-sample ', '');
   const css   = getCss(cls);
-  const crs   = spr.querySelector('.obj-item-info-crossable').dataset.crossable;
-  const brk   = spr.querySelector('.obj-item-info-breakable').dataset.breakable;
-  const gra   = spr.querySelector('.obj-item-info-grabbable').dataset.grabbable;
-  const pic   = spr.querySelector('.obj-item-info-pickable').dataset.pickable;
+  const crs   = spr.querySelector('.crossable').dataset.crossable;
+  const bre   = spr.querySelector('.breakable').dataset.breakable;
+  const gra   = spr.querySelector('.grabbable').dataset.grabbable;
+  const pic   = spr.querySelector('.pickable').dataset.pickable;
 
-  editSpriteCategoryId = parseInt(spr.parentNode.parentNode.dataset.id);
+  editSpriteCategoryId = parseInt(sprc.dataset.id);
   editSpriteId = parseInt(spr.dataset.id);
   title.innerHTML = 'Editar sprite';
   const txt_name = document.getElementById('spr-name');
@@ -312,15 +381,15 @@ function editSprite(){
   txt_css.value = css;
   const chk_crs = document.getElementById('spr-crossable');
   chk_crs.checked = (crs=='1');
-  const chk_brk = document.getElementById('spr-breakable');
-  chk_brk.checked = (brk=='1');
+  const chk_bre = document.getElementById('spr-breakable');
+  chk_bre.checked = (bre=='1');
   const chk_gra = document.getElementById('spr-grabbable');
   chk_gra.checked = (gra=='1');
   const chk_pic = document.getElementById('spr-pickable');
   chk_pic.checked = (pic=='1');
+  const del  = document.getElementById('spr-delete');
+  del.style.display = 'inline-block';
 
   ovl.classList.add('add-box-show');
   txt_name.focus();
 }
-
-updateEventListeners();

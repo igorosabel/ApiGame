@@ -2,6 +2,7 @@
 <header>
   <img src="/img/triforce.png" />
   <a href="/admin/main">Admin</a> > Sprites
+  <a href="#" class="admin-header-add">Añadir categoría</a>
 </header>
 
 <div class="obj-list" id="sprc-list">
@@ -21,6 +22,7 @@
         <input type="text" class="add-box-txt" name="sprc-name" id="sprc-name" value="" placeholder="Nombre de la categoría" />
       </div>
       <div class="add-box-footer">
+        <input type="button" class="add-box-btn add-box-btn-del" id="sprc-delete" value="Borrar" />
         <input type="submit" class="add-box-btn" id="new-sprc-go" value="Enviar" />
       </div>
     </div>
@@ -64,38 +66,28 @@
         </div>
       </div>
       <div class="add-box-footer">
+        <input type="button" class="add-box-btn add-box-btn-del" id="spr-delete" value="Borrar" />
         <input type="submit" class="add-box-btn" id="new-spr-go" value="Enviar" />
       </div>
     </div>
   </form>
 </div>
 
-<script type="text/x-template" id="sprc-tpl">
-  <div class="obj-category" id="sprc-{{id}}" data-id="{{id}}">
-    <div class="obj-category-header">
-      <img src="/img/closed.svg" class="obj-category-deploy" />
-      <span>{{name}}</span>
-      <img src="/img/delete.svg" class="obj-category-btn obj-category-delete" title="Editar categoría" />
-      <img src="/img/edit.svg" class="obj-category-btn obj-category-edit" title="Borrar categoría" />
-      <img src="/img/add.svg" class="obj-category-btn obj-category-add" title="Añadir sprite" />
-    </div>
-    <div class="obj-category-list" id="spr-list-{{id}}"></div>
-  </div>
-</script>
-
 <script type="text/x-template" id="spr-tpl">
-  <div class="obj-item" id="spr-{{id}}" data-id="{{id}}">
-    <div class="obj-item-sample {{class}}"></div>
-    <div class="obj-item-name">{{name}}</div>
-    <div class="obj-item-options">
-      <img src="/img/edit.svg" class="obj-edit" title="Editar sprite" />
-      <img src="/img/delete.svg" class="obj-delete" title="Borrar sprite" />
+  <div class="item-list-sample {{class}}"></div>
+  <span>{{name}}</span>
+  <div class="item-list-info">
+    <div class="item-list-info-item">
+      <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_{{crossable}}.png" data-crossable="{{crs}}" />
     </div>
-    <div class="obj-item-info">
-      <img class="obj-item-info-crossable" title="¿Se puede cruzar?" src="/img/{{crs_img}}.svg" data-crossable="{{crossable}}" />
-      <img class="obj-item-info-breakable" title="¿Se puede romper?" src="/img/{{brk_img}}.svg" data-breakable="{{breakable}}" />
-      <img class="obj-item-info-grabbable" title="¿Se puede coger?" src="/img/{{gra_img}}.svg" data-grabbable="{{grabbable}}" />
-      <img class="obj-item-info-pickable" title="¿Se puede coger (inv)?" src="/img/{{pic_img}}.svg" data-pickable="{{pickable}}" />
+    <div class="item-list-info-item">
+      <img class="breakable" title="¿Se puede romper?" src="/img/breakable_{{breakable}}.png" data-breakable="{{bre}}" />
+    </div>
+    <div class="item-list-info-item">
+      <img class="grabbable" title="¿Se puede coger?" src="/img/grabbable_{{grabbable}}.png" data-grabbable="{{gra}}" />
+    </div>
+    <div class="item-list-info-item">
+      <img class="pickable" title="¿Se puede coger (inv)?" src="/img/pickable_{{pickable}}.png" data-pickable="{{pic}}" />
     </div>
   </div>
 </script>
