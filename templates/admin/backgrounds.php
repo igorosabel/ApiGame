@@ -58,15 +58,11 @@
 </div>
 
 <script type="text/x-template" id="bck-tpl">
-  <div class="obj-item" id="bck-{{id}}" data-id="{{id}}">
-    <div class="obj-item-sample {{class}}"></div>
-    <div class="obj-item-name">{{name}}</div>
-    <div class="obj-item-options">
-      <img src="/img/edit.svg" class="obj-edit" title="Editar fondo" />
-      <img src="/img/delete.svg" class="obj-delete" title="Borrar fondo" />
-    </div>
-    <div class="obj-item-info">
-      <img title="¿Se puede cruzar?" src="/img/{{crs_img}}.svg" data-crossable="{{crossable}}" />
+  <div class="item-list-sample {{class}}"></div>
+  <span>{{name}}</span>
+  <div class="item-list-info">
+    <div class="item-list-info-item">
+      <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_{{crossable}}.png" data-crossable="{{crs}}" />
     </div>
   </div>
 </script>

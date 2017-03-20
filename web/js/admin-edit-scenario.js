@@ -105,21 +105,24 @@ function changeOption() {
 
   switch (opt.dataset.id){
     case 'select':{
-      label.innerHTML          = 'Seleccionar';
-      sample.style.display     = 'none';
-      sampleName.style.display = 'none;'
+      label.innerHTML             = 'Seleccionar';
+      sample.style.display        = 'none';
+      sampleName.style.display    = 'none';
+      menuPaintLast.style.display = 'none';
     }
     break;
     case 'paint':{
-      label.innerHTML          = 'Pintar';
-      sample.style.display     = 'block';
-      sampleName.style.display = 'block;'
+      label.innerHTML             = 'Pintar';
+      sample.style.display        = 'block';
+      sampleName.style.display    = 'block';
+      menuPaintLast.style.display = 'block';
     }
     break;
     case 'clear':{
-      label.innerHTML          = 'Borrar';
-      sample.style.display     = 'none';
-      sampleName.style.display = 'none;'
+      label.innerHTML             = 'Borrar';
+      sample.style.display        = 'none';
+      sampleName.style.display    = 'none;'
+      menuPaintLast.style.display = 'none';
     }
     break;
   }

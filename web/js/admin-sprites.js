@@ -255,7 +255,6 @@ function saveSpriteSuccess(data){
   if (data.status=='ok'){
     if (data.is_new){
       const list = document.querySelector('#sprc-tab-'+data.id_category+' ul');
-      
       const item = document.createElement('li');
       item.id = 'spr-'+data.id;
       item.dataset.id = data.id;

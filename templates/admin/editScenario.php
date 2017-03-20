@@ -26,9 +26,7 @@
     <div class="scenario-menu-paint-sample"></div>
     <div class="scenario-menu-paint-sample-name"></div>
     
-    <div class="scenario-menu-paint-last">
-      <div class="scenario-menu-paint-item"></div>
-    </div>
+    <div class="scenario-menu-paint-last"></div>
 
     <a href="#" id="save-scn" class="save-scn save-scn-disabled">Guardar</a>
 

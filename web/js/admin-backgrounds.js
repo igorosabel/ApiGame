@@ -241,13 +241,18 @@ function saveBackgroundSuccess(data){
   if (data.status=='ok'){
     if (data.is_new){
       const list = document.getElementById('bck-list-'+data.id_category);
-      list.innerHTML += template('bck-tpl', {
+      const item = document.createElement('li');
+      item.id = 'bck-'+data.id;
+      item.dataset.id = data.id;
+      item.innerHTML += template('bck-tpl', {
         id: data.id,
         name: urldecode(data.name),
         class: urldecode(data.class),
-        crs_img: data.crossable ? 'yes' : 'no',
-        crossable: data.crossable ? '1': '0'
+        crossable: data.crossable ? 'on' : 'off',
+        crs: data.crossable ? '1': '0'
       });
+      item.addEventListener('click', editBackground);
+      list.appendChild(item);
       addCss(urldecode(data.class),urldecode(data.css));
     }
     else{
