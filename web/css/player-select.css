@@ -40,6 +40,7 @@
 }
 
 .player-select-name{
+  cursor: pointer;
   display: inline-block;
   font-size: 3em;
   line-height: 46px;

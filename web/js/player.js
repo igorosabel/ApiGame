@@ -2,7 +2,7 @@
  * Objeto que contiene al jugador
  */
 const player = {
-  name: 'dunedain',
+  name: '',
   position: {
     x: position_x,
     y: position_y
@@ -51,6 +51,7 @@ const player = {
   },
   
   load: function(){
+    this.setName(player_name);
     let obj = document.createElement('div');
     obj.id = 'player';
     obj.className = 'player';
@@ -72,7 +73,7 @@ const player = {
       x: this.getPositionX(),
       y: this.getPositionY() - Val.step,
       orientation: 'up'
-    }
+    };
     this.move(new_pos);
   },
   moveRight: function(){
@@ -80,7 +81,7 @@ const player = {
       x: this.getPositionX() + Val.step,
       y: this.getPositionY(),
       orientation: 'right'
-    }
+    };
     this.move(new_pos);
   },
   moveDown: function(){
@@ -88,7 +89,7 @@ const player = {
       x: this.getPositionX(),
       y: this.getPositionY() + Val.step,
       orientation: 'down'
-    }
+    };
     this.move(new_pos);
   },
   moveLeft: function(){
@@ -96,7 +97,7 @@ const player = {
       x: this.getPositionX() - Val.step,
       y: this.getPositionY(),
       orientation: 'left'
-    }
+    };
     this.move(new_pos);
   },
   move: function(pos){
@@ -110,13 +111,10 @@ const player = {
     }
     
     let hasBlocker = false;
+    // Busco entre los posibles bloqueadores
     for (let i in blockers){
       let obj = blockers[i];
-      if (modo_debug){
-        console.log('pos',{xy: pos.x+'-'+pos.y, wh: pos.width+'-'+pos.height});
-        console.log('obj',{xy: obj.x+'-'+obj.y, wh: obj.width+'-'+obj.height});
-      }
-      if (pos.x < obj.x + obj.width && pos.x + pos.width > obj.x && pos.y < obj.y + obj.height && pos.height + pos.y > obj.y) {
+      if (pos.x < obj.x + obj.width && pos.x + pos.width > obj.x && pos.y < obj.y + obj.height && pos.height + pos.y > obj.y){
         hasBlocker = true;
         break;
       }
@@ -125,20 +123,7 @@ const player = {
       return false;
     }
 
-/*
-    // Busco casilla de destino
-    const new_pos_tile = scenario[pos.x][pos.y];
-    // Si la casilla de destino no se puede cruzar, fuera
-    if (!backgrounds.list['bck_'+new_pos_tile.bck].crossable){
-      return false;
-    }
-    // Si la casilla de destino no se puede cruzar, fuera
-    if (new_pos_tile.spr && !sprites.list['spr_'+new_pos_tile.spr].crossable){
-      return false;
-    }
-*/
     this.setPosition(pos.x, pos.y);
-    
     
     obj_player.classList.remove('player_'+this.getOrientation());
     obj_player.classList.add('player_'+pos.orientation);
@@ -146,7 +131,5 @@ const player = {
     this.setOrientation(pos.orientation);
     obj_player.style.left  = pos.x + 'px';
     obj_player.style.top = pos.y + 'px';
-    //const dest = document.getElementById('cell_'+this.getPositionX()+'_'+this.getPositionY());
-    //dest.appendChild(obj_player);
   }
 };

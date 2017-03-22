@@ -19,8 +19,8 @@ class Game extends OBase{
   
   private $scenario = null;
   
-  public function setScenario($sce){
-    $this->scenario = $sce;
+  public function setScenario($scn){
+    $this->scenario = $scn;
   }
   
   public function getScenario(){
@@ -31,9 +31,9 @@ class Game extends OBase{
   }
   
   public function loadScenario(){
-    $sce = new Scenario();
-    $sce->find(array('id'=>$this->get('id_scenario')));
+    $scn = new Scenario();
+    $scn->find(array('id'=>$this->get('id_scenario')));
     
-    $this->setScenario($sce);
+    $this->setScenario($scn);
   }
 }

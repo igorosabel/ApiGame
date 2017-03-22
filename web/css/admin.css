@@ -624,6 +624,7 @@
   width: 80px;
   height: 80px;
   margin: 0 auto;
+  background-size: 100% 100% !important;
 }
 
 .item-list li span{
