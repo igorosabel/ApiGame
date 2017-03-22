@@ -7,8 +7,6 @@
 
 <div class="scenario-main">
   <div class="scenario-menu">
-    <input type="text" class="scn-name" name="scn-name" id="scn-name" value="{{scn_name}}" placeholder="Nombre del escenario" />
-
     <div class="scenario-menu-options">
       <div class="scenario-menu-option scenario-menu-option-selected" data-id="select">
         <img src="/img/cursor.svg" title="Seleccionar" />
@@ -19,14 +17,33 @@
       <div class="scenario-menu-option" data-id="clear">
         <img src="/img/clear.svg" title="Limpiar" />
       </div>
+      <div class="scenario-menu-option" data-id="start">
+        <img src="/img/start-position.svg" title="Posición inicial" />
+      </div>
+      <div class="scenario-menu-option" data-id="connectors">
+        <img src="/img/connectors.svg" title="Conectores" />
+      </div>
+      <div class="scenario-menu-option" data-id="data">
+        <img src="/img/data.svg" title="Datos" />
+      </div>
     </div>
 
     <div class="scenario-menu-option-label">Seleccionar</div>
 
-    <div class="scenario-menu-paint-sample"></div>
-    <div class="scenario-menu-paint-sample-name"></div>
+    <div class="scenario-menu-option-group" data-id="paint">
+      <div class="scenario-menu-paint-sample"></div>
+      <div class="scenario-menu-paint-sample-name"></div>
     
-    <div class="scenario-menu-paint-last"></div>
+      <div class="scenario-menu-paint-last"></div>
+    </div>
+
+    <div class="scenario-menu-option-group" data-id="data">
+      <input type="text" class="scn-name" name="scn-name" id="scn-name" value="" placeholder="Nombre del escenario" />
+      <div class="scenario-menu-row">
+        <label for="scn-initial">Inicial:</label>
+        <input type="checkbox" name="scn-initial" id="scn-initial" />
+      </div>
+    </div>
 
     <a href="#" id="save-scn" class="save-scn save-scn-disabled">Guardar</a>
 
@@ -80,8 +97,8 @@
 </div>
 
 <script>
-  const idScenario  = {{scn_id}};
-  const scenario    = JSON.parse('{{scn_data}}');
+  const scn         = JSON.parse('{{scenario}}');
+  const scenario    = scn.data;
   const backgrounds = JSON.parse('{{bcks_data}}');
   const sprites     = JSON.parse('{{sprs_data}}');
 </script>

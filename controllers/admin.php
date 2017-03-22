@@ -74,14 +74,21 @@
     $scn = new Scenario();
     $scn->find(array('id'=>$req['id']));
 
+    $scenario = array(
+      'id' => $scn->get('id'),
+      'name' => $scn->get('name'),
+      'data' => json_decode($scn->get('data'),true),
+      'start_x' => $scn->get('start_x'),
+      'start_y' => $scn->get('start_y'),
+      'initial' => $scn->get('initial')
+    );
+
     $backgrounds = stPublic::getBackgrounds();
     $sprites     = stPublic::getSprites();
 
     $t->addPartial('backgrounds_css', 'public/backgrounds_css', array('backgrounds'=>$backgrounds));
     $t->addPartial('sprites_css',     'public/sprites_css',     array('sprites'=>$sprites));
-    $t->add('scn_id',   $scn->get('id'));
-    $t->add('scn_name', $scn->get('name'));
-    $t->add('scn_data', $scn->get('data'));
+    $t->add('scenario', json_encode($scenario));
     $t->addPartial('backgrounds', 'admin/backgrounds', array('backgrounds'=>$backgrounds));
     $t->add('bcks_data', json_encode(stPublic::getBackgroundsData($backgrounds)));
     $t->addPartial('sprites', 'admin/sprites', array('sprites'=>$sprites));

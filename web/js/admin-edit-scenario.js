@@ -11,6 +11,9 @@ const detailDelBck    = cellDetailBck.querySelector('.cell-detail-option-delete'
 const detailDelSpr    = cellDetailSpr.querySelector('.cell-detail-option-delete');
 const menuPaint       = document.querySelector('.scenario-menu-paint-sample');
 const menuPaintLast   = document.querySelector('.scenario-menu-paint-last');
+let startMark         = null;
+const scnName         = document.getElementById('scn-name');
+const scnInitial      = document.getElementById('scn-initial');
 const saveScnBtn      = document.getElementById('save-scn');
 
 options.forEach(opt => opt.addEventListener('click', changeOption));
@@ -24,6 +27,8 @@ detailItems.forEach(item => item.addEventListener('click', selectItem));
 detailDelBck.addEventListener('click', deleteSelectBck);
 detailDelSpr.addEventListener('click', deleteSelectSpr);
 menuPaint.addEventListener('click', showBackgrounds);
+scnName.addEventListener('keyup',function(){ setAllSaved(false); });
+scnInitial.addEventListener('click',function(){ setAllSaved(false); });
 saveScnBtn.addEventListener('click', saveScenario);
 
 loadScenario();
@@ -37,6 +42,8 @@ loadScenario();
  * Función para dibujar el escenario
  */
 function loadScenario(){
+  scnName.value      = scn.name;
+  scnInitial.checked = scn.initial;
   board.innerHTML = '';
   // Líneas
   for (let i in scenario){
@@ -60,6 +67,14 @@ function loadScenario(){
 
   const cells = board.querySelectorAll('.cell');
   cells.forEach(cell => cell.addEventListener('click', selectCell));
+  
+  // Casilla de salida
+  const start = document.createElement('div');
+  start.id = 'start-cell';
+  start.className = 'start-cell';
+  start.style.display = 'none';
+  document.getElementById('cell_'+scn.start_x+'_'+scn.start_y).appendChild(start);
+  startMark = document.getElementById('start-cell');
 }
 
 /*
@@ -101,28 +116,37 @@ function changeOption() {
   const sample     = document.querySelector('.scenario-menu-paint-sample');
   const sampleName = document.querySelector('.scenario-menu-paint-sample-name');
 
+  document.querySelectorAll('.scenario-menu-option-group').forEach(grp => grp.style.display='none');
+  startMark.style.display = 'none';
+
   selectedOption = opt.dataset.id;
 
   switch (opt.dataset.id){
     case 'select':{
-      label.innerHTML             = 'Seleccionar';
-      sample.style.display        = 'none';
-      sampleName.style.display    = 'none';
-      menuPaintLast.style.display = 'none';
+      label.innerHTML = 'Seleccionar';
     }
     break;
     case 'paint':{
-      label.innerHTML             = 'Pintar';
-      sample.style.display        = 'block';
-      sampleName.style.display    = 'block';
-      menuPaintLast.style.display = 'block';
+      label.innerHTML = 'Pintar';
+      document.querySelector('.scenario-menu-option-group[data-id="paint"]').style.display = 'block';
     }
     break;
     case 'clear':{
-      label.innerHTML             = 'Borrar';
-      sample.style.display        = 'none';
-      sampleName.style.display    = 'none;'
-      menuPaintLast.style.display = 'none';
+      label.innerHTML = 'Borrar';
+    }
+    break;
+    case 'start':{
+      label.innerHTML         = 'Posición inicial';
+      startMark.style.display = 'block';
+    }
+    break;
+    case 'connectors':{
+      label.innerHTML = 'Conectores';
+    }
+    break;
+    case 'data':{
+      label.innerHTML = 'Datos';
+      document.querySelector('.scenario-menu-option-group[data-id="data"]').style.display = 'block';
     }
     break;
   }
@@ -213,6 +237,14 @@ function selectCell() {
       scenario[cell.dataset.x][cell.dataset.y] = {};
       cell.className = 'cell debug';
       cell.innerHTML = '';
+      setAllSaved(false);
+    }
+    break;
+    case 'start':{
+      const dest = document.getElementById('cell_'+cell.dataset.x+'_'+cell.dataset.y);
+      dest.appendChild(startMark);
+      scn.start_x = parseInt(cell.dataset.x);
+      scn.start_y = parseInt(cell.dataset.y);
       setAllSaved(false);
     }
     break;
@@ -373,10 +405,8 @@ function updatePaintBckList(){
  * Función para seleccionar un elemento de la lista de últimos
  */
 function selectFromPaintList(){
-  var item = this;
-  console.log(item);
+  const item = this;
   const id = item.id.replace('paint-last-bck-','');
-  
   const obj = backgrounds.list['bck_'+id];
   
   paintBck = obj;
@@ -444,14 +474,22 @@ function saveScenario(e){
   e.preventDefault();
   if (allSaved){ return true; }
 
-  const name = document.getElementById('scn-name');
-  if (name.value==''){
+  if (scnName.value==''){
     alert('¡No puedes dejar el nombre del escenario en blanco!');
     name.focus();
     return false;
   }
+  
+  const params = {
+    id: scn.id, 
+    name: urlencode(scnName.value),
+    scenario: JSON.stringify(scenario),
+    start_x: scn.start_x,
+    start_y: scn.start_y,
+    initial: (scnInitial.checked)?1:0
+  };
 
-  postAjax('/api/save-scenario', {id: idScenario, name: urlencode(name.value), scenario: JSON.stringify(scenario)}, saveScenarioSuccess);
+  postAjax('/api/save-scenario', params, saveScenarioSuccess);
 }
 
 /*

@@ -253,11 +253,13 @@
 .scenario-menu-options{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .scenario-menu-option{
   border: 1px solid #ccc;
   flex: 1;
+  min-width: 33%;
   text-align: center;
   cursor: pointer;
   padding: 10px 0;
@@ -283,13 +285,20 @@
   text-align: center;
 }
 
+.scenario-menu-option-group{
+  display: none;
+}
+
+.scenario-menu-option-group.scenario-menu-option-selected{
+  display: block;
+}
+
 .scenario-menu-paint-sample{
   cursor: pointer;
   width: 80px;
   height: 80px;
   border: 1px solid #ccc;
   margin: 10px auto;
-  display: none;
 }
 
 .scenario-menu-paint-sample:hover{
@@ -299,7 +308,6 @@
 .scenario-menu-paint-sample-name{
   color: #000;
   border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
   line-height: 30px;
   text-align: center;
   display: none;
@@ -307,7 +315,7 @@
 
 .scenario-menu-paint-last{
   height: 240px;
-  display: none;
+  border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
 
@@ -322,6 +330,13 @@
 
 .scenario-menu-paint-item:hover{
   border: 1px solid #000;
+}
+
+.scenario-menu-row{
+  border-bottom: 1px solid #ccc;
+  line-height: 40px;
+  color: #000;
+  padding: 0 16px;
 }
 
 .save-scn{
@@ -366,6 +381,16 @@
 
 .cell-selected{
   border: 1px dotted #00f !important;
+}
+
+.start-cell{
+  z-index: 20;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: url('/img/start-position-mark.svg') no-repeat center center transparent;
+  background-size: auto 100% !important;
 }
 
 .scenario-overlay{

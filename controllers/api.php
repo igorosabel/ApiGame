@@ -100,10 +100,12 @@
       $name = urldecode($name);
       $game = new Game();
       if ($game->find(array('id'=>$id))){
+        $scn = stPublic::getStartScenario();
+
         $game->set('name', $name);
-        $game->set('id_scenario', 1);
-        $game->set('position_x', 14);
-        $game->set('position_y', 13);
+        $game->set('id_scenario', $scn->get('id'));
+        $game->set('position_x', $scn->get('start_x'));
+        $game->set('position_y', $scn->get('start_y'));
         $game->save();
       }
       else{
@@ -172,16 +174,22 @@
     $id       = Base::getParam('id',       $req['url_params'], false);
     $name     = Base::getParam('name',     $req['url_params'], false);
     $scenario = Base::getParam('scenario', $req['url_params'], false);
+    $start_x  = Base::getParam('start_x',  $req['url_params'], false);
+    $start_y  = Base::getParam('start_y',  $req['url_params'], false);
+    $initial  = Base::getParam('initial',  $req['url_params'], false);
     
-    if ($id===false || $name===false || $scenario===false){
+    if ($id===false || $name===false || $scenario===false || $start_x===false || $start_y===false || $initial===false){
       $status = 'error';
     }
     
     if ($status=='ok'){
       $scn = new Scenario();
       if ($scn->find(array('id'=>$id))){
-        $scn->set('name', urldecode($name));
-        $scn->set('data', $scenario);
+        $scn->set('name',    urldecode($name));
+        $scn->set('data',    $scenario);
+        $scn->set('start_x', $start_x);
+        $scn->set('start_y', $start_y);
+        $scn->set('initial', $initial);
         $scn->save();
 
       }

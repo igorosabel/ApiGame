@@ -18,6 +18,18 @@ class stPublic{
     
     return $ret;
   }
+
+  public static function getStartScenario(){
+    $db = new ODB();
+    $sql = "SELECT * FROM `scenario` WHERE `initial` = 1";
+    $db->query($sql);
+
+    $res = $db->next();
+    $scn = new Scenario();
+    $scn->update($res);
+
+    return $scn;
+  }
   
   public static function getBackgrounds(){
     $ret = array();

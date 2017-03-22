@@ -36,6 +36,7 @@
 .player-select-game img{
   vertical-align: middle;
   float: left;
+  margin-right: 15px;
 }
 
 .player-select-name{
