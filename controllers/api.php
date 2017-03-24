@@ -229,6 +229,7 @@
         $is_new = 'false';
       }
       $bckc->set('name', $name);
+      $bckc->set('slug', Base::slugify($name));
       $bckc->save();
 
       $id = $bckc->get('id');
@@ -283,20 +284,18 @@
     $id          = Base::getParam('id',          $req['url_params'], false);
     $id_category = Base::getParam('id_category', $req['url_params'], false);
     $name        = Base::getParam('name',        $req['url_params'], false);
-    $class       = Base::getParam('class',       $req['url_params'], false);
-    $css         = Base::getParam('css',       $req['url_params'], false);
+    $file_name   = Base::getParam('file_name',   $req['url_params'], false);
+    $file        = Base::getParam('file',        $req['url_params'], false);
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
     $is_new      = 'true';
 
-    if ($name===false || $class===false || $css===false || $crossable===false){
+    if ($id===false || $id_category===false || $name===false || $crossable===false){
       $status = 'error';
     }
 
     if ($status=='ok'){
       $id    = (int)$id;
       $name  = urldecode($name);
-      $class = urldecode($class);
-      $css   = urldecode($css);
 
       $bck = new Background();
       if ($id!==0){
@@ -305,12 +304,23 @@
       }
       $bck->set('id_category', $id_category);
       $bck->set('name',        $name);
-      $bck->set('class',       $class);
-      $bck->set('css',         $css);
+      if ($file_name!=''){
+        $bck->set('file', str_ireplace('.png', '', $file_name));
+      }
       $bck->set('crossable',   ($crossable=='true'));
       $bck->save();
+      
+      if ($file_name!=''){
+        $bckc = new BackgroundCategory();
+        $bckc->find(array('id'=>$id_category));
+        $category = $bckc->get('slug');
+
+        $ruta = $c->getDir('assets').'background/'.$bckc->get('slug').'/'.$file_name;
+        stPublic::saveImage($ruta, $file);
+      }
 
       $id = $bck->get('id');
+      $saved_file = $spr->get('file');
     }
 
     $t->setLayout(false);
@@ -320,8 +330,8 @@
     $t->add('id',          $id);
     $t->add('id_category', $id_category);
     $t->add('name',        $name);
-    $t->add('class',       $class);
-    $t->add('css',         $css);
+    $t->add('saved_file',  $saved_file);
+    $t->add('category',    $category);
     $t->add('crossable',   $crossable);
     $t->add('is_new',      $is_new);
     $t->process();
@@ -343,6 +353,16 @@
     if ($status=='ok'){
       $bck = new Background();
       if ($bck->find(array('id'=>$id))){
+        // Primero borro el archivo
+        $bckc = new BackgroundCategory();
+        $bckc->find(array('id'=>$bck->get('id_category')));
+
+        $ruta = $c->getDir('assets').'background/'.$bckc->get('slug').'/'.$bck->get('file').'.png';
+        if (file_exists($ruta)){
+          unlink($ruta);
+        }
+
+        // Luego el registro
         $bck->delete();
       }
       else{

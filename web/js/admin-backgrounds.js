@@ -14,6 +14,10 @@ const items = document.querySelectorAll('.item-list li');
 items.forEach(item => item.addEventListener('click', editBackground));
 const addBckClose = document.getElementById('add-bck-close');
 addBckClose.addEventListener('click', closeAddBackgroundBox);
+const addBckFile = document.querySelector('.bck-add-file');
+addBckFile.addEventListener('click', bckFileSelect);
+const bckFile = document.getElementById('bck-file');
+bckFile.addEventListener('change', bckFileUpload);
 const frmBck = document.getElementById('frm-bck');
 frmBck.addEventListener('submit', saveBackground);
 const bckDel = document.getElementById('bck-delete');
@@ -74,7 +78,7 @@ function closeAddCategoryBox(e){
 function saveBackgroundCategory(e){
   e.preventDefault();
   const txt = document.getElementById('bckc-name');
-  if (txt.value==''){
+  if (txt.value===''){
     alert('¡No puedes dejar el nombre de la categoría en blanco!');
     txt.focus();
     return false;
@@ -87,7 +91,7 @@ function saveBackgroundCategory(e){
  * Función callback tras guardar una categoría
  */
 function saveBackgroundCategorySuccess(data){
-  if (data.status=='ok'){
+  if (data.status==='ok'){
     if (data.is_new){
       const tab = document.createElement('li');
       tab.innerHTML = '<span>'+urldecode(data.name)+'</span>';
@@ -160,6 +164,14 @@ function editBackgroundCategory(e){
 }
 
 /*
+ * Foto seleccionada
+ */
+const uploadedBackground = {
+  name: '',
+  data: null
+};
+
+/*
  * Id del fondo que se está editando
  */
 let editBackgroundId = 0;
@@ -173,13 +185,13 @@ function showAddBackgroundBox(e){
   const ovl  = document.getElementById('add-bck');
   const name = document.getElementById('bck-name');
   name.value = '';
-  const cls  = document.getElementById('bck-class');
-  cls.value  = '';
-  const css  = document.getElementById('bck-css');
-  css.value  = '';
-  const crossable = document.getElementById('bck-crossable');
+  bckFile.value = '';
+  uploadedBackground.name = '';
+  uploadedBackground.data = null;
+  addBckFile.innerHTML    = '';
+  const crossable   = document.getElementById('bck-crossable');
   crossable.checked = true;
-  const del  = document.getElementById('bck-delete');
+  const del         = document.getElementById('bck-delete');
   del.style.display = 'none';
   
   editBackgroundId = 0;
@@ -198,26 +210,44 @@ function closeAddBackgroundBox(e){
 }
 
 /*
+ * Función para abrir la ventana de elegir archivo
+ */
+function bckFileSelect() {
+  bckFile.click();
+}
+
+/*
+ * Función para subir un archivo de imagen
+ */
+function bckFileUpload() {
+  const f = bckFile.files[0];
+  const r = new FileReader();
+  r.onload = function(e){
+    const data = e.target.result;
+    uploadedBackground.name = f.name;
+    uploadedBackground.data = data;
+    addBckFile.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = data;
+    addBckFile.appendChild(img);
+  };
+  r.readAsDataURL(f);
+}
+
+/*
  * Función para guardar un fondo
  */
 function saveBackground(e){
   e.preventDefault();
   const name = document.getElementById('bck-name');
-  if (name.value==''){
+  if (name.value===''){
     alert('¡No puedes dejar el nombre del fondo en blanco!');
     name.focus();
     return false;
   }
-  const cls = document.getElementById('bck-class');
-  if (cls.value==''){
-    alert('¡No puedes dejar el nombre de la clase en blanco!');
-    cls.focus();
-    return false;
-  }
-  const css = document.getElementById('bck-css');
-  if (css.value==''){
-    alert('¡No puedes dejar el CSS de la clase en blanco!');
-    css.focus();
+  const file = document.getElementById('bck-file');
+  if (editBackgroundId===0 && file.value===''){
+    alert('¡No has elegido ninguna imagen!');
     return false;
   }
   const crossable = document.getElementById('bck-crossable');
@@ -226,19 +256,19 @@ function saveBackground(e){
     id: editBackgroundId,
     id_category: editBackgroundCategoryId,
     name: urlencode(name.value),
-    class: urlencode(cls.value),
-    css: urlencode(css.value),
+    file_name: uploadedBackground.name,
+    file: uploadedBackground.data,
     crossable: crossable.checked
   };
 
-  postAjax('/api/save-background', params, saveBackgroundSuccess);
+  postAjaxFile('/api/save-background', params, saveBackgroundSuccess);
 }
 
 /*
  * Función callback tras guardar un fondo
  */
 function saveBackgroundSuccess(data){
-  if (data.status=='ok'){
+  if (data.status==='ok'){
     if (data.is_new){
       const list = document.getElementById('bck-list-'+data.id_category);
       const item = document.createElement('li');
@@ -247,24 +277,24 @@ function saveBackgroundSuccess(data){
       item.innerHTML += template('bck-tpl', {
         id: data.id,
         name: urldecode(data.name),
-        class: urldecode(data.class),
+        file: data.file,
         crossable: data.crossable ? 'on' : 'off',
         crs: data.crossable ? '1': '0'
       });
       item.addEventListener('click', editBackground);
       list.appendChild(item);
-      addCss(urldecode(data.class),urldecode(data.css));
+      addCss(data.category, data.file);
     }
     else{
       const bck = document.getElementById('bck-'+data.id);
       bck.querySelector('span').innerHTML = urldecode(data.name);
       const sample = bck.querySelector('.item-list-sample');
       sample.className = 'item-list-sample';
-      sample.classList.add(urldecode(data.class));
+      sample.classList.add(data.file);
       const crs = bck.querySelector('.crossable');
       crs.src = '/img/crossable_' + ((data.crossable) ? 'on':'off') + '.png';
       crs.dataset.crossable = ((data.crossable) ? '1':'0');
-      updateCss(urldecode(data.class), urldecode(data.css));
+      updateCss(data.category, data.file);
     }
     closeAddBackgroundBox();
   }
@@ -276,31 +306,20 @@ function saveBackgroundSuccess(data){
 /*
  * Función para añadir una nueva clase CSS
  */
-function addCss(cls, css){
+function addCss(category,file){
   const obj = document.getElementById('backgrounds-css');
-  obj.innerHTML += '.'+cls+'{'+css+'}';
+  obj.innerHTML += "."+file+"{background: url('/assets/background/"+category+"/"+file+".png') no-repeat center center transparent;background-size: 100% 100% !important;}";
 }
 
 /*
  * Función para actualizar una clase CSS
  */
-function updateCss(cls, css){
+function updateCss(category, file){
   const obj = document.getElementById('backgrounds-css');
   const classes = obj.innerHTML;
   
-  const exp = new RegExp('.'+cls+'{([\\s\\S]*?)}','g');
-  obj.innerHTML = classes.replace(exp, '.'+cls+'{'+css+'}');
-}
-
-/*
- * Función para leer el contenido de una clase CSS
- */
-function getCss(cls){
-  const obj = document.getElementById('backgrounds-css').innerHTML;
-  const exp = new RegExp('.'+cls+'{([\\s\\S]*?)}','ig');
-  const res = obj.match(exp);
-  const ret = res[0].replace('.'+cls+'{','').replace('}','').replace(/^\s+|\s+$/g, '');
-  return trim(ret);
+  const exp = new RegExp('.'+file+'{([\\s\\S]*?)}','g');
+  obj.innerHTML = classes.replace(exp, "."+file+"{background: url('/assets/background/"+category+"/"+file+".png') no-repeat center center transparent;background-size: 100% 100% !important;}");
 }
 
 /*
@@ -308,10 +327,9 @@ function getCss(cls){
  */
 function deleteBackground(){
   const bck = this;
-  const id = parseInt(bck.parentNode.parentNode.dataset.id);
   const conf = confirm('¿Estás seguro de querer borrar este fondo?');
   if (conf){
-    postAjax('/api/delete-background', {id: id}, deleteBackgroundSuccess);
+    postAjax('/api/delete-background', {id: editBackgroundId}, deleteBackgroundSuccess);
   }
 }
 
@@ -321,6 +339,7 @@ function deleteBackground(){
 function deleteBackgroundSuccess(data){
   const bck = document.getElementById('bck-'+data.id);
   bck.parentNode.removeChild(bck);
+  closeAddBackgroundBox();
 }
 
 /*
@@ -332,8 +351,7 @@ function editBackground(){
   const ovl   = document.getElementById('add-bck');
   const title = document.getElementById('add-bck-title');
   const name  = bck.querySelector('span').innerHTML;
-  const cls   = bck.querySelector('.item-list-sample').className.replace('item-list-sample ', '');
-  const css   = getCss(cls);
+  const file  = bck.querySelector('.item-list-sample').className.replace('item-list-sample ', '');
   const crs   = bck.querySelector('.crossable').dataset.crossable;
 
   editBackgroundCategoryId = parseInt(bckc.dataset.id);
@@ -341,13 +359,16 @@ function editBackground(){
   title.innerHTML = 'Editar fondo';
   const txt_name = document.getElementById('bck-name');
   txt_name.value = name;
-  const txt_cls = document.getElementById('bck-class');
-  txt_cls.value = cls;
-  const txt_css = document.getElementById('bck-css');
-  txt_css.value = css;
-  const chk_crs = document.getElementById('bck-crossable');
-  chk_crs.checked = (crs=='1');
-  const del  = document.getElementById('bck-delete');
+  
+  const category = slugify(bckc.querySelector('span').innerHTML);
+  addBckFile.innerHTML = '';
+  const img = document.createElement('img');
+  img.src = '/assets/background/'+category+'/'+file+'.png';
+  addBckFile.appendChild(img);
+  
+  const chk_crs     = document.getElementById('bck-crossable');
+  chk_crs.checked   = (crs==='1');
+  const del         = document.getElementById('bck-delete');
   del.style.display = 'inline-block';
 
   ovl.classList.add('add-box-show');

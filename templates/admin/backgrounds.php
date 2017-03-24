@@ -40,10 +40,9 @@
         <input type="text" class="add-box-txt" name="bck-name" id="bck-name" value="" placeholder="Nombre del fondo" />
       </div>
       <div class="add-box-row">
-        <input type="text" class="add-box-txt" name="bck-class" id="bck-class" value="" placeholder="Clase CSS del fondo" />
-      </div>
-      <div class="add-box-row">
-        <textarea class="add-box-textarea" name="bck-css" id="bck-css" placeholder="CSS de la clase"></textarea>
+        <label>Imagen:</label>
+        <div class="bck-add-file"></div>
+        <input type="file" class="add-box-file" name="bck-file" id="bck-file" />
       </div>
       <div class="add-box-row">
         <label for="bck-crossable">Cruzable</label>
@@ -58,7 +57,7 @@
 </div>
 
 <script type="text/x-template" id="bck-tpl">
-  <div class="item-list-sample {{class}}"></div>
+  <div class="item-list-sample {{file}}"></div>
   <span>{{name}}</span>
   <div class="item-list-info">
     <div class="item-list-info-item">

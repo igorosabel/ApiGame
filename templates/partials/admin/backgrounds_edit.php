@@ -12,7 +12,7 @@
     <ul class="item-list">
       <?php foreach ($bckc->getBackgrounds() as $bck): ?>
       <li id="bck-<?php echo $bck->get('id') ?>" data-id="<?php echo $bck->get('id') ?>">
-        <div class="item-list-sample <?php echo $bck->get('class') ?>"></div>
+        <div class="item-list-sample <?php echo $bck->get('file') ?>"></div>
         <span><?php echo $bck->get('name') ?></span>
         <div class="item-list-info">
           <div class="item-list-info-item">
