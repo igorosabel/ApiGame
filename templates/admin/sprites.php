@@ -40,10 +40,9 @@
         <input type="text" class="add-box-txt" name="spr-name" id="spr-name" value="" placeholder="Nombre del sprite" />
       </div>
       <div class="add-box-row">
-        <input type="text" class="add-box-txt" name="spr-class" id="spr-class" value="" placeholder="Clase CSS del sprite" />
-      </div>
-      <div class="add-box-row">
-        <textarea class="add-box-textarea" name="spr-css" id="spr-css" placeholder="CSS de la clase"></textarea>
+        <label>Imagen:</label>
+        <div class="spr-add-file"></div>
+        <input type="file" class="add-box-file" name="spr-file" id="spr-file" />
       </div>
       <div class="add-box-row">
         <div class="add-box-col">
@@ -74,7 +73,7 @@
 </div>
 
 <script type="text/x-template" id="spr-tpl">
-  <div class="item-list-sample {{class}}"></div>
+  <div class="item-list-sample {{file}}"></div>
   <span>{{name}}</span>
   <div class="item-list-info">
     <div class="item-list-info-item">

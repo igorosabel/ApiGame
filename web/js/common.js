@@ -2,7 +2,7 @@
  * Función para hacer llamadas AJAX usando GET
  */
 function getAjax(url, success) {
-  var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+  const xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
   xhr.open('GET', url);
   xhr.onreadystatechange = function() {
       if (xhr.readyState>3 && xhr.status==200) success(JSON.parse(xhr.responseText));
@@ -16,11 +16,11 @@ function getAjax(url, success) {
  * Función para hacer llamadas AJAX usando POST
  */
 function postAjax(url, data, success) {
-  var params = typeof data == 'string' ? data : Object.keys(data).map(
+  const params = typeof data == 'string' ? data : Object.keys(data).map(
           function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
       ).join('&');
 
-  var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+  const xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
   xhr.open('POST', url);
   xhr.onreadystatechange = function() {
       if (xhr.readyState>3 && xhr.status==200) { success(JSON.parse(xhr.responseText)); }
@@ -32,15 +32,35 @@ function postAjax(url, data, success) {
 }
 
 /*
+
+ */
+function postAjaxFile(url,params,callback){
+  const fd = new FormData();
+  for (let ind in params){
+    fd.append(ind, params[ind]);
+  }
+
+  const xhr = new XMLHttpRequest;
+
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4){
+      if (xhr.status == 200){
+        callback && callback(JSON.parse(xhr.responseText));
+      }
+    }
+  };
+  xhr.open('POST', url);
+  xhr.send(fd);
+}
+
+/*
  * Función para renderizar plantillas
  */
 function template(id,data){
-  var obj = document.getElementById(id).innerHTML;
-  var temp = '';
+  let obj = document.getElementById(id).innerHTML;
 
-  for (var ind in data){
-    temp = '{{'+ind+'}}';
-    obj = obj.replace(new RegExp(temp,"g") ,data[ind]);
+  for (let ind in data){
+    obj = obj.replace(new RegExp('{{'+ind+'}}',"g") ,data[ind]);
   }
 
   return obj;

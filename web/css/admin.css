@@ -186,6 +186,26 @@
   border-bottom: 1px solid rgb(1,89,162);
 }
 
+.add-box-file{
+  display: none;
+}
+
+.spr-add-file{
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  border: 1px dashed #ccc;
+  margin: 10px auto;
+}
+
+.spr-add-file:hover{
+  border: 1px dashed rgb(16,108,200);
+}
+
+.spr-add-file img{
+  width: 100%;
+}
+
 .add-box-footer{
   padding: 16px;
   border-top: 1px solid #ccc;

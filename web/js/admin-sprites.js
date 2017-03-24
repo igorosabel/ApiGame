@@ -14,6 +14,10 @@ const items = document.querySelectorAll('.item-list li');
 items.forEach(item => item.addEventListener('click', editSprite));
 const addSprClose = document.getElementById('add-spr-close');
 addSprClose.addEventListener('click', closeAddSpriteBox);
+const addSprFile = document.querySelector('.spr-add-file');
+addSprFile.addEventListener('click', sprFileSelect);
+const sprFile = document.getElementById('spr-file');
+sprFile.addEventListener('change', sprFileUpload);
 const frmSpr = document.getElementById('frm-spr');
 frmSpr.addEventListener('submit', saveSprite);
 const sprDel = document.getElementById('spr-delete');
@@ -74,7 +78,7 @@ function closeAddCategoryBox(e){
 function saveSpriteCategory(e){
   e.preventDefault();
   const txt = document.getElementById('sprc-name');
-  if (txt.value==''){
+  if (txt.value===''){
     alert('¡No puedes dejar el nombre de la categoría en blanco!');
     txt.focus();
     return false;
@@ -87,7 +91,7 @@ function saveSpriteCategory(e){
  * Función callback tras guardar una categoría
  */
 function saveSpriteCategorySuccess(data){
-  if (data.status=='ok'){
+  if (data.status==='ok'){
     if (data.is_new){
       const tab = document.createElement('li');
       tab.innerHTML = '<span>'+urldecode(data.name)+'</span>';
@@ -160,6 +164,14 @@ function editSpriteCategory(e){
 }
 
 /*
+ * Foto seleccionada
+ */
+const uploadedSprite = {
+  name: '',
+  data: null
+};
+
+/*
  * Id del sprite que se está editando
  */
 let editSpriteId = 0;
@@ -174,19 +186,19 @@ function showAddSpriteBox(e){
   const title = document.getElementById('add-spr-title');
   const name  = document.getElementById('spr-name');
   name.value  = '';
-  const cls   = document.getElementById('spr-class');
-  cls.value   = '';
-  const css   = document.getElementById('spr-css');
-  css.value   = '';
-  const crossable = document.getElementById('spr-crossable');
+  sprFile.value = '';
+  uploadedSprite.name = '';
+  uploadedSprite.data = null;
+  addSprFile.innerHTML = '';
+  const crossable   = document.getElementById('spr-crossable');
   crossable.checked = false;
-  const breakable = document.getElementById('spr-breakable');
+  const breakable   = document.getElementById('spr-breakable');
   breakable.checked = false;
-  const grabbable = document.getElementById('spr-grabbable');
+  const grabbable   = document.getElementById('spr-grabbable');
   grabbable.checked = false;
-  const pickable = document.getElementById('spr-pickable');
-  pickable.checked = false;
-  const del  = document.getElementById('spr-delete');
+  const pickable    = document.getElementById('spr-pickable');
+  pickable.checked  = false;
+  const del         = document.getElementById('spr-delete');
   del.style.display = 'none';
   
   title.innerHTML = 'Añadir sprite';
@@ -206,28 +218,47 @@ function closeAddSpriteBox(e){
 }
 
 /*
+ * Función para abrir la ventana de elegir archivo
+ */
+function sprFileSelect() {
+  sprFile.click();
+}
+
+/*
+ * Función para subir un archivo de imagen
+ */
+function sprFileUpload() {
+  const f = sprFile.files[0];
+  const r = new FileReader();
+  r.onload = function(e){
+    const data = e.target.result;
+    uploadedSprite.name = f.name;
+    uploadedSprite.data = data;
+    addSprFile.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = data;
+    addSprFile.appendChild(img);
+  };
+  r.readAsDataURL(f);
+}
+
+/*
  * Función para guardar un sprite
  */
 function saveSprite(e){
   e.preventDefault();
   const name = document.getElementById('spr-name');
-  if (name.value==''){
+  if (name.value===''){
     alert('¡No puedes dejar el nombre del sprite en blanco!');
     name.focus();
     return false;
   }
-  const cls = document.getElementById('spr-class');
-  if (cls.value==''){
-    alert('¡No puedes dejar el nombre de la clase en blanco!');
-    cls.focus();
+  const file = document.getElementById('spr-file');
+  if (editSpriteId===0 && file.value===''){
+    alert('¡No has elegido ninguna imagen!');
     return false;
   }
-  const css = document.getElementById('spr-css');
-  if (css.value==''){
-    alert('¡No puedes dejar el CSS de la clase en blanco!');
-    css.focus();
-    return false;
-  }
+
   const crossable = document.getElementById('spr-crossable');
   const breakable = document.getElementById('spr-breakable');
   const grabbable = document.getElementById('spr-grabbable');
@@ -237,22 +268,22 @@ function saveSprite(e){
     id: editSpriteId,
     id_category: editSpriteCategoryId,
     name: urlencode(name.value),
-    class: urlencode(cls.value),
-    css: urlencode(css.value),
+    file_name: uploadedSprite.name,
+    file: uploadedSprite.data,
     crossable: crossable.checked,
     breakable: breakable.checked,
     grabbable: grabbable.checked,
     pickable: pickable.checked
   };
 
-  postAjax('/api/save-sprite', params, saveSpriteSuccess);
+  postAjaxFile('/api/save-sprite', params, saveSpriteSuccess);
 }
 
 /*
  * Función callback tras guardar un sprite
  */
 function saveSpriteSuccess(data){
-  if (data.status=='ok'){
+  if (data.status==='ok'){
     if (data.is_new){
       const list = document.querySelector('#sprc-tab-'+data.id_category+' ul');
       const item = document.createElement('li');
@@ -261,7 +292,7 @@ function saveSpriteSuccess(data){
       item.innerHTML += template('spr-tpl', {
         id: data.id,
         name: urldecode(data.name),
-        class: urldecode(data.class),
+        file: data.file,
         crossable: data.crossable ? 'on': 'off',
         crs: data.crossable ? '1': '0',
         breakable: data.breakable ? 'on': 'off',
@@ -273,14 +304,14 @@ function saveSpriteSuccess(data){
       });
       item.addEventListener('click', editSprite);
       list.appendChild(item);
-      addCss(urldecode(data.class),urldecode(data.css));
+      addCss(data.category, data.file);
     }
     else{
       const spr = document.getElementById('spr-'+data.id);
       spr.querySelector('span').innerHTML = urldecode(data.name);
       const sample = spr.querySelector('.item-list-sample');
       sample.className = 'item-list-sample';
-      sample.classList.add(urldecode(data.class));
+      sample.classList.add(data.file);
       const crs = spr.querySelector('.crossable');
       crs.src = '/img/crossable_' + ((data.crossable) ? 'on':'off') + '.png';
       crs.dataset.crossable = ((data.crossable) ? '1':'0');
@@ -293,7 +324,7 @@ function saveSpriteSuccess(data){
       const pic = spr.querySelector('.pickable');
       pic.src = '/img/pickable_' + ((data.pickable) ? 'on':'off') + '.png';
       pic.dataset.pickable = ((data.pickable) ? '1':'0');
-      updateCss(urldecode(data.class), urldecode(data.css));
+      updateCss(data.category, data.file);
     }
     closeAddSpriteBox();
   }
@@ -305,32 +336,20 @@ function saveSpriteSuccess(data){
 /*
  * Función para añadir una nueva clase CSS
  */
-function addCss(cls, css){
+function addCss(category,file){
   const obj = document.getElementById('sprites-css');
-  obj.innerHTML += '.'+cls+'{'+css+'}';
+  obj.innerHTML += "."+file+"{background: url('/assets/sprite/"+category+"/"+file+".png') no-repeat center center transparent;}";
 }
 
 /*
  * Función para actualizar una clase CSS
  */
-function updateCss(cls, css){
+function updateCss(category, file){
   const obj = document.getElementById('sprites-css');
   const classes = obj.innerHTML;
   
-  const exp = new RegExp('.'+cls+'{([\\s\\S]*?)}','g');
-  obj.innerHTML = classes.replace(exp, '.'+cls+'{'+css+'}');
-}
-
-/*
- * Función para leer el contenido de una clase CSS
- */
-function getCss(cls){
-  const obj = document.getElementById('sprites-css').innerHTML;
-  const exp = new RegExp('.'+cls+'{([\\s\\S]*?)}','ig');
-  console.log(exp);
-  const res = obj.match(exp);
-  const ret = res[0].replace('.'+cls+'{','').replace('}','').replace(/^\s+|\s+$/g, '');
-  return trim(ret);
+  const exp = new RegExp('.'+file+'{([\\s\\S]*?)}','g');
+  obj.innerHTML = classes.replace(exp, "."+file+"{background: url('/assets/sprite/"+category+"/"+file+".png') no-repeat center center transparent;}");
 }
 
 /*
@@ -338,10 +357,9 @@ function getCss(cls){
  */
 function deleteSprite(){
   const spr = this;
-  const id = parseInt(spr.parentNode.parentNode.dataset.id);
   const conf = confirm('¿Estás seguro de querer borrar este sprite?');
   if (conf){
-    postAjax('/api/delete-sprite', {id: id}, deleteSpriteSuccess);
+    postAjax('/api/delete-sprite', {id: editSpriteId}, deleteSpriteSuccess);
   }
 }
 
@@ -351,6 +369,7 @@ function deleteSprite(){
 function deleteSpriteSuccess(data){
   const spr = document.getElementById('spr-'+data.id);
   spr.parentNode.removeChild(spr);
+  closeAddSpriteBox();
 }
 
 /*
@@ -362,8 +381,7 @@ function editSprite(){
   const ovl   = document.getElementById('add-spr');
   const title = document.getElementById('add-spr-title');
   const name  = spr.querySelector('span').innerHTML;
-  const cls   = spr.querySelector('.item-list-sample').className.replace('item-list-sample ', '');
-  const css   = getCss(cls);
+  const file  = spr.querySelector('.item-list-sample').className.replace('item-list-sample ', '');
   const crs   = spr.querySelector('.crossable').dataset.crossable;
   const bre   = spr.querySelector('.breakable').dataset.breakable;
   const gra   = spr.querySelector('.grabbable').dataset.grabbable;
@@ -374,18 +392,21 @@ function editSprite(){
   title.innerHTML = 'Editar sprite';
   const txt_name = document.getElementById('spr-name');
   txt_name.value = name;
-  const txt_cls = document.getElementById('spr-class');
-  txt_cls.value = cls;
-  const txt_css = document.getElementById('spr-css');
-  txt_css.value = css;
+
+  const category = slugify(sprc.querySelector('span').innerHTML);
+  addSprFile.innerHTML = '';
+  const img = document.createElement('img');
+  img.src = '/assets/sprite/'+category+'/'+file+'.png';
+  addSprFile.appendChild(img);
+
   const chk_crs = document.getElementById('spr-crossable');
-  chk_crs.checked = (crs=='1');
+  chk_crs.checked = (crs==='1');
   const chk_bre = document.getElementById('spr-breakable');
-  chk_bre.checked = (bre=='1');
+  chk_bre.checked = (bre==='1');
   const chk_gra = document.getElementById('spr-grabbable');
-  chk_gra.checked = (gra=='1');
+  chk_gra.checked = (gra==='1');
   const chk_pic = document.getElementById('spr-pickable');
-  chk_pic.checked = (pic=='1');
+  chk_pic.checked = (pic==='1');
   const del  = document.getElementById('spr-delete');
   del.style.display = 'inline-block';
 

@@ -52,6 +52,9 @@
   /* Páginas de error customizadas */
   $c->setErrorPage('403','/');
   
+  /* Carpeta assets */
+  $c->setDir('assets', $c->getDir('web').'assets/');
+  
   /* Anchura y altura del escenario, en casillas */
   $c->setExtra('width', 24);
   $c->setExtra('height', 18);

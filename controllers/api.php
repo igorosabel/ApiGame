@@ -382,6 +382,7 @@
         $is_new = 'false';
       }
       $sprc->set('name', $name);
+      $sprc->set('slug', Base::slugify($name));
       $sprc->save();
 
       $id = $sprc->get('id');
@@ -432,27 +433,28 @@
    * Función para guardar un fondo
    */
   function executeSaveSprite($req, $t){
+    global $c;
     $status      = 'ok';
     $id          = Base::getParam('id',          $req['url_params'], false);
     $id_category = Base::getParam('id_category', $req['url_params'], false);
     $name        = Base::getParam('name',        $req['url_params'], false);
-    $class       = Base::getParam('class',       $req['url_params'], false);
-    $css         = Base::getParam('css',         $req['url_params'], false);
+    $file_name   = Base::getParam('file_name',   $req['url_params'], false);
+    $file        = Base::getParam('file',        $req['url_params'], false);
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
     $breakable   = Base::getParam('breakable',   $req['url_params'], false);
     $grabbable   = Base::getParam('grabbable',   $req['url_params'], false);
     $pickable    = Base::getParam('pickable',    $req['url_params'], false);
     $is_new      = 'true';
+    $saved_file  = '';
+    $category    = '';
 
-    if ($name===false || $class===false || $css===false || $crossable===false || $grabbable===false || $pickable===false){
+    if ($id===false || $id_category===false || $name===false || $crossable===false || $breakable===false || $grabbable===false || $pickable===false){
       $status = 'error';
     }
 
     if ($status=='ok'){
       $id    = (int)$id;
       $name  = urldecode($name);
-      $class = urldecode($class);
-      $css   = urldecode($css);
 
       $spr = new Sprite();
       if ($id!==0){
@@ -461,15 +463,26 @@
       }
       $spr->set('id_category', $id_category);
       $spr->set('name',        $name);
-      $spr->set('class',       $class);
-      $spr->set('css',         $css);
+      if ($file_name!=''){
+        $spr->set('file',        str_ireplace('.png', '', $file_name));
+      }
       $spr->set('crossable',   ($crossable=='true'));
       $spr->set('breakable',   ($breakable=='true'));
       $spr->set('grabbable',   ($grabbable=='true'));
       $spr->set('pickable',    ($pickable=='true'));
       $spr->save();
-
+      
+      if ($file_name!=''){
+        $sprc = new SpriteCategory();
+        $sprc->find(array('id'=>$id_category));
+        $category = $sprc->get('slug');
+      
+        $ruta = $c->getDir('assets').'sprite/'.$sprc->get('slug').'/'.$file_name;
+        stPublic::saveImage($ruta, $file);
+      }
+      
       $id = $spr->get('id');
+      $saved_file = $spr->get('file');
     }
 
     $t->setLayout(false);
@@ -479,8 +492,8 @@
     $t->add('id',          $id);
     $t->add('id_category', $id_category);
     $t->add('name',        $name);
-    $t->add('class',       $class);
-    $t->add('css',         $css);
+    $t->add('saved_file',  $saved_file);
+    $t->add('category',    $category);
     $t->add('crossable',   $crossable);
     $t->add('breakable',   $breakable);
     $t->add('grabbable',   $grabbable);
@@ -505,6 +518,16 @@
     if ($status=='ok'){
       $spr = new Sprite();
       if ($spr->find(array('id'=>$id))){
+        // Primero borro el archivo
+        $sprc = new SpriteCategory();
+        $sprc->find(array('id'=>$spr->get('id_category')));
+      
+        $ruta = $c->getDir('assets').'sprite/'.$sprc->get('slug').'/'.$spr->get('file').'.png';
+        if (file_exists($ruta)){
+          unlink($ruta);
+        }
+        
+        // Luego el registro
         $spr->delete();
       }
       else{

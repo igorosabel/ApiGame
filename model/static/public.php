@@ -122,4 +122,15 @@ class stPublic{
     $data['list'] = $all;
     return $data;
   }
+  
+  public static function saveImage($ruta, $base64_string) {
+    if (file_exists($ruta)){
+      unlink($ruta);
+    }
+
+    $ifp = fopen($ruta, "wb");
+    $data = explode(',', $base64_string);
+    fwrite($ifp, base64_decode($data[1]));
+    fclose($ifp);
+  }
 }

@@ -6,6 +6,7 @@ class SpriteCategory extends OBase{
     $model = array(
         'id'         => array('type'=>Base::PK,                 'com'=>'Id único de cada categoría'),
         'name'       => array('type'=>Base::TEXT,    'len'=>50, 'com'=>'Nombre de la categoría'),
+        'slug'       => array('type'=>Base::TEXT,    'len'=>50, 'com'=>'Slug del nombre de la categoría'),
         'created_at' => array('type'=>Base::CREATED,            'com'=>'Fecha de creación del registro'),
         'updated_at' => array('type'=>Base::UPDATED,            'com'=>'Fecha de última modificación del registro')
     );

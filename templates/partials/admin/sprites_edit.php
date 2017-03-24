@@ -12,7 +12,7 @@
     <ul class="item-list">
       <?php foreach ($sprc->getSprites() as $spr): ?>
       <li id="spr-<?php echo $spr->get('id') ?>" data-id="<?php echo $spr->get('id') ?>">
-        <div class="item-list-sample <?php echo $spr->get('class') ?>"></div>
+        <div class="item-list-sample <?php echo $spr->get('file') ?>"></div>
         <span><?php echo $spr->get('name') ?></span>
         <div class="item-list-info">
           <div class="item-list-info-item">
