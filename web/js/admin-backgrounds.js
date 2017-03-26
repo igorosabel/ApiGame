@@ -14,7 +14,7 @@ const items = document.querySelectorAll('.item-list li');
 items.forEach(item => item.addEventListener('click', editBackground));
 const addBckClose = document.getElementById('add-bck-close');
 addBckClose.addEventListener('click', closeAddBackgroundBox);
-const addBckFile = document.querySelector('.bck-add-file');
+const addBckFile = document.querySelector('.add-file');
 addBckFile.addEventListener('click', bckFileSelect);
 const bckFile = document.getElementById('bck-file');
 bckFile.addEventListener('change', bckFileUpload);

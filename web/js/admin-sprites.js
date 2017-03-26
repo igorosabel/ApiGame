@@ -14,7 +14,7 @@ const items = document.querySelectorAll('.item-list li');
 items.forEach(item => item.addEventListener('click', editSprite));
 const addSprClose = document.getElementById('add-spr-close');
 addSprClose.addEventListener('click', closeAddSpriteBox);
-const addSprFile = document.querySelector('.spr-add-file');
+const addSprFile = document.querySelector('.add-file');
 addSprFile.addEventListener('click', sprFileSelect);
 const sprFile = document.getElementById('spr-file');
 sprFile.addEventListener('change', sprFileUpload);

@@ -89,8 +89,12 @@ function updateCell(x,y,sel){
   if (sel){
     cell.classList.add('cell-selected');
   }
+  
   if (scenario[x][y].bck){
-    cell.classList.add(backgrounds.list['bck_'+scenario[x][y].bck].class);
+    const bck_ind = 'bck_'+scenario[x][y].bck;
+    if (backgrounds.list[bck_ind]){
+      cell.classList.add(backgrounds.list[bck_ind].class);
+    }
   }
   if (scenario[x][y].spr){
     const spr = document.createElement('div');

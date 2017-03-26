@@ -6,7 +6,7 @@
   <div class="cell-detail-group" id="select-group-bckc-<?php echo $bckc->get('id') ?>">
     <?php foreach ($bckc->getBackgrounds() as $bck): ?>
       <div class="cell-detail-item" data-type="bck" data-id="<?php echo $bck->get('id') ?>">
-        <div class="cell-detail-item-sample <?php echo $bck->get('class') ?>"></div>
+        <div class="cell-detail-item-sample <?php echo $bck->get('file') ?>"></div>
         <span><?php echo $bck->get('name') ?></span>
       </div>
     <?php endforeach ?>

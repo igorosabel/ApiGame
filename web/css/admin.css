@@ -190,7 +190,7 @@
   display: none;
 }
 
-.spr-add-file{
+.add-file{
   cursor: pointer;
   width: 80px;
   height: 80px;
@@ -198,11 +198,11 @@
   margin: 10px auto;
 }
 
-.spr-add-file:hover{
+.add-file:hover{
   border: 1px dashed rgb(16,108,200);
 }
 
-.spr-add-file img{
+.add-file img{
   width: 100%;
 }
 

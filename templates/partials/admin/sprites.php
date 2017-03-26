@@ -6,7 +6,7 @@
   <div class="cell-detail-group" id="select-group-sprc-<?php echo $sprc->get('id') ?>">
     <?php foreach ($sprc->getSprites() as $spr): ?>
       <div class="cell-detail-item" data-type="spr" data-id="<?php echo $spr->get('id') ?>">
-        <div class="cell-detail-item-sample <?php echo $spr->get('class') ?>"></div>
+        <div class="cell-detail-item-sample <?php echo $spr->get('file') ?>"></div>
         <span><?php echo $spr->get('name') ?></span>
       </div>
     <?php endforeach ?>

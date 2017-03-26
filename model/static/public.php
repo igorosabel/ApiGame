@@ -63,7 +63,7 @@ class stPublic{
         $item_bck = array(
           'id' => $bck->get('id'),
           'name' => urlencode($bck->get('name')),
-          'class' => $bck->get('class'),
+          'class' => $bck->get('file'),
           'crossable' => $bck->get('crossable')
         );
         array_push($item['list'], (int)$bck->get('id'));
@@ -108,7 +108,7 @@ class stPublic{
         $item_spr = array(
           'id' => $spr->get('id'),
           'name' => urlencode($spr->get('name')),
-          'class' => $spr->get('class'),
+          'class' => $spr->get('file'),
           'crossable' => $spr->get('crossable'),
           'breakable' => $spr->get('breakable'),
           'grabbable' => $spr->get('breakable')

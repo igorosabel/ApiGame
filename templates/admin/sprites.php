@@ -41,7 +41,7 @@
       </div>
       <div class="add-box-row">
         <label>Imagen:</label>
-        <div class="spr-add-file"></div>
+        <div class="add-file"></div>
         <input type="file" class="add-box-file" name="spr-file" id="spr-file" />
       </div>
       <div class="add-box-row">
