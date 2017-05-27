@@ -31,6 +31,21 @@ class stPublic{
     return $scn;
   }
   
+  public static function getBackgroundCategories(){
+    $db = new ODB();
+    $sql = "SELECT * FROM `background_category`";
+    $db->query($sql);
+    $bckcs = array();
+    while ($res=$db->next()){
+      $bckc = new BackgroundCategory();
+      $bckc->update($res);
+      
+      $bckcs['bckc_'.$bckc->get('id')] = $bckc;
+    }
+    
+    return $bckcs;
+  }
+  
   public static function getBackgrounds(){
     $ret = array();
     $db = new ODB();
@@ -74,6 +89,67 @@ class stPublic{
     }
     $data['list'] = $all;
     return $data;
+  }
+
+  public static function getAssetsData($scn){
+    $ret = array('assets'=>array(), 'bck'=>array(), 'spr'=>array());
+    $ids = array('bck'=>array(), 'spr'=>array());
+
+    $scenario = json_decode($scn,true);
+    for ($y=0; $y<count($scenario); $y++){
+      for ($x=0; $x<count($scenario[$y]); $x++){
+        foreach ($scenario[$y][$x] as $type => $val){
+          $temp = array('type'=>$type, 'x'=>($x+1), 'y'=>($y+1), 'id'=>(int)$val);
+          array_push($ret['assets'], $temp);
+          if (!in_array((int)$val, $ids[$type])) {
+            array_push($ids[$type], (int)$val);
+          }
+        }
+      }
+    }
+
+    $db = new ODB();
+    if (count($ids['bck'])>0){
+      $bckcs = self::getBackgroundCategories();
+      
+      $sql = 'SELECT * FROM `background` WHERE `id` IN ('.implode(',', $ids['bck']).')';
+      $db->query($sql);
+  
+      while ($res=$db->next()){
+        $bck = new Background();
+        $bck->update($res);
+        $ret['bck']['bck_'.$bck->get('id')] = array('url' => $bckcs['bckc_'.$bck->get('id_category')]->get('slug').'/'.$bck->get('file'), 'crossable' => $bck->get('crossable'));
+      }
+    }
+    if (count($ids['spr'])>0){
+      $sprcs = self::getSpriteCategories();
+      
+      $sql = 'SELECT * FROM `sprite` WHERE `id` IN ('.implode(',', $ids['spr']).')';
+      $db->query($sql);
+  
+      while ($res=$db->next()){
+        $spr = new Sprite();
+        $spr->update($res);
+        $ret['spr']['spr_'.$spr->get('id')] = array('url' => $sprcs['sprc_'.$spr->get('id_category')]->get('slug').'/'.$spr->get('file'), 'crossable' => $spr->get('crossable'));
+      }
+    }
+
+    return $ret;
+  }
+  
+  public static function getSpriteCategories(){
+    $db = new ODB();
+    $sql = "SELECT * FROM `sprite_category`";
+    $db->query($sql);
+    $sprcs = array();
+    while ($res=$db->next()){
+      $sprc = new SpriteCategory();
+      $sprc->update($res);
+      
+      $sprcs['sprc_'.$sprc->get('id')] = $sprc;
+    }
+    
+    return $sprcs;
   }
   
   public static function getSprites(){

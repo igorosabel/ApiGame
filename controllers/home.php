@@ -52,3 +52,33 @@
     $t->addCss('game');
     $t->process();
   }
+
+  /*
+   * Pantalla de juego (con canvas)
+   */
+  function executeCanvas($req, $t){
+    $game = new Game();
+    $game->find(array('id'=>$req['id']));
+    $scn = $game->getScenario();
+    $assets = stPublic::getAssetsData($scn->get('data'));
+
+    $t->addPartial('assets', 'public/canvas_assets', array('assets'=>$assets['assets']));
+    
+    $res = array(
+      'bck' => $assets['bck'],
+      'spr' => $assets['spr'],
+      'player' => array(
+        'player_up'    => array('url'=>'link-up',    'crossable'=>false),
+        'player_right' => array('url'=>'link-right', 'crossable'=>false),
+        'player_down'  => array('url'=>'link-down',  'crossable'=>false),
+        'player_left'  => array('url'=>'link-left',  'crossable'=>false)
+      )
+    );
+
+    $t->add('res', json_encode($res));
+    $t->add('position_x',  $game->get('position_x'));
+    $t->add('position_y',  $game->get('position_y'));
+
+    $t->addCss('game');
+    $t->process();
+  }

@@ -53,6 +53,13 @@
         "comment": "Pantalla de juego"
       },
       {
+        "id": "canvas",
+        "url": "/canvas/:id",
+        "module": "home",
+        "action": "canvas",
+        "comment": "Pantalla de juego (con canvas)"
+      },
+      {
         "id": "admin",
         "url": "/admin",
         "module": "admin",

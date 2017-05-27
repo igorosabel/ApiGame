@@ -90,7 +90,7 @@ function selectGame(e,num){
 
   // Partida existente
   if (name.innerHTML!=''){
-    document.location.href = '/game/'+selectedGameId;
+    document.location.href = '/canvas/'+selectedGameId;
   }
   else{
     // Partida nueva
@@ -136,7 +136,7 @@ function sendAddGame(e){
  */
 function sendAddGameSuccess(data){
   if (data.status=='ok'){
-    document.location.href = '/game/'+selectedGameId;
+    document.location.href = '/canvas/'+selectedGameId;
   }
   else{
     alert('¡Ocurrió un error!');

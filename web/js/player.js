@@ -68,6 +68,15 @@ const player = {
     board.appendChild(obj);
   },
   
+  getDestinationTile: function(pos){
+    const x = (this.getOrientation()==='right') ? (pos.x + pos.width)  : pos.x;
+    const y = (this.getOrientation()==='down')  ? (pos.y + pos.height) : pos.y;
+    return {
+      x: Math.floor( x / Val.cell.width),
+      y: Math.floor( y / Val.cell.height),
+    };
+  },
+  
   moveUp: function(){
     const new_pos = {
       x: this.getPositionX(),
@@ -100,8 +109,13 @@ const player = {
     };
     this.move(new_pos);
   },
+
   move: function(pos){
     const obj_player = document.getElementById('player');
+    obj_player.classList.remove('player_'+this.getOrientation());
+    obj_player.classList.add('player_'+pos.orientation);
+    this.setOrientation(pos.orientation);
+
     const coords = obj_player.getBoundingClientRect();
     pos.width = Math.floor(coords.width)-1;
     pos.height = Math.floor(coords.height)-1;
@@ -110,25 +124,38 @@ const player = {
       return false;
     }
     
-    let hasBlocker = false;
-    // Busco entre los posibles bloqueadores
-    for (let i in blockers){
-      let obj = blockers[i];
-      if (pos.x < obj.x + obj.width && pos.x + pos.width > obj.x && pos.y < obj.y + obj.height && pos.height + pos.y > obj.y){
-        hasBlocker = true;
-        break;
-      }
+    const dest = this.getDestinationTile(pos);
+    console.log(dest);
+    const dest_scn = scenario[dest.y][dest.x];
+    console.log(dest_scn);
+    let destIsBlocker = false;
+    if (dest_scn.bck && !backgrounds.list['bck_'+dest_scn.bck].crossable){
+      destIsBlocker = true;
     }
-    if (hasBlocker){
-      return false;
+    if (dest_scn.spr && !sprites.list['spr_'+dest_scn.spr].crossable){
+      destIsBlocker = true;
+    }
+    if (destIsBlocker) {
+      const dest_cell = document.getElementById('cell_' + dest.x + '_' + dest.y);
+      console.log(dest_cell);
+      const obj = {
+        x: dest_cell.offsetLeft,
+        y: dest_cell.offsetTop,
+        width: dest_cell.offsetWidth,
+        height: dest_cell.offsetHeight
+      };
+
+      let hasBlocker = false;
+      if (pos.x < obj.x + obj.width && pos.x + pos.width > obj.x && pos.y < obj.y + obj.height && pos.height + pos.y > obj.y) {
+        hasBlocker = true;
+      }
+
+      if (hasBlocker) {
+        return false;
+      }
     }
 
     this.setPosition(pos.x, pos.y);
-    
-    obj_player.classList.remove('player_'+this.getOrientation());
-    obj_player.classList.add('player_'+pos.orientation);
-    
-    this.setOrientation(pos.orientation);
     obj_player.style.left  = pos.x + 'px';
     obj_player.style.top = pos.y + 'px';
   }

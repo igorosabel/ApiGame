@@ -9,7 +9,11 @@ window.onload = function(){
  * Valores generales
  */
 const Val = {
-  step: 10
+  step: 10,
+  cell: {
+    width: 0,
+    height: 0
+  }
 };
 
 /*
@@ -18,6 +22,7 @@ const Val = {
 function start(){
   board = document.getElementById('board');
   loadScenario();
+  loadCellDetails();
   loadBlockers();
   player.load();
 
@@ -77,6 +82,15 @@ function updateCell(x,y){
     spr.className = 'sprite ' + sprites.list['spr_'+scenario[y][x].spr].class;
     cell.appendChild(spr);
   }
+}
+
+/*
+ * Función para obtener los detalles de una casilla
+ */
+function loadCellDetails(){
+  const cell = document.getElementById('cell_0_0');
+  Val.cell.width = cell.offsetWidth;
+  Val.cell.height = cell.offsetHeight;
 }
 
 let modo_debug = false;
