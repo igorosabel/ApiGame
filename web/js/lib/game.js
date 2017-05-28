@@ -1,12 +1,16 @@
 'use strict';
 
-let stage;
-let player;
+let stage,
+    player,
+    fps = 30,
+    start = 0,
+    frameDuration = 1000 / fps;
 
 function setup(){
   stage = new Stage(800, 600, 18, 24);
-  player = makePlayer(startPos, {w: stage.tile_width, h: stage.tile_height});
+  player = makePlayer(startPos, {w: stage.tile_width, h: (stage.tile_height * 1.5)});
 
+  // Cargo assets en el escenario
   assets.list.forEach(asset => {
     if (asset.type==='bck') {
       let bck = makeSprite(asset.image, asset.crossable);
@@ -21,9 +25,12 @@ function setup(){
       player.setSprite(asset.id, orient);
     }
   });
+  
+  // Pinto escenario
   stage.render();
   player.render(stage.getCtx());
   
+  // Eventos de teclado
   let up = keyboard(38);
   up.press = () => player.up();
   up.release = () => player.stopUp();
@@ -40,12 +47,17 @@ function setup(){
   left.press = () => player.left();
   left.release = () => player.stopLeft();
   
+  // Bucle del juego
   gameLoop();
 }
 
-function gameLoop(){
+function gameLoop(timestamp){
   requestAnimationFrame(gameLoop);
-  stage.render();
-  player.move();
-  player.render(stage.getCtx());
+  if (timestamp >= start){
+    stage.render();
+    player.move();
+    player.render(stage.getCtx());
+    
+    start = timestamp + frameDuration;
+  }
 }

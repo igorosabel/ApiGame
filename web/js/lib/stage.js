@@ -87,15 +87,15 @@ class Player{
     this.orientationList = [];
     this.pos = {
       x: pos.x * size.w,
-      y: pos.y * size.h
+      y: pos.y * (size.h/1.5)
     };
     this.size = size;
     this.center = {};
     this.sprites = {
-      up: null,
-      right: null,
-      down: null,
-      left: null
+      up: [],
+      right: [],
+      down: [],
+      left: []
     }
     this.vx = 0;
     this.vy = 0;
@@ -105,10 +105,21 @@ class Player{
       right: false,
       left: false
     }
+    this.frames = {
+      up: [],
+      right: [],
+      down: [],
+      left: []
+    };
+    this.currentFrame = 0;
+    this.playing = false;
+    this.interval = null;
     this.updateCenter();
   }
   setSprite(ind, sprite){
-    this.sprites[ind.replace('player_','')] = sprite;
+    ind = ind.replace('player_','');
+    ind = ind.split('_').shift();
+    this.sprites[ind].push(sprite);
   }
   updateCenter(){
     this.center = {
@@ -121,6 +132,7 @@ class Player{
       this.vy = -1;
       this.moving.up = true;
       this.orientationList.push('up');
+      this.playAnimation();
     }
     this.updateOrientation();
   }
@@ -135,6 +147,7 @@ class Player{
       this.vy = 1;
       this.moving.down = true;
       this.orientationList.push('down');
+      this.playAnimation();
     }
     this.updateOrientation();
   }
@@ -149,6 +162,7 @@ class Player{
       this.vx = 1;
       this.moving.right = true;
       this.orientationList.push('right');
+      this.playAnimation();
     }
     this.updateOrientation();
   }
@@ -163,6 +177,7 @@ class Player{
       this.vx = -1;
       this.moving.left = true;
       this.orientationList.push('left');
+      this.playAnimation();
     }
     this.updateOrientation();
   }
@@ -171,6 +186,25 @@ class Player{
     this.vx = 0;
     this.orientationList.splice( this.orientationList.indexOf('left'), 1 );
     this.updateOrientation();
+  }
+  playAnimation(){
+    if (!this.playing){
+      this.playing = true;
+      this.interval = setInterval(this.updateAnimation.bind(this), frameDuration);
+    }
+  }
+  stopAnimation(){
+    this.playing = false;
+    this.currentFrame = 0;
+    clearInterval(this.interval);
+  }
+  updateAnimation(){
+    if (this.currentFrame==this.sprites[this.orientation].length-1){
+      this.currentFrame = 1;
+    }
+    else{
+      this.currentFrame++;
+    }
   }
   updateOrientation(){
     if (this.orientationList.length>0){
@@ -205,9 +239,12 @@ class Player{
       this.pos.y += this.vy;
       this.updateCenter();
     }
+    else{
+      this.stopAnimation();
+    }
   }
   render(ctx){
-    ctx.drawImage(this.sprites[this.orientation].img, this.pos.x, this.pos.y, this.size.w, this.size.h);
+    ctx.drawImage(this.sprites[this.orientation][this.currentFrame].img, this.pos.x, this.pos.y, this.size.w, this.size.h);
   }
 }
 
@@ -292,7 +329,7 @@ function keyboard(keyCode) {
 class Stage{
   constructor(width = 256, height = 256, rows = 16, cols = 16) {
     // Modo debug
-    this.debug = true;
+    this.debug = false;
 
     // Creo el canvas
     this.canvas = makeCanvas(width,height);

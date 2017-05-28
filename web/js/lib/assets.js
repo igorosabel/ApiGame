@@ -29,7 +29,8 @@ let assets = {
       };
 
       items.forEach(item => {
-        let asset = new Asset(item.type, item.x, item.y, item.id, res[item.type][item.type+'_'+item.id].crossable);
+        let crossable = res[item.type][item.type+'_'+item.id].crossable;
+        let asset = new Asset(item.type, item.x, item.y, item.id, crossable);
         asset.image = new Image();
         asset.image.addEventListener('load', loadHandler, false);
         let folder;
@@ -39,6 +40,8 @@ let assets = {
           case 'spr': { folder = 'sprite'; }
           break;
           case 'player': { folder = 'player'; }
+          break;
+          case 'player_animation': { folder = 'player_animation'; }
           break;
         }
 
