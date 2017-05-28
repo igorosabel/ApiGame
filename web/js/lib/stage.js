@@ -84,6 +84,7 @@ function makeSprite(img, crossable){
 class Player{
   constructor(pos, size){
     this.orientation = 'down';
+    this.orientationList = [];
     this.pos = {
       x: pos.x * size.w,
       y: pos.y * size.h
@@ -119,45 +120,62 @@ class Player{
     if (!this.moving.up){
       this.vy = -1;
       this.moving.up = true;
+      this.orientationList.push('up');
     }
-    this.orientation = 'up';
+    this.updateOrientation();
   }
   stopUp(){
     this.moving.up = false;
     this.vy = 0;
+    this.orientationList.splice( this.orientationList.indexOf('up'), 1 );
+    this.updateOrientation();
   }
   down(){
     if (!this.moving.down){
       this.vy = 1;
       this.moving.down = true;
+      this.orientationList.push('down');
     }
-    this.orientation = 'down';
+    this.updateOrientation();
   }
   stopDown(){
     this.moving.down = false;
     this.vy = 0;
+    this.orientationList.splice( this.orientationList.indexOf('down'), 1 );
+    this.updateOrientation();
   }
   right(){
     if (!this.moving.right){
       this.vx = 1;
       this.moving.right = true;
+      this.orientationList.push('right');
     }
-    this.orientation = 'right';
+    this.updateOrientation();
   }
   stopRight(){
     this.moving.right = false;
     this.vx = 0;
+    this.orientationList.splice( this.orientationList.indexOf('right'), 1 );
+    this.updateOrientation();
   }
   left(){
     if (!this.moving.left){
       this.vx = -1;
       this.moving.left = true;
+      this.orientationList.push('left');
     }
-    this.orientation = 'left';
+    this.updateOrientation();
   }
   stopLeft(){
     this.moving.left = false;
     this.vx = 0;
+    this.orientationList.splice( this.orientationList.indexOf('left'), 1 );
+    this.updateOrientation();
+  }
+  updateOrientation(){
+    if (this.orientationList.length>0){
+      this.orientation = this.orientationList[this.orientationList.length-1];
+    }
   }
   move(){
     if (this.moving.up || this.moving.down || this.moving.right || this.moving.left){
