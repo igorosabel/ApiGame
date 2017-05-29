@@ -1,77 +1,191 @@
 class Character{
-  constructor(){
-    this.x = 0;
-    this.y = 0;
-    this.width = 0;
-    this.height = 0;
-
+  constructor(pos, size){
+    this.orientation = 'down';
+    this.orientationList = [];
+    this.pos = pos;
+    this.size = size;
+    this.center = {};
+    this.sprites = {
+      up: [],
+      right: [],
+      down: [],
+      left: []
+    };
     this.vx = 0;
     this.vy = 0;
-
-    this.frames = [];
-    this.loop = true;
-    this._currentFrame = 0;
+    this.moving = {
+      up: false,
+      down: false,
+      right: false,
+      left: false
+    };
+    this.frames = {
+      up: [],
+      right: [],
+      down: [],
+      left: []
+    };
+    this.currentFrame = 0;
     this.playing = false;
+    this.interval = null;
+    this.updateCenter();
 
-    this.previousX = 0;
-    this.previousY = 0;
+    // Detalles del personaje
+    this.isNPC = false;
+    this.health = 100;
+    this.currentHealth = 100;
+    this.items = [];
+  }
+  setSprite(ind, sprite){
+    this.sprites[ind].push(sprite);
+  }
+  updateCenter(){
+    this.center = {
+      x: this.pos.x + (this.size.w/2),
+      y: this.pos.y + (this.size.h/2)
+    }
+  }
+  up(){
+    if (!this.moving.up){
+      this.vy = -1;
+      this.moving.up = true;
+      this.orientationList.push('up');
+      this.playAnimation();
+    }
+    this.updateOrientation();
+  }
+  stopUp(){
+    this.moving.up = false;
+    this.vy = 0;
+    this.orientationList.splice( this.orientationList.indexOf('up'), 1 );
+    this.updateOrientation();
+  }
+  down(){
+    if (!this.moving.down){
+      this.vy = 1;
+      this.moving.down = true;
+      this.orientationList.push('down');
+      this.playAnimation();
+    }
+    this.updateOrientation();
+  }
+  stopDown(){
+    this.moving.down = false;
+    this.vy = 0;
+    this.orientationList.splice( this.orientationList.indexOf('down'), 1 );
+    this.updateOrientation();
+  }
+  right(){
+    if (!this.moving.right){
+      this.vx = 1;
+      this.moving.right = true;
+      this.orientationList.push('right');
+      this.playAnimation();
+    }
+    this.updateOrientation();
+  }
+  stopRight(){
+    this.moving.right = false;
+    this.vx = 0;
+    this.orientationList.splice( this.orientationList.indexOf('right'), 1 );
+    this.updateOrientation();
+  }
+  left(){
+    if (!this.moving.left){
+      this.vx = -1;
+      this.moving.left = true;
+      this.orientationList.push('left');
+      this.playAnimation();
+    }
+    this.updateOrientation();
+  }
+  stopLeft(){
+    this.moving.left = false;
+    this.vx = 0;
+    this.orientationList.splice( this.orientationList.indexOf('left'), 1 );
+    this.updateOrientation();
+  }
+  playAnimation(){
+    if (!this.playing){
+      this.playing = true;
+      this.interval = setInterval(this.updateAnimation.bind(this), frameDuration);
+    }
+  }
+  stopAnimation(){
+    this.playing = false;
+    this.currentFrame = 0;
+    clearInterval(this.interval);
+  }
+  updateAnimation(){
+    if (this.currentFrame === (this.sprites[this.orientation].length-1)){
+      this.currentFrame = 1;
+    }
+    else{
+      this.currentFrame++;
+    }
+  }
+  updateOrientation(){
+    if (this.orientationList.length>0){
+      this.orientation = this.orientationList[this.orientationList.length-1];
+    }
+  }
+  move(){
+    if (this.moving.up || this.moving.down || this.moving.right || this.moving.left){
+      let newPosX = this.pos.x + this.vx;
+      let newPosY = this.pos.y + this.vy;
 
-    this.health = 10;
-    this.isNpc = false;
-    this.items  = [];
-  }
+      // Colisión con los bordes de la pantalla
+      if (newPosX<0 || newPosY<0 || (newPosX+this.size.w)>scenario.width || (newPosY+this.size.h)>scenario.height){
+        return false;
+      }
 
-  get gx() {
-    return this.x;
+      // Colisión con objetos
+      let hit = false;
+      let newPos = {
+        pos: {x: newPosX, y: newPosY},
+        size: this.size
+      };
+      scenario.blockers.forEach(tile => {
+        if (collission(newPos,tile)){
+          hit = true;
+        }
+      });
+      if (hit){
+        return false;
+      }
+      // Actualizo posición
+      this.pos.x += this.vx;
+      this.pos.y += this.vy;
+      this.updateCenter();
+    }
+    else{
+      this.stopAnimation();
+    }
   }
-  get gy() {
-    return this.y;
-  }
-  get halfWidth() {
-    return this.width / 2;
-  }
-  get halfHeight() {
-    return this.height / 2;
-  }
-  get centerX() {
-    return this.x + this.halfWidth;
-  }
-  get centerY() {
-    return this.y + this.halfHeight;
-  }
-  get position() {
-    return {x: this.x, y: this.y};
-  }
-  setPosition(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-  get currentFrame() {
-    return this._currentFrame;
-  }
-  addItem(item) {
-    this.items.add(item);
-  }
-  removeItem(item) {
-    this.items.splice(this.items.indexOf(item), 1);
+  render(){
+    scenario.ctx.drawImage(this.sprites[this.orientation][this.currentFrame].img, this.pos.x, this.pos.y, this.size.w, this.size.h);
   }
 }
 
 class Player extends Character{
-  constructor() {
-    super();
+  constructor(pos, size) {
+    super(pos, size);
   }
 }
 
+function makePlayer(pos, size){
+  return new Player(pos, size);
+}
+
 class NPC extends Character{
-  constructor() {
-    super();
+  constructor(pos, size) {
+    super(pos, size);
     this.isNpc = true;
   }
 }
 
 class Monster extends Character{
-  constructor() {
-    super();
+  constructor(pos, size) {
+    super(pos, size);
   }
 }

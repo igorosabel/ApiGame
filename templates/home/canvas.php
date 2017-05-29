@@ -6,6 +6,7 @@
 <div class="game"></div>
 
 <script src="/js/lib/assets.js"></script>
+<script src="/js/lib/characters.js"></script>
 <script src="/js/lib/game.js"></script>
 <script src="/js/lib/stage.js"></script>
 <script>

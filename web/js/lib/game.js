@@ -1,34 +1,36 @@
 'use strict';
 
-let stage,
+let scenario,
     player,
     fps = 30,
     start = 0,
     frameDuration = 1000 / fps;
 
 function setup(){
-  stage = new Stage(800, 600, 18, 24);
-  player = makePlayer(startPos, {w: stage.tile_width, h: (stage.tile_height * 1.5)});
+  scenario = makeScenario(800, 600, 18, 24);
+  player = makePlayer({x: startPos.x * scenario.tile_width, y: startPos.y * scenario.tile_height}, {w: scenario.tile_width, h: (scenario.tile_height * 1.5)});
 
   // Cargo assets en el escenario
   assets.list.forEach(asset => {
     if (asset.type==='bck') {
       let bck = makeSprite(asset.image, asset.crossable);
-      stage.addBck(bck, asset.x, asset.y);
+      scenario.addBck({x: asset.x, y: asset.y}, bck);
     }
     if (asset.type==='spr'){
       let spr = makeSprite(asset.image, asset.crossable);
-      stage.addSpr(spr, asset.x, asset.y);
+      scenario.addSpr({x: asset.x, y: asset.y}, spr);
     }
     if (asset.type==='player'){
-      let orient = makeSprite(asset.image);
-      player.setSprite(asset.id, orient);
+      let fr = makeSprite(asset.image);
+      let ind = asset.id.replace('player_','');
+      ind = ind.split('_').shift();
+      player.setSprite(ind, fr);
     }
   });
   
   // Pinto escenario
-  stage.render();
-  player.render(stage.getCtx());
+  scenario.render();
+  player.render();
   
   // Eventos de teclado
   let up = keyboard(38);
@@ -54,9 +56,9 @@ function setup(){
 function gameLoop(timestamp){
   requestAnimationFrame(gameLoop);
   if (timestamp >= start){
-    stage.render();
+    scenario.render();
     player.move();
-    player.render(stage.getCtx());
+    player.render();
     
     start = timestamp + frameDuration;
   }
