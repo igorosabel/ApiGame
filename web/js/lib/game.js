@@ -2,6 +2,8 @@
 
 let scenario,
     player,
+    defaultVX = 3,
+    defaultVY = 3,
     fps = 30,
     start = 0,
     frameDuration = 1000 / fps;

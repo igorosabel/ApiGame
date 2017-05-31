@@ -46,6 +46,16 @@
       </div>
       <div class="add-box-row">
         <div class="add-box-col">
+          <label for="spr-width">Anchura</label>
+          <input type="text" class="add-box-txt add-box-txt-sm" name="spr-width" id="spr-width" value="" placeholder="Anchura del sprite (en casillas)" />
+        </div>
+        <div class="add-box-col">
+          <label for="spr-height">Altura</label>
+          <input type="text" class="add-box-txt add-box-txt-sm" name="spr-height" id="spr-height" value="" placeholder="Altura del sprite (en casillas)" />
+        </div>
+      </div>
+      <div class="add-box-row">
+        <div class="add-box-col">
           <label for="spr-crossable">Cruzar</label>
           <input type="checkbox" name="spr-crossable" id="spr-crossable" />
         </div>
@@ -73,8 +83,10 @@
 </div>
 
 <script type="text/x-template" id="spr-tpl">
-  <div class="item-list-sample {{file}}"></div>
-  <span>{{name}}</span>
+  <div class="item-list-sample {{file}}">
+    <img src="/assets/sprite/{{slug}}/{{file}}.png" />
+  </div>
+  <span data-width="{{width}}" data-height="{{height}}">{{name}}</span>
   <div class="item-list-info">
     <div class="item-list-info-item">
       <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_{{crossable}}.png" data-crossable="{{crs}}" />

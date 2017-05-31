@@ -12,8 +12,10 @@
     <ul class="item-list">
       <?php foreach ($sprc->getSprites() as $spr): ?>
       <li id="spr-<?php echo $spr->get('id') ?>" data-id="<?php echo $spr->get('id') ?>">
-        <div class="item-list-sample <?php echo $spr->get('file') ?>"></div>
-        <span><?php echo $spr->get('name') ?></span>
+        <div class="item-list-sample">
+          <img src="/assets/sprite/<?php echo $sprc->get('slug') ?>/<?php echo $spr->get('file') ?>.png" />
+        </div>
+        <span data-width="<?php echo $spr->get('width') ?>" data-height="<?php echo $spr->get('height') ?>"><?php echo $spr->get('name') ?></span>
         <div class="item-list-info">
           <div class="item-list-info-item">
             <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_<?php echo $spr->get('crossable')?'on':'off' ?>.png" data-crossable="<?php echo $spr->get('crossable')?'1':'0' ?>" />

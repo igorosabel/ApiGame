@@ -5,6 +5,8 @@
   "name": "{{name}}",
   "file": "{{saved_file}}",
   "category": "{{category}}",
+  "width": {{width}},
+  "height": {{height}},
   "crossable": {{crossable}},
   "breakable": {{breakable}},
   "grabbable": {{grabbable}},

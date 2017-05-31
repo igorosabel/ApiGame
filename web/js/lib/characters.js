@@ -47,7 +47,7 @@ class Character{
   }
   up(){
     if (!this.moving.up){
-      this.vy = -1;
+      this.vy = -1 * defaultVY;
       this.moving.up = true;
       this.orientationList.push('up');
       this.playAnimation();
@@ -62,7 +62,7 @@ class Character{
   }
   down(){
     if (!this.moving.down){
-      this.vy = 1;
+      this.vy = defaultVY;
       this.moving.down = true;
       this.orientationList.push('down');
       this.playAnimation();
@@ -77,7 +77,7 @@ class Character{
   }
   right(){
     if (!this.moving.right){
-      this.vx = 1;
+      this.vx = defaultVX;
       this.moving.right = true;
       this.orientationList.push('right');
       this.playAnimation();
@@ -92,7 +92,7 @@ class Character{
   }
   left(){
     if (!this.moving.left){
-      this.vx = -1;
+      this.vx = -1 * defaultVX;
       this.moving.left = true;
       this.orientationList.push('left');
       this.playAnimation();

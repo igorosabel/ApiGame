@@ -3,7 +3,10 @@
   Admin
 </header>
 
-<a href="/admin/scenarios" class="admin-option">Escenarios</a>
-<a href="/admin/backgrounds" class="admin-option">Fondos</a>
-<a href="/admin/sprites" class="admin-option">Sprites</a>
-<a href="/admin/users" class="admin-option">Usuarios</a>
+<ul class="admin-options">
+  <li><a href="/admin/scenarios">Escenarios</a></li>
+  <li><a href="/admin/backgrounds">Fondos</a></li>
+  <li><a href="/admin/sprites">Sprites</a></li>
+  <li><a href="/admin/interactives">Interactivos</a></li>
+  <li><a href="/admin/users">Usuarios</a></li>
+</ul>

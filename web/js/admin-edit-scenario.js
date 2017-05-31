@@ -97,9 +97,14 @@ function updateCell(x,y,sel){
     }
   }
   if (scenario[x][y].spr){
-    const spr = document.createElement('div');
-    spr.className = 'sprite ' + sprites.list['spr_'+scenario[x][y].spr].class;
-    cell.appendChild(spr);
+    if (sprites.list['spr_'+scenario[x][y].spr]){
+      const spr = document.createElement('div');
+      spr.className = 'sprite ' + sprites.list['spr_'+scenario[x][y].spr].class;
+      cell.appendChild(spr);
+    }
+    else{
+      delete scenario[x][y].spr;
+    }
   }
 }
 

@@ -12,6 +12,8 @@ class Sprite extends OBase{
         'breakable'   => array('type'=>Base::BOOL,               'com'=>'Indica si se puede romper 1 o no 0'),
         'grabbable'   => array('type'=>Base::BOOL,               'com'=>'Indica si se puede coger 1 o no 0'),
         'pickable'    => array('type'=>Base::BOOL,               'com'=>'Indica si se puede coger al inventario 1 o no 0'),
+        'width'       => array('type'=>Base::NUM,                'com'=>'Anchura del sprite en casillas'),
+        'height'      => array('type'=>Base::NUM,                'com'=>'Altura del sprite en casillas'),
         'created_at'  => array('type'=>Base::CREATED,            'com'=>'Fecha de creación del registro'),
         'updated_at'  => array('type'=>Base::UPDATED,            'com'=>'Fecha de última modificación del registro')
     );

@@ -460,6 +460,8 @@
     $name        = Base::getParam('name',        $req['url_params'], false);
     $file_name   = Base::getParam('file_name',   $req['url_params'], false);
     $file        = Base::getParam('file',        $req['url_params'], false);
+    $width       = Base::getParam('width',       $req['url_params'], false);
+    $height      = Base::getParam('height',      $req['url_params'], false);
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
     $breakable   = Base::getParam('breakable',   $req['url_params'], false);
     $grabbable   = Base::getParam('grabbable',   $req['url_params'], false);
@@ -468,7 +470,7 @@
     $saved_file  = '';
     $category    = '';
 
-    if ($id===false || $id_category===false || $name===false || $crossable===false || $breakable===false || $grabbable===false || $pickable===false){
+    if ($id===false || $id_category===false || $name===false || $width===false || $height===false || $crossable===false || $breakable===false || $grabbable===false || $pickable===false){
       $status = 'error';
     }
 
@@ -486,6 +488,8 @@
       if ($file_name!=''){
         $spr->set('file',        str_ireplace('.png', '', $file_name));
       }
+      $spr->set('width', $width);
+      $spr->set('height', $height);
       $spr->set('crossable',   ($crossable=='true'));
       $spr->set('breakable',   ($breakable=='true'));
       $spr->set('grabbable',   ($grabbable=='true'));
@@ -514,6 +518,8 @@
     $t->add('name',        $name);
     $t->add('saved_file',  $saved_file);
     $t->add('category',    $category);
+    $t->add('width',       $width);
+    $t->add('height',      $height);
     $t->add('crossable',   $crossable);
     $t->add('breakable',   $breakable);
     $t->add('grabbable',   $grabbable);
