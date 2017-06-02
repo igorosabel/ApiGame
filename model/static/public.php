@@ -209,4 +209,21 @@ class stPublic{
     fwrite($ifp, base64_decode($data[1]));
     fclose($ifp);
   }
+  
+  public static function getInteractives(){
+    $ret = array();
+    $db = new ODB();
+    $sql = "SELECT * FROM `interactive` ORDER BY `name`";
+    $db->query($sql);
+    
+    while ($res=$db->next()){
+      $int = new Interactive();
+      $int->update($res);
+      $int->loadSprites();
+      
+      array_push($ret, $int);
+    }
+    
+    return $ret;
+  }
 }

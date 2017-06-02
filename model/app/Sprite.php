@@ -20,4 +20,19 @@ class Sprite extends OBase{
 
     parent::load($model_name,$tablename,$model);
   }
+  
+  private $category = null;
+  
+  public function getCategory(){
+    if (is_null($this->category)){
+      $this->loadCategory();
+    }
+    return $this->category;
+  }
+  
+  public function loadCategory(){
+    $sprc = new SpriteCategory();
+    $sprc->find(array('id'=>$this->get('id_category')));
+    $this->category = $sprc;
+  }
 }

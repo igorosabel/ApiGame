@@ -1,28 +1,29 @@
-const addCat = document.querySelector('.admin-header-add');
-addCat.addEventListener('click', showAddCategoryBox);
+const addCat      = document.querySelector('.admin-header-add');
 const addCatClose = document.getElementById('add-sprc-close');
-addCatClose.addEventListener('click', closeAddCategoryBox);
-const frmSprc = document.getElementById('frm-sprc');
-frmSprc.addEventListener('submit', saveSpriteCategory);
-const sprcDel = document.getElementById('sprc-delete');
-sprcDel.addEventListener('click', deleteCategory);
-const tabs = document.querySelectorAll('.admin-tabs li');
-tabs.forEach(tab => tab.addEventListener('click',selectTab));
-const tabsEdit = document.querySelectorAll('.admin-tabs li img');
-tabsEdit.forEach(img => img.addEventListener('click', editSpriteCategory));
-const items = document.querySelectorAll('.item-list li');
-items.forEach(item => item.addEventListener('click', editSprite));
+const frmSprc     = document.getElementById('frm-sprc');
+const sprcDel     = document.getElementById('sprc-delete');
+const tabs        = document.querySelectorAll('.admin-tabs li');
+const tabsEdit    = document.querySelectorAll('.admin-tabs li img');
+const items       = document.querySelectorAll('.item-list li');
 const addSprClose = document.getElementById('add-spr-close');
+const addSprFile  = document.querySelector('.add-file');
+const sprFile     = document.getElementById('spr-file');
+const frmSpr      = document.getElementById('frm-spr');
+const sprDel      = document.getElementById('spr-delete');
+const addBtn      = document.getElementById('add-btn');
+
+addCat.addEventListener('click', showAddCategoryBox);
+addCatClose.addEventListener('click', closeAddCategoryBox);
+frmSprc.addEventListener('submit', saveSpriteCategory);
+sprcDel.addEventListener('click', deleteCategory);
+tabs.forEach(tab => tab.addEventListener('click',selectTab));
+tabsEdit.forEach(img => img.addEventListener('click', editSpriteCategory));
+items.forEach(item => item.addEventListener('click', editSprite));
 addSprClose.addEventListener('click', closeAddSpriteBox);
-const addSprFile = document.querySelector('.add-file');
 addSprFile.addEventListener('click', sprFileSelect);
-const sprFile = document.getElementById('spr-file');
 sprFile.addEventListener('change', sprFileUpload);
-const frmSpr = document.getElementById('frm-spr');
 frmSpr.addEventListener('submit', saveSprite);
-const sprDel = document.getElementById('spr-delete');
 sprDel.addEventListener('click', deleteSprite);
-const addBtn = document.getElementById('add-btn');
 addBtn.addEventListener('click', showAddSpriteBox);
 
 /*

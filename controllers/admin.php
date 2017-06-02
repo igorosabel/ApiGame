@@ -126,6 +126,20 @@
   }
   
   /*
+   * Página para editar los elementos interactivos
+   */
+  function executeInteractives($req, $t){
+    $interactives = stPublic::getInteractives();
+    $sprites      = stPublic::getSprites();
+
+    $t->addCss('admin');
+    $t->addPartial('sprites_css',  'public/sprites_css',      array('sprites'=>$sprites));
+    $t->addPartial('interactives', 'admin/interactives_edit', array('interactives'=>$interactives));
+    $t->addPartial('sprites',      'admin/sprites',           array('sprites'=>$sprites));
+    $t->process();
+  }
+  
+  /*
    * Página para editar los usuarios
    */
   function executeUsers($req, $t){

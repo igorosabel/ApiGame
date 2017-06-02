@@ -14,4 +14,28 @@ class Interactive extends OBase{
 
     parent::load($model_name,$tablename,$model);
   }
+  
+  private $sprite_start = null;
+  private $sprite_end   = null;
+  
+  public function loadSprites(){
+    if (is_null($this->sprite_start)){
+      $sprs = new Sprite();
+      $sprs->find(array('id'=>$this->get('sprite_start')));
+      $this->sprite_start = $sprs;
+    }
+    if (is_null($this->sprite_end)){
+      $spre = new Sprite();
+      $spre->find(array('id'=>$this->get('sprite_end')));
+      $this->sprite_end = $spre;
+    }
+  }
+  
+  public function getSpriteStart(){
+    return $this->sprite_start;
+  }
+  
+  public function getSpriteEnd(){
+    return $this->sprite_end;
+  }
 }

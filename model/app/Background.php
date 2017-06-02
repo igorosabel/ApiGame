@@ -15,4 +15,19 @@ class Background extends OBase{
 
     parent::load($model_name,$tablename,$model);
   }
+  
+  private $category = null;
+  
+  public function getCategory(){
+    if (is_null($this->category)){
+      $this->loadCategory();
+    }
+    return $this->category;
+  }
+  
+  public function loadCategory(){
+    $bckc = new BackgroundCategory();
+    $bckc->find(array('id'=>$this->get('id_category')));
+    $this->category = $bckc;
+  }
 }

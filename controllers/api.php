@@ -570,6 +570,56 @@
   }
   
   /*
+   * Función para guardar un elemento interactivo
+   */
+  function executeSaveInteractive($req, $t){
+    global $c, $s;
+
+    $status       = 'ok';
+    $id           = Base::getParam('id',           $req['url_params'], false);
+    $name         = Base::getParam('name',         $req['url_params'], false);
+    $sprite_start = Base::getParam('sprite_start', $req['url_params'], false);
+    $sprite_end   = Base::getParam('sprite_end',   $req['url_params'], false);
+    $url_start    = '';
+    $is_new       = 'true';
+
+    if ($id===false || $name===false || $sprite_start===false || $sprite_end===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $name = urldecode($name);
+      $int = new Interactive();
+      if ($id!==0){
+        $int->find(array('id'=>$id));
+        $is_new = 'false';
+      }
+      $int->set('name',         $name);
+      $int->set('sprite_start', $sprite_start);
+      $int->set('sprite_end',   $sprite_end);
+      
+      $int->save();
+      
+      $id = $int->get('id');
+      $int->loadSprites();
+      
+      $url_start = '/assets/sprite/'.$int->getSpriteStart()->getCategory()->get('slug').'/'.$int->getSpriteStart()->get('file').'.png';
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status',       $status);
+    $t->add('is_new',       $is_new);
+    $t->add('id',           $id);
+    $t->add('name',         $name);
+    $t->add('url_start',    $url_start);
+    $t->add('sprite_start', $sprite_start);
+    $t->add('sprite_end',   $sprite_end);
+    $t->process();
+  }
+  
+  /*
    * Función para guardar un usuario
    */
   function executeSaveUser($req, $t){

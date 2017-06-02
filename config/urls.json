@@ -194,6 +194,22 @@
         "filter": "adminFilter"
       },
       {
+        "id": "interactives",
+        "url": "/admin/interactives",
+        "module": "admin",
+        "action": "interactives",
+        "comment": "Página para editar los elementos interactivos",
+        "filter": "adminFilter"
+      },
+      {
+        "id": "saveInteractive",
+        "url": "/api/save-interactive",
+        "module": "api",
+        "action": "saveInteractive",
+        "comment": "Función para guardar un elemento interactivo",
+        "filter": "adminFilter"
+      },
+      {
         "id": "users",
         "url": "/admin/users",
         "module": "admin",
