@@ -49,7 +49,7 @@ function showAddInteractiveBox(e){
   editInt.sprite_start = 0;
   editInt.sprite_end = 0;
   
-  selectSprites.forEach( spr => { spr.innerHTML = ''; } );
+  selectSprites.forEach( spr => { spr.className = 'cell-detail-option-sample'; } );
   const names = document.querySelectorAll('.cell-detail-option .cell-detail-option-name');
   names.forEach( name => {
     name.innerHTML = '';
@@ -76,7 +76,7 @@ function deleteInteractive(){
   const int = this;
   const conf = confirm('¿Estás seguro de querer borrar este elemento interactivo?');
   if (conf){
-    postAjax('/api/delete-interactive', {id: editIntId}, deleteInteractiveSuccess);
+    postAjax('/api/delete-interactive', {id: editInt.id}, deleteInteractiveSuccess);
   }
 }
 

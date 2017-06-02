@@ -210,6 +210,14 @@
         "filter": "adminFilter"
       },
       {
+        "id": "deleteInteractive",
+        "url": "/api/delete-interactive",
+        "module": "api",
+        "action": "deleteInteractive",
+        "comment": "Función para borrar un elemento interactivo",
+        "filter": "adminFilter"
+      },
+      {
         "id": "users",
         "url": "/admin/users",
         "module": "admin",

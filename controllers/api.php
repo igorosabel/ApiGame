@@ -588,7 +588,9 @@
     }
 
     if ($status=='ok'){
+      $id    = (int)$id;
       $name = urldecode($name);
+      
       $int = new Interactive();
       if ($id!==0){
         $int->find(array('id'=>$id));
@@ -616,6 +618,37 @@
     $t->add('url_start',    $url_start);
     $t->add('sprite_start', $sprite_start);
     $t->add('sprite_end',   $sprite_end);
+    $t->process();
+  }
+  
+  /*
+   * Función para borrar un elemento interactivo
+   */
+  function executeDeleteInteractive($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id', $req['url_params'], false);
+
+    if ($id===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $int = new Interactive();
+      if ($int->find(array('id'=>$id))){
+        $int->delete();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status', $status);
+    $t->add('id',     $id);
     $t->process();
   }
   
