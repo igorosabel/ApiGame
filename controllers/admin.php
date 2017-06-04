@@ -83,8 +83,9 @@
       'initial' => $scn->get('initial')
     );
 
-    $backgrounds = stPublic::getBackgrounds();
-    $sprites     = stPublic::getSprites();
+    $backgrounds  = stPublic::getBackgrounds();
+    $sprites      = stPublic::getSprites();
+    $interactives = stPublic::getInteractives();
 
     $t->addPartial('backgrounds_css', 'public/backgrounds_css', array('backgrounds'=>$backgrounds));
     $t->addPartial('sprites_css',     'public/sprites_css',     array('sprites'=>$sprites));
@@ -93,6 +94,8 @@
     $t->add('bcks_data', json_encode(stPublic::getBackgroundsData($backgrounds)));
     $t->addPartial('sprites', 'admin/sprites', array('sprites'=>$sprites));
     $t->add('sprs_data', json_encode(stPublic::getSpritesData($sprites)));
+    $t->addPartial('interactives', 'admin/interactives', array('interactives'=>$interactives));
+    $t->add('ints_data', json_encode(stPublic::getInteractivesData($interactives)));
 
     $t->setTitle('Game - '.$scn->get('name'));
     $t->addCss('admin');

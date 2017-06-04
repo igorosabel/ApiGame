@@ -73,6 +73,12 @@
       <div class="cell-detail-option-name"></div>
       <img class="cell-detail-option-delete" src="/img/clear.svg" title="Quitar sprite" />
     </div>
+    <div class="cell-detail-option" id="cell-detail-interactive">
+      <div class="cell-detail-option-title">Interactivo</div>
+      <div class="cell-detail-option-sample"></div>
+      <div class="cell-detail-option-name"></div>
+      <img class="cell-detail-option-delete" src="/img/clear.svg" title="Quitar elemento interactivo" />
+    </div>
   </div>
 </div>
 
@@ -96,10 +102,21 @@
   </div>
 </div>
 
+<div class="over-box" id="select-interactive">
+  <div class="over-header">
+    <span>Interactivos</span>
+    <img id="select-interactive-close" src="/img/clear.svg" />
+  </div>
+  <div class="over-body-long">
+    {{interactives}}
+  </div>
+</div>
+
 <script>
-  const scn         = JSON.parse('{{scenario}}');
-  const scenario    = scn.data;
-  const backgrounds = JSON.parse('{{bcks_data}}');
-  const sprites     = JSON.parse('{{sprs_data}}');
+  const scn          = JSON.parse('{{scenario}}');
+  const scenario     = scn.data;
+  const backgrounds  = JSON.parse('{{bcks_data}}');
+  const sprites      = JSON.parse('{{sprs_data}}');
+  const interactives = JSON.parse('{{ints_data}}');
 </script>
 <script src="/js/admin-edit-scenario.js"></script>

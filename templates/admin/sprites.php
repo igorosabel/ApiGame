@@ -55,24 +55,8 @@
         </div>
       </div>
       <div class="add-box-row">
-        <div class="add-box-col">
-          <label for="spr-crossable">Cruzar</label>
-          <input type="checkbox" name="spr-crossable" id="spr-crossable" />
-        </div>
-        <div class="add-box-col">
-          <label for="spr-breakable">Romper</label>
-          <input type="checkbox" name="spr-breakable" id="spr-breakable" />
-        </div>
-      </div>
-      <div class="add-box-row">
-        <div class="add-box-col">
-          <label for="spr-grabbable">Coger</label>
-          <input type="checkbox" name="spr-grabbable" id="spr-grabbable" />
-        </div>
-        <div class="add-box-col">
-          <label for="spr-pickable">Coger (inv)</label>
-          <input type="checkbox" name="spr-pickable" id="spr-pickable" />
-        </div>
+        <label for="spr-crossable">Cruzar</label>
+        <input type="checkbox" name="spr-crossable" id="spr-crossable" />
       </div>
       <div class="add-box-footer">
         <input type="button" class="add-box-btn add-box-btn-del" id="spr-delete" value="Borrar" />
@@ -84,21 +68,12 @@
 
 <script type="text/x-template" id="spr-tpl">
   <div class="item-list-sample {{file}}">
-    <img src="/assets/sprite/{{slug}}/{{file}}.png" />
+    <img src="{{url}}" />
   </div>
-  <span data-width="{{width}}" data-height="{{height}}">{{name}}</span>
+  <span>{{name}}</span>
   <div class="item-list-info">
     <div class="item-list-info-item">
-      <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_{{crossable}}.png" data-crossable="{{crs}}" />
-    </div>
-    <div class="item-list-info-item">
-      <img class="breakable" title="¿Se puede romper?" src="/img/breakable_{{breakable}}.png" data-breakable="{{bre}}" />
-    </div>
-    <div class="item-list-info-item">
-      <img class="grabbable" title="¿Se puede coger?" src="/img/grabbable_{{grabbable}}.png" data-grabbable="{{gra}}" />
-    </div>
-    <div class="item-list-info-item">
-      <img class="pickable" title="¿Se puede coger (inv)?" src="/img/pickable_{{pickable}}.png" data-pickable="{{pic}}" />
+      <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_{{crossable}}.png" />
     </div>
   </div>
 </script>

@@ -3,8 +3,10 @@ const options = document.querySelectorAll('.scenario-menu-option');
 const cellDetailClose = document.getElementById('cell-detail-close');
 const cellDetailBck   = document.getElementById('cell-detail-background');
 const cellDetailSpr   = document.getElementById('cell-detail-sprite');
+const cellDetailInt   = document.getElementById('cell-detail-interactive');
 const selectBckClose  = document.getElementById('select-background-close');
 const selectSprClose  = document.getElementById('select-sprite-close');
+const selectIntClose  = document.getElementById('select-interactive-close');
 const detailTitles    = document.querySelectorAll('.cell-detail-title');
 const detailItems     = document.querySelectorAll('.cell-detail-item');
 const detailDelBck    = cellDetailBck.querySelector('.cell-detail-option-delete');
@@ -20,8 +22,10 @@ options.forEach(opt => opt.addEventListener('click', changeOption));
 cellDetailClose.addEventListener('click', closeCellDetail);
 cellDetailBck.querySelector('.cell-detail-option-sample').addEventListener('click', showBackgrounds);
 cellDetailSpr.querySelector('.cell-detail-option-sample').addEventListener('click', showSprites);
+cellDetailInt.querySelector('.cell-detail-option-sample').addEventListener('click', showInteractives);
 selectBckClose.addEventListener('click', closeSelectBck);
 selectSprClose.addEventListener('click', closeSelectSpr);
+selectIntClose.addEventListener('click', closeSelectInt);
 detailTitles.forEach(tit => tit.addEventListener('click', deployGroup));
 detailItems.forEach(item => item.addEventListener('click', selectItem));
 detailDelBck.addEventListener('click', deleteSelectBck);
@@ -287,6 +291,15 @@ function showSprites(){
 }
 
 /*
+ * Función para mostrar la lista de elementos interactivos
+ */
+function showInteractives(){
+  document.getElementById('cell-detail').style.display = 'none';
+  document.querySelector('.scenario-overlay').style.display = 'block';
+  document.getElementById('select-interactive').style.display = 'block';
+}
+
+/*
  * Función para cerrar la lista de fondos
  */
 function closeSelectBck(){
@@ -304,6 +317,14 @@ function closeSelectBck(){
  */
 function closeSelectSpr(){
   document.getElementById('select-sprite').style.display = 'none';
+  document.getElementById('cell-detail').style.display = 'block';
+}
+
+/*
+ * Función para cerrar la lista de elementos interactivos
+ */
+function closeSelectInt(){
+  document.getElementById('select-interactive').style.display = 'none';
   document.getElementById('cell-detail').style.display = 'block';
 }
 
@@ -391,6 +412,9 @@ function selectItem(){
     updateCell(selectedCell.x,selectedCell.y,false);
     setAllSaved(false);
     closeSelectSpr();
+  }
+  if (item.dataset.type=='int'){
+    console.log(item);
   }
 }
 

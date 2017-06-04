@@ -10,6 +10,9 @@ class Game extends OBase{
         'id_scenario' => array('type'=>Base::NUM,                'com'=>'Id del escenario en el que está el usuario'),
         'position_x'  => array('type'=>Base::NUM,                'com'=>'Última posición X guardada del jugador'),
         'position_y'  => array('type'=>Base::NUM,                'com'=>'Última posición Y guardada del jugador'),
+        'money'       => array('type'=>Base::NUM,                'com'=>'Cantidad de dinero que tiene el jugador'),
+        'health'      => array('type'=>Base::NUM,                'com'=>'Salud actual del jugador'),
+        'max_health'  => array('type'=>Base::NUM,                'com'=>'Máxima salud del jugador'),
         'created_at'  => array('type'=>Base::CREATED,            'com'=>'Fecha de creación del registro'),
         'updated_at'  => array('type'=>Base::UPDATED,            'com'=>'Fecha de última modificación del registro')
     );

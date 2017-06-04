@@ -178,6 +178,14 @@
         "filter": "adminFilter"
       },
       {
+        "id": "getSprite",
+        "url": "/api/get-sprite",
+        "module": "api",
+        "action": "getSprite",
+        "comment": "Función para obtener los datos de un sprite",
+        "filter": "adminFilter"
+      },
+      {
         "id": "saveSprite",
         "url": "/api/save-sprite",
         "module": "api",

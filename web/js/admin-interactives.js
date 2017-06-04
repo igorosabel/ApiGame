@@ -25,7 +25,7 @@ frmInt.addEventListener('submit', saveInteractive);
 items.forEach(item => item.addEventListener('click', editInteractive));
 
 /*
- * Id del elemento interactivo que se está editando
+ * Elemento interactivo que se está editando
  */
 let editInt = {
   id: 0,

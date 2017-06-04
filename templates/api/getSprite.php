@@ -5,8 +5,10 @@
   "name": "{{name}}",
   "file": "{{file}}",
   "url": "{{url}}",
+  "crossable": {{crossable}},
   "width": {{width}},
   "height": {{height}},
-  "crossable": {{crossable}},
-  "is_new": {{is_new}}
+  "frames": [
+{{frames}}
+  ]
 }

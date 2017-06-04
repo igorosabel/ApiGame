@@ -199,17 +199,6 @@ class stPublic{
     return $data;
   }
   
-  public static function saveImage($ruta, $base64_string) {
-    if (file_exists($ruta)){
-      unlink($ruta);
-    }
-
-    $ifp = fopen($ruta, "wb");
-    $data = explode(',', $base64_string);
-    fwrite($ifp, base64_decode($data[1]));
-    fclose($ifp);
-  }
-  
   public static function getInteractives(){
     $ret = array();
     $db = new ODB();
@@ -225,5 +214,33 @@ class stPublic{
     }
     
     return $ret;
+  }
+  
+  public static function getInteractivesData($list){
+    $data = array();
+    
+    foreach ($list as $int){
+      $item_int = array(
+        'id' => $int->get('id'),
+        'name' => urlencode($int->get('name')),
+        'sprite_start' => $int->get('sprite_start'),
+        'sprite_end' => $int->get('sprite_end'),
+        'start_url' => '/assets/sprite/'.$int->getSpriteStart()->getCategory()->get('slug').'/'.$int->getSpriteStart()->get('file').'.png'
+      );
+      $data['int_'.$item_int['id']] = $item_int;
+    }
+    
+    return $data;
+  }
+  
+  public static function saveImage($ruta, $base64_string) {
+    if (file_exists($ruta)){
+      unlink($ruta);
+    }
+
+    $ifp = fopen($ruta, "wb");
+    $data = explode(',', $base64_string);
+    fwrite($ifp, base64_decode($data[1]));
+    fclose($ifp);
   }
 }

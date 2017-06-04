@@ -8,6 +8,7 @@ const items       = document.querySelectorAll('.item-list li');
 const addSprClose = document.getElementById('add-spr-close');
 const addSprFile  = document.querySelector('.add-file');
 const sprFile     = document.getElementById('spr-file');
+const ovlSpr      = document.getElementById('add-spr');
 const frmSpr      = document.getElementById('frm-spr');
 const sprDel      = document.getElementById('spr-delete');
 const addBtn      = document.getElementById('add-btn');
@@ -173,45 +174,75 @@ const uploadedSprite = {
 };
 
 /*
- * Id del sprite que se está editando
+ * Sprite que se está editando
  */
-let editSpriteId = 0;
+let editSpr = {
+  id: 0,
+  id_category: 0,
+  name: '',
+  file: '',
+  data: null,
+  url: '',
+  crossable: false,
+  width: 1,
+  height: 1,
+  frames: []
+};
 
 /*
  * Función para mostrar el cuadro de añadir sprite
  */
 function showAddSpriteBox(e){
   e.preventDefault();
+  
   const sprc  = document.querySelector('.admin-tabs li.admin-tab-selected');
-  const ovl   = document.getElementById('add-spr');
-  const title = document.getElementById('add-spr-title');
-  const name  = document.getElementById('spr-name');
-  name.value  = '';
+  
+  editSpr.id          = 0;
+  editSpr.id_category = sprc.dataset.id;
+  editSpr.name        = '';
+  editSpr.file        = '';
+  editSpr.data        = null;
+  editSpr.url         = '';
+  editSpr.crossable   = false;
+  editSpr.width       = 1;
+  editSpr.height      = 1;
+  editSpr.frames      = [];
+  
   sprFile.value = '';
   uploadedSprite.name = '';
   uploadedSprite.data = null;
   addSprFile.innerHTML = '';
-  const width       = document.getElementById('spr-width');
-  width.value       = '';
-  const height      = document.getElementById('spr-height');
-  height.value      = '';
-  const crossable   = document.getElementById('spr-crossable');
-  crossable.checked = false;
-  const breakable   = document.getElementById('spr-breakable');
-  breakable.checked = false;
-  const grabbable   = document.getElementById('spr-grabbable');
-  grabbable.checked = false;
-  const pickable    = document.getElementById('spr-pickable');
-  pickable.checked  = false;
-  const del         = document.getElementById('spr-delete');
-  del.style.display = 'none';
   
-  title.innerHTML = 'Añadir sprite';
-  editSpriteId = 0;
-  editSpriteCategoryId = sprc.dataset.id;
+  showLoadedSprite();
+}
+
+/*
+ * Función para mostrar en el formulario el sprite cargado
+ */
+function showLoadedSprite(){
+  const title = document.getElementById('add-spr-title');
+  const name      = document.getElementById('spr-name');
+  const width     = document.getElementById('spr-width');
+  const height    = document.getElementById('spr-height');
+  const crossable = document.getElementById('spr-crossable');
+  const del       = document.getElementById('spr-delete');
   
-  ovl.classList.add('add-box-show');
+  title.innerHTML   = ( editSpr.id===0 ) ? 'Añadir sprite' : 'Editar sprite';
+  name.value        = editSpr.name;
+  width.value       = editSpr.width;
+  height.value      = editSpr.height;
+  crossable.checked = editSpr.crossable;
+  del.style.display = ( editSpr.id===0 ) ? 'none' : 'inline-block';
+  
+  addSprFile.innerHTML = '';
+  if (editSpr.url!==''){
+    const img = document.createElement('img');
+    img.src = editSpr.url;
+    addSprFile.appendChild(img);
+  }
+  
   name.focus();
+  ovlSpr.classList.add('add-box-show');
 }
 
 /*
@@ -237,14 +268,24 @@ function sprFileUpload() {
   const r = new FileReader();
   r.onload = function(e){
     const data = e.target.result;
-    uploadedSprite.name = f.name;
-    uploadedSprite.data = data;
+    editSpr.file = f.name;
+    editSpr.data = data;
     addSprFile.innerHTML = '';
     const img = document.createElement('img');
     img.src = data;
     addSprFile.appendChild(img);
   };
   r.readAsDataURL(f);
+}
+
+/*
+ * Función para actualizar el objeto editSpr con los datos del formulario
+ */
+function updateEditSpr(){
+  editSpr.name = document.getElementById('spr-name').value;
+  editSpr.crossable   = document.getElementById('spr-crossable').checked;
+  editSpr.width       = document.getElementById('spr-width').value;
+  editSpr.height      = document.getElementById('spr-height').value;
 }
 
 /*
@@ -259,7 +300,7 @@ function saveSprite(e){
     return false;
   }
   const file = document.getElementById('spr-file');
-  if (editSpriteId===0 && file.value===''){
+  if (editSpr.id===0 && file.value===''){
     alert('¡No has elegido ninguna imagen!');
     return false;
   }
@@ -275,24 +316,20 @@ function saveSprite(e){
     height.focus();
     return false;
   }
+  
+  updateEditSpr();
 
   const crossable = document.getElementById('spr-crossable');
-  const breakable = document.getElementById('spr-breakable');
-  const grabbable = document.getElementById('spr-grabbable');
-  const pickable  = document.getElementById('spr-pickable');
 
   const params = {
-    id: editSpriteId,
-    id_category: editSpriteCategoryId,
-    name: urlencode(name.value),
-    file_name: uploadedSprite.name,
-    file: uploadedSprite.data,
-    width: width.value,
-    height: height.value,
-    crossable: crossable.checked,
-    breakable: breakable.checked,
-    grabbable: grabbable.checked,
-    pickable: pickable.checked
+    id: editSpr.id,
+    id_category: editSpr.id_category,
+    name: urlencode(editSpr.name),
+    file: urlencode(editSpr.file),
+    file_data: editSpr.data,
+    width: editSpr.width,
+    height: editSpr.height,
+    crossable: editSpr.crossable
   };
 
   postAjaxFile('/api/save-sprite', params, saveSpriteSuccess);
@@ -313,18 +350,10 @@ function saveSpriteSuccess(data){
       item.innerHTML += template('spr-tpl', {
         id: data.id,
         name: urldecode(data.name),
-        slug: category,
-        file: data.file,
+        url: urldecode(data.url),
         width: data.width,
         height: data.height,
-        crossable: data.crossable ? 'on': 'off',
-        crs: data.crossable ? '1': '0',
-        breakable: data.breakable ? 'on': 'off',
-        bre: data.breakable ? '1': '0',
-        grabbable: data.grabbable ? 'on': 'off',
-        gra: data.grabbable ? '1': '0',
-        pickable: data.pickable ? 'on': 'off',
-        pic: data.pickable ? '1': '0'
+        crossable: data.crossable ? 'on': 'off'
       });
       item.addEventListener('click', editSprite);
       list.appendChild(item);
@@ -336,19 +365,9 @@ function saveSpriteSuccess(data){
       name.dataset.width = data.width;
       name.dataset.height = data.height;
       const img = spr.querySelector('.item-list-sample img');
-      img.src = '/assets/sprite/'+category+'/'+file+'.png';
+      img.src = urldecode(data.url);
       const crs = spr.querySelector('.crossable');
       crs.src = '/img/crossable_' + ((data.crossable) ? 'on':'off') + '.png';
-      crs.dataset.crossable = ((data.crossable) ? '1':'0');
-      const bre = spr.querySelector('.breakable');
-      bre.src = '/img/breakable_' + ((data.breakable) ? 'on':'off') + '.png';
-      bre.dataset.breakable = ((data.breakable) ? '1':'0');
-      const gra = spr.querySelector('.grabbable');
-      gra.src = '/img/grabbable_' + ((data.grabbable) ? 'on':'off') + '.png';
-      gra.dataset.grabbable = ((data.grabbable) ? '1':'0');
-      const pic = spr.querySelector('.pickable');
-      pic.src = '/img/pickable_' + ((data.pickable) ? 'on':'off') + '.png';
-      pic.dataset.pickable = ((data.pickable) ? '1':'0');
     }
     closeAddSpriteBox();
   }
@@ -364,7 +383,7 @@ function deleteSprite(){
   const spr = this;
   const conf = confirm('¿Estás seguro de querer borrar este sprite?');
   if (conf){
-    postAjax('/api/delete-sprite', {id: editSpriteId}, deleteSpriteSuccess);
+    postAjax('/api/delete-sprite', {id: editSpr.id}, deleteSpriteSuccess);
   }
 }
 
@@ -382,45 +401,23 @@ function deleteSpriteSuccess(data){
  */
 function editSprite(){
   const spr    = this;
-  const sprc   = document.querySelector('.admin-tabs li.admin-tab-selected');
-  const ovl    = document.getElementById('add-spr');
-  const title  = document.getElementById('add-spr-title');
-  const name   = spr.querySelector('span').innerHTML;
-  const width  = spr.querySelector('span').dataset.width;
-  const height = spr.querySelector('span').dataset.height;
-  const file   = spr.querySelector('.item-list-sample img').src;
-  const crs    = spr.querySelector('.crossable').dataset.crossable;
-  const bre    = spr.querySelector('.breakable').dataset.breakable;
-  const gra    = spr.querySelector('.grabbable').dataset.grabbable;
-  const pic    = spr.querySelector('.pickable').dataset.pickable;
+  postAjax('/api/get-sprite', {id: parseInt(spr.dataset.id)}, getSpriteSuccess);
+}
 
-  editSpriteCategoryId = parseInt(sprc.dataset.id);
-  editSpriteId = parseInt(spr.dataset.id);
-  title.innerHTML = 'Editar sprite';
-  const txt_name = document.getElementById('spr-name');
-  txt_name.value = name;
-
-  const category = slugify(sprc.querySelector('span').innerHTML);
-  addSprFile.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = file;
-  addSprFile.appendChild(img);
-
-  const txt_width = document.getElementById('spr-width');
-  txt_width.value = width;
-  const txt_height = document.getElementById('spr-height');
-  txt_height.value = height;
-  const chk_crs = document.getElementById('spr-crossable');
-  chk_crs.checked = (crs==='1');
-  const chk_bre = document.getElementById('spr-breakable');
-  chk_bre.checked = (bre==='1');
-  const chk_gra = document.getElementById('spr-grabbable');
-  chk_gra.checked = (gra==='1');
-  const chk_pic = document.getElementById('spr-pickable');
-  chk_pic.checked = (pic==='1');
-  const del  = document.getElementById('spr-delete');
-  del.style.display = 'inline-block';
-
-  ovl.classList.add('add-box-show');
-  txt_name.focus();
+/*
+ * Función para mostrar el cuadro de editar sprite con los datos obtenidos
+ */
+function getSpriteSuccess(data){
+  editSpr.id          = data.id;
+  editSpr.id_category = data.id_category;
+  editSpr.name        = urldecode(data.name);
+  editSpr.file        = '';
+  editSpr.data        = null;
+  editSpr.url         = urldecode(data.url);
+  editSpr.crossable   = data.crossable;
+  editSpr.width       = data.width;
+  editSpr.height      = data.height;
+  editSpr.frames      = data.frames;
+  
+  showLoadedSprite();
 }

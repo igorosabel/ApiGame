@@ -13,21 +13,12 @@
       <?php foreach ($sprc->getSprites() as $spr): ?>
       <li id="spr-<?php echo $spr->get('id') ?>" data-id="<?php echo $spr->get('id') ?>">
         <div class="item-list-sample">
-          <img src="/assets/sprite/<?php echo $sprc->get('slug') ?>/<?php echo $spr->get('file') ?>.png" />
+          <img src="<?php echo $spr->getUrl() ?>" />
         </div>
-        <span data-width="<?php echo $spr->get('width') ?>" data-height="<?php echo $spr->get('height') ?>"><?php echo $spr->get('name') ?></span>
+        <span><?php echo $spr->get('name') ?></span>
         <div class="item-list-info">
           <div class="item-list-info-item">
-            <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_<?php echo $spr->get('crossable')?'on':'off' ?>.png" data-crossable="<?php echo $spr->get('crossable')?'1':'0' ?>" />
-          </div>
-          <div class="item-list-info-item">
-            <img class="breakable" title="¿Se puede romper?" src="/img/breakable_<?php echo $spr->get('breakable')?'on':'off' ?>.png" data-breakable="<?php echo $spr->get('breakable')?'1':'0' ?>" />
-          </div>
-          <div class="item-list-info-item">
-            <img class="grabbable" title="¿Se puede coger?" src="/img/grabbable_<?php echo $spr->get('grabbable')?'on':'off' ?>.png" data-grabbable="<?php echo $spr->get('grabbable')?'1':'0' ?>" />
-          </div>
-          <div class="item-list-info-item">
-            <img class="pickable" title="¿Se puede coger (inv)?" src="/img/pickable_<?php echo $spr->get('pickable')?'on':'off' ?>.png" data-pickable="<?php echo $spr->get('pickable')?'1':'0' ?>" />
+            <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_<?php echo $spr->get('crossable')?'on':'off' ?>.png" />
           </div>
         </div>
       </li>

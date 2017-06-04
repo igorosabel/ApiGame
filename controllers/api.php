@@ -448,6 +448,61 @@
     $t->add('id',     $id);
     $t->process();
   }
+  
+  /*
+   * Función para obtener los datos de un sprite
+   */
+  function executeGetSprite($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id',   $req['url_params'], false);
+    
+    $id_category = 0;
+    $name        = '';
+    $file        = '';
+    $url         = '';
+    $crossable   = 'false';
+    $width       = 0;
+    $height      = 0;
+    $frames      = array();
+
+    if ($id===false){
+      $status = 'error';
+    }
+
+    if ($status=='ok'){
+      $spr = new Sprite();
+      if ($spr->find(array('id'=>$id))){
+        $id_category = $spr->get('id_category');
+        $name        = $spr->get('name');
+        $file        = $spr->get('file');
+        $url         = $spr->getUrl();
+        $crossable   = $spr->get('crossable') ? 'true' : 'false';
+        $width       = $spr->get('width');
+        $height      = $spr->get('height');
+        $frames      = $spr->getFrames();
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status',      $status);
+    $t->add('id',          $id);
+    $t->add('id_category', $id_category);
+    $t->add('name',        $name);
+    $t->add('file',        $file);
+    $t->add('url',         $url);
+    $t->add('crossable',   $crossable);
+    $t->add('width',       $width);
+    $t->add('height',      $height);
+    $t->addPartial('frames', 'api/getSpriteFrames', array('frames' => $frames));
+    $t->process();
+  }
 
   /*
    * Función para guardar un fondo
@@ -458,16 +513,13 @@
     $id          = Base::getParam('id',          $req['url_params'], false);
     $id_category = Base::getParam('id_category', $req['url_params'], false);
     $name        = Base::getParam('name',        $req['url_params'], false);
-    $file_name   = Base::getParam('file_name',   $req['url_params'], false);
     $file        = Base::getParam('file',        $req['url_params'], false);
+    $file_data   = Base::getParam('file_data',   $req['url_params'], false);
     $width       = Base::getParam('width',       $req['url_params'], false);
     $height      = Base::getParam('height',      $req['url_params'], false);
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
-    $breakable   = Base::getParam('breakable',   $req['url_params'], false);
-    $grabbable   = Base::getParam('grabbable',   $req['url_params'], false);
-    $pickable    = Base::getParam('pickable',    $req['url_params'], false);
     $is_new      = 'true';
-    $saved_file  = '';
+    $url         = '';
     $category    = '';
 
     if ($id===false || $id_category===false || $name===false || $width===false || $height===false || $crossable===false || $breakable===false || $grabbable===false || $pickable===false){
@@ -485,28 +537,25 @@
       }
       $spr->set('id_category', $id_category);
       $spr->set('name',        $name);
-      if ($file_name!=''){
-        $spr->set('file',        str_ireplace('.png', '', $file_name));
+      if ($file!=''){
+        $spr->set('file', str_ireplace('.png', '', $file));
       }
-      $spr->set('width', $width);
-      $spr->set('height', $height);
-      $spr->set('crossable',   ($crossable=='true'));
-      $spr->set('breakable',   ($breakable=='true'));
-      $spr->set('grabbable',   ($grabbable=='true'));
-      $spr->set('pickable',    ($pickable=='true'));
+      $spr->set('width',     $width);
+      $spr->set('height',    $height);
+      $spr->set('crossable', ($crossable=='true'));
       $spr->save();
       
-      if ($file_name!=''){
+      if ($file!=''){
         $sprc = new SpriteCategory();
         $sprc->find(array('id'=>$id_category));
         $category = $sprc->get('slug');
       
-        $ruta = $c->getDir('assets').'sprite/'.$sprc->get('slug').'/'.$file_name;
-        stPublic::saveImage($ruta, $file);
+        $ruta = $c->getDir('assets').'sprite/'.$category.'/'.$file;
+        stPublic::saveImage($ruta, $file_data);
       }
       
-      $id = $spr->get('id');
-      $saved_file = $spr->get('file');
+      $id  = $spr->get('id');
+      $url = $spr->getUrl();
     }
 
     $t->setLayout(false);
@@ -516,14 +565,11 @@
     $t->add('id',          $id);
     $t->add('id_category', $id_category);
     $t->add('name',        $name);
-    $t->add('saved_file',  $saved_file);
-    $t->add('category',    $category);
+    $t->add('file',        $file);
+    $t->add('url',         $url);
     $t->add('width',       $width);
     $t->add('height',      $height);
     $t->add('crossable',   $crossable);
-    $t->add('breakable',   $breakable);
-    $t->add('grabbable',   $grabbable);
-    $t->add('pickable',    $pickable);
     $t->add('is_new',      $is_new);
     $t->process();
   }

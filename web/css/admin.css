@@ -139,12 +139,12 @@
 
 .add-box{
   background-color: #fff;
-  width: 600px;
+  width: 640px;
   position: absolute;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
   border-radius: 2px;
   left: 50%;
-  margin-left: -300px;
+  margin-left: -320px;
   top: 20%;
 }
 
@@ -463,8 +463,8 @@
   top: 20%;
   background-color: #fff;
   z-index: 20;
-  width: 600px;
-  left: calc(50% - 300px);
+  width: 900px;
+  left: calc(50% - 450px);
 }
 
 .over-header{
@@ -497,8 +497,8 @@
 
 .cell-detail-option{
   display: inline-block;
-  width: 30%;
-  margin: 10%;
+  width: 180px;
+  margin: 60px;
   float: left;
   position: relative;
 }
