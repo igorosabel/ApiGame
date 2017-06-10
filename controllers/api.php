@@ -500,7 +500,7 @@
     $t->add('crossable',   $crossable);
     $t->add('width',       $width);
     $t->add('height',      $height);
-    $t->addPartial('frames', 'api/getSpriteFrames', array('frames' => $frames));
+    $t->addPartial('frames', 'api/getSpriteFrames', array('frames' => $frames,'extra'=>'nourlencode'));
     $t->process();
   }
 
@@ -514,21 +514,23 @@
     $id_category = Base::getParam('id_category', $req['url_params'], false);
     $name        = Base::getParam('name',        $req['url_params'], false);
     $file        = Base::getParam('file',        $req['url_params'], false);
-    $file_data   = Base::getParam('file_data',   $req['url_params'], false);
+    $data        = Base::getParam('data',        $req['url_params'], false);
     $width       = Base::getParam('width',       $req['url_params'], false);
     $height      = Base::getParam('height',      $req['url_params'], false);
     $crossable   = Base::getParam('crossable',   $req['url_params'], false);
+    $frames      = Base::getParam('frames',      $req['url_params'], false);
     $is_new      = 'true';
     $url         = '';
     $category    = '';
 
-    if ($id===false || $id_category===false || $name===false || $width===false || $height===false || $crossable===false || $breakable===false || $grabbable===false || $pickable===false){
+    if ($id===false || $id_category===false || $name===false || $width===false || $height===false || $crossable===false){
       $status = 'error';
     }
 
     if ($status=='ok'){
       $id    = (int)$id;
       $name  = urldecode($name);
+      $frames = json_decode($frames,true);
 
       $spr = new Sprite();
       if ($id!==0){
@@ -544,14 +546,44 @@
       $spr->set('height',    $height);
       $spr->set('crossable', ($crossable=='true'));
       $spr->save();
+
+      if ($data!=''){
+        $ruta = $c->getDir('assets').'sprite/'.$spr->getCategory()->get('slug').'/'.$file;
+        stPublic::saveImage($ruta, $data);
+      }
       
-      if ($file!=''){
-        $sprc = new SpriteCategory();
-        $sprc->find(array('id'=>$id_category));
-        $category = $sprc->get('slug');
-      
-        $ruta = $c->getDir('assets').'sprite/'.$category.'/'.$file;
-        stPublic::saveImage($ruta, $file_data);
+      if (count($frames)>0){
+        $order = 0;
+        foreach ($frames as $frame){
+          $order++;
+          
+          $fr = new SpriteFrame();
+          if ($frame['id']!=0){
+            $fr->find(array('id'=>$frame['id']));
+          }
+          $fr->set('id_sprite',$spr->get('id'));
+          $fr->set('order',$order);
+          
+          if (array_key_exists('data', $frame)){
+            if ($frame['file']!=$fr->get('file') && $fr->get('file')!=''){
+              $ruta = $c->getDir('assets').'sprite/'.$spr->getCategory()->get('slug').'/'.$fr->get('file');
+              unlink($ruta);
+            }
+            $ruta = $c->getDir('assets').'sprite/'.$spr->getCategory()->get('slug').'/'.$frame['file'];
+            stPublic::saveImage($ruta, $frame['data']);
+          }
+          if (array_key_exists('delete', $frame)){
+            $fr->deleteFull();
+          }
+          else{
+            if (array_key_exists('file', $frame)){
+              $fr->set('file',str_ireplace('.png', '', $frame['file']));
+            }
+            $fr->save();
+          }
+        }
+        $spr->set('frames',$order);
+        $spr->save();
       }
       
       $id  = $spr->get('id');

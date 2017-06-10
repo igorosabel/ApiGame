@@ -16,9 +16,22 @@ function getAjax(url, success) {
  * Función para hacer llamadas AJAX usando POST
  */
 function postAjax(url, data, success) {
-  const params = typeof data == 'string' ? data : Object.keys(data).map(
-          function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
-      ).join('&');
+  let params = '';
+  if (typeof data === 'string'){
+    params = data;
+  }
+  else{
+    const newParams = [];
+    for (let i in data){
+      if (!Array.isArray(data[i])){
+        newParams.push(i+'='+data[i]);
+      }
+      else{
+        newParams.push(i+'='+JSON.stringify(data[i]));
+      }
+    }
+    params = newParams.join('&');
+  }
 
   const xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
   xhr.open('POST', url);
@@ -37,7 +50,12 @@ function postAjax(url, data, success) {
 function postAjaxFile(url,params,callback){
   const fd = new FormData();
   for (let ind in params){
-    fd.append(ind, params[ind]);
+    if (!Array.isArray(params[ind])){
+      fd.append(ind, params[ind]);
+    }
+    else{
+      fd.append(ind, JSON.stringify(params[ind]));
+    }
   }
 
   const xhr = new XMLHttpRequest;

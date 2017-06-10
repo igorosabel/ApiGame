@@ -19,6 +19,14 @@ class Sprite extends OBase{
     parent::load($model_name,$tablename,$model);
   }
   
+  public function deleteFull(){
+    global $c;
+    $ruta = $c->getDir('assets').$this->getCategory()->get('slug').'/'.$this->get('file').'.png';
+    if (file_exists($ruta)){
+      unlink($ruta);
+    }
+  }
+  
   private $category = null;
   
   public function getCategory(){

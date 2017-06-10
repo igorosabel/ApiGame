@@ -6,12 +6,16 @@ const tabs        = document.querySelectorAll('.admin-tabs li');
 const tabsEdit    = document.querySelectorAll('.admin-tabs li img');
 const items       = document.querySelectorAll('.item-list li');
 const addSprClose = document.getElementById('add-spr-close');
-const addSprFile  = document.querySelector('.add-file');
+const addSprFile  = document.querySelector('#add-file');
+const addSprFrame = document.querySelector('#add-frame');
 const sprFile     = document.getElementById('spr-file');
+const sprFrame    = document.getElementById('spr-frame');
 const ovlSpr      = document.getElementById('add-spr');
 const frmSpr      = document.getElementById('frm-spr');
 const sprDel      = document.getElementById('spr-delete');
 const addBtn      = document.getElementById('add-btn');
+const addFrames   = document.querySelector('.add-box-photos');
+const frameList   = document.querySelector('.add-box-photo-container');
 
 addCat.addEventListener('click', showAddCategoryBox);
 addCatClose.addEventListener('click', closeAddCategoryBox);
@@ -22,7 +26,9 @@ tabsEdit.forEach(img => img.addEventListener('click', editSpriteCategory));
 items.forEach(item => item.addEventListener('click', editSprite));
 addSprClose.addEventListener('click', closeAddSpriteBox);
 addSprFile.addEventListener('click', sprFileSelect);
+addSprFrame.addEventListener('click', sprFrameSelect);
 sprFile.addEventListener('change', sprFileUpload);
+sprFrame.addEventListener('change', sprFrameUpload);
 frmSpr.addEventListener('submit', saveSprite);
 sprDel.addEventListener('click', deleteSprite);
 addBtn.addEventListener('click', showAddSpriteBox);
@@ -166,14 +172,6 @@ function editSpriteCategory(e){
 }
 
 /*
- * Foto seleccionada
- */
-const uploadedSprite = {
-  name: '',
-  data: null
-};
-
-/*
  * Sprite que se está editando
  */
 let editSpr = {
@@ -209,9 +207,7 @@ function showAddSpriteBox(e){
   editSpr.frames      = [];
   
   sprFile.value = '';
-  uploadedSprite.name = '';
-  uploadedSprite.data = null;
-  addSprFile.innerHTML = '';
+  sprFrame.value = '';
   
   showLoadedSprite();
 }
@@ -240,6 +236,7 @@ function showLoadedSprite(){
     img.src = editSpr.url;
     addSprFile.appendChild(img);
   }
+  updateFrameList();
   
   name.focus();
   ovlSpr.classList.add('add-box-show');
@@ -254,10 +251,17 @@ function closeAddSpriteBox(e){
 }
 
 /*
- * Función para abrir la ventana de elegir archivo
+ * Función para abrir la ventana de elegir archivo para la imagen principal
  */
 function sprFileSelect() {
   sprFile.click();
+}
+
+/*
+ * Función para abrir la ventana de elegir archivo para añadir un frame
+ */
+function sprFrameSelect() {
+  sprFrame.click();
 }
 
 /*
@@ -276,6 +280,90 @@ function sprFileUpload() {
     addSprFile.appendChild(img);
   };
   r.readAsDataURL(f);
+}
+
+/*
+ * Función para subir un archivo de imagen a un frame
+ */
+function sprFrameUpload() {
+  const f = sprFrame.files[0];
+  const r = new FileReader();
+  r.onload = function(e){
+    const data = e.target.result;
+    editSpr.frames.push({
+      id: 0,
+      file: f.name,
+      url: '',
+      data: data
+    });
+    
+    updateFrameList();
+  };
+  r.readAsDataURL(f);
+}
+
+/*
+ * Función para pintar la lista de frames
+ */
+function updateFrameList(){
+  frameList.innerHTML = '';
+  
+  editSpr.frames.forEach( (item,index) => {
+    if (!item.delete){
+      const newPhoto = template('fr-tpl',{
+        ind: index,
+        data: ( (item.data) ? item.data : urldecode(item.url)),
+        num: (index+1)
+      });
+      const photo = document.createElement('div');
+      photo.className = 'add-box-photo';
+      photo.innerHTML = newPhoto;
+      photo.querySelector('.add-file-left').addEventListener('click', moveFrameLeft);
+      photo.querySelector('.add-file-right').addEventListener('click', moveFrameRight);
+      photo.querySelector('.add-file-delete').addEventListener('click', deleteFrame);
+  
+      frameList.appendChild(photo);
+    }
+  });
+}
+
+/*
+ * Función para mover un frame hacia la izquierda
+ */
+function moveFrameLeft(e){
+  const ind = parseInt( e.target.parentNode.id.replace('frm-','') );
+  if (ind==0){
+    return false;
+  }
+  
+  const aux = editSpr.frames[ind];
+  editSpr.frames[ind] = editSpr.frames[ind-1];
+  editSpr.frames[ind-1] = aux;
+  updateFrameList();
+}
+
+/*
+ * Función para mover un frame hacia la derecha
+ */
+function moveFrameRight(e){
+  const ind = parseInt( e.target.parentNode.id.replace('frm-','') );
+  if (ind==editSpr.frames.length-1){
+    return false;
+  }
+  
+  const aux = editSpr.frames[ind];
+  editSpr.frames[ind] = editSpr.frames[ind+1];
+  editSpr.frames[ind+1] = aux;
+  updateFrameList();
+}
+
+/*
+ * Función para borrar un frame
+ */
+function deleteFrame(e){
+  const ind = parseInt( e.target.parentNode.id.replace('frm-','') );
+  editSpr.frames[ind].delete = true;
+  updateFrameList();
 }
 
 /*
@@ -326,10 +414,11 @@ function saveSprite(e){
     id_category: editSpr.id_category,
     name: urlencode(editSpr.name),
     file: urlencode(editSpr.file),
-    file_data: editSpr.data,
+    data: (editSpr.data) ? editSpr.data : '',
     width: editSpr.width,
     height: editSpr.height,
-    crossable: editSpr.crossable
+    crossable: editSpr.crossable,
+    frames: editSpr.frames
   };
 
   postAjaxFile('/api/save-sprite', params, saveSpriteSuccess);

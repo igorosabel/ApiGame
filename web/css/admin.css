@@ -179,6 +179,30 @@
   float: left;
 }
 
+.add-box-main-photo{
+  display: inline-block;
+  float: left;
+  width: 100px;
+  border-right: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.add-box-photos{
+  display: inline-block;
+  float: left;
+  width: calc(100% - 100px);
+  overflow: auto;
+}
+
+.add-box-photo{
+  float: left;
+  width: 100px;
+}
+
+.add-box-photo-container{
+  display: inline-block;
+}
+
 .add-box-row label{
   color: #000;
 }
@@ -229,14 +253,60 @@
   height: 80px;
   border: 1px dashed #ccc;
   margin: 10px auto;
+  position: relative;
 }
 
 .add-file:hover{
   border: 1px dashed rgb(16,108,200);
 }
 
+.add-file:hover .add-file-controls{
+  display: block;
+}
+
 .add-file img{
   width: 100%;
+}
+
+.add-file-controls{
+  display: none;
+  cursor: pointer;
+}
+
+.add-file-controls:hover{
+  background-color: rgb(60,154,245);
+  color: #fff;
+}
+
+.add-file-arrows{
+  position: absolute;
+  bottom: 2px;
+  color: #000;
+  text-align: center;
+  width: 20px;
+}
+
+.add-file-left{
+  left: 2px;
+}
+
+.add-file-right{
+  right: 2px;
+}
+
+.add-file-delete{
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  color: #000;
+  text-align: center;
+  width: 20px;
+}
+
+.add-file-label{
+  color: #000;
+  width: 100px;
+  text-align: center;
 }
 
 .add-box-footer{

@@ -40,9 +40,21 @@
         <input type="text" class="add-box-txt" name="spr-name" id="spr-name" value="" placeholder="Nombre del sprite" />
       </div>
       <div class="add-box-row">
-        <label>Imagen:</label>
-        <div class="add-file"></div>
+        <div class="add-box-main-photo">
+          <div class="add-file" id="add-file" data-type="main"></div>
+          <div class="add-file-label">Principal</div>
+        </div>
+        <div class="add-box-photos">
+          <div class="add-box-photo-container"></div>
+          <div class="add-box-photo" id="add-frame-box">
+            <div class="add-file" id="add-frame" data-type="frame">
+              <img src="/img/add.svg" />
+            </div>
+            <div class="add-file-label">Añadir</div>
+          </div>
+        </div>
         <input type="file" class="add-box-file" name="spr-file" id="spr-file" />
+        <input type="file" class="add-box-file" name="spr-frame" id="spr-frame" />
       </div>
       <div class="add-box-row">
         <div class="add-box-col">
@@ -76,6 +88,16 @@
       <img class="crossable" title="¿Se puede cruzar?" src="/img/crossable_{{crossable}}.png" />
     </div>
   </div>
+</script>
+
+<script type="text/x-template" id="fr-tpl">
+  <div class="add-file" id="frm-{{ind}}">
+    <img src="{{data}}" />
+    <div class="add-file-controls add-file-arrows add-file-left" title="Mover a la izquierda">&lt;</div>
+    <div class="add-file-controls add-file-arrows add-file-right" title="Mover a la derecha">&gt;</div>
+    <div class="add-file-controls add-file-delete" title="Borrar frame">X</div>
+  </div>
+  <div class="add-file-label">Frame {{num}}</div>
 </script>
 
 <script src="/js/admin-sprites.js"></script>

@@ -15,6 +15,15 @@ class SpriteFrame extends OBase{
     parent::load($model_name,$tablename,$model);
   }
   
+  public function deleteFull(){
+    global $c;
+    $ruta = $c->getDir('assets').'sprite/'.$this->getSprite()->getCategory()->get('slug').'/'.$this->get('file').'.png';
+    if (file_exists($ruta)){
+      unlink($ruta);
+    }
+    $this->delete();
+  }
+  
   private $sprite = null;
   
   public function getSprite(){
