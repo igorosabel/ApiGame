@@ -4,7 +4,17 @@ const ovlSel         = document.getElementById('sel-sprite');
 const addIntClose    = document.getElementById('add-int-close');
 const intDel         = document.getElementById('int-delete');
 const intTitle       = document.getElementById('add-int-title');
-const selectSprites  = document.querySelectorAll('.cell-detail-option .cell-detail-option-sample');
+
+const detailStart = document.getElementById('cell-detail-sprite-start');
+const detailStartName = detailStart.querySelector('.cell-detail-option-name');
+const detailStartImage = detailStart.querySelector('.cell-detail-option-sample');
+const detailStartDelete = detailStart.querySelector('.cell-detail-option-delete');
+
+const detailActive = document.getElementById('cell-detail-sprite-active');
+const detailActiveName = detailActive.querySelector('.cell-detail-option-name');
+const detailActiveImage = detailActive.querySelector('.cell-detail-option-sample');
+const detailActiveDelete = detailActive.querySelector('.cell-detail-option-delete');
+
 const selSpriteClose = document.getElementById('sel-sprite-close');
 const detailTitles   = document.querySelectorAll('.cell-detail-title');
 const detailItems    = document.querySelectorAll('.cell-detail-item');
@@ -16,7 +26,8 @@ const items          = document.querySelectorAll('.item-list li');
 addBtn.addEventListener('click', showAddInteractiveBox);
 addIntClose.addEventListener('click', closeAddInteractiveBox);
 intDel.addEventListener('click', deleteInteractive);
-selectSprites.forEach( spr => spr.addEventListener('click', selectSprite));
+detailStartImage.addEventListener('click', selectSprite);
+detailActiveImage.addEventListener('click', selectSprite);
 selSpriteClose.addEventListener('click', closeSelSpriteBox);
 detailTitles.forEach(tit => tit.addEventListener('click', deployGroup));
 detailItems.forEach(item => item.addEventListener('click', selectItem));
@@ -30,8 +41,22 @@ items.forEach(item => item.addEventListener('click', editInteractive));
 let editInt = {
   id: 0,
   name: '',
-  sprite_start: 0,
-  sprite_end: 0
+  type: 0,
+  activable: false,
+  pickable: false,
+  grabbable: false,
+  breakable: false,
+  crossable: false,
+  crossable_active: false,
+  sprite_start_id: 0,
+  sprite_start_name: '',
+  sprite_start_url: '',
+  sprite_active_id: 0,
+  sprite_active_name: '',
+  sprite_active_url: '',
+  drops: 0,
+  quantity: 0,
+  active_time: 0
 };
 
 /*
@@ -39,26 +64,26 @@ let editInt = {
  */
 function showAddInteractiveBox(e){
   e.preventDefault();
-  intTitle.innerHTML = 'Añadir elemento interactivo';
-  const name = document.getElementById('int-name');
-  name.value = '';
-  intDel.style.display = 'none';
+  editInt.id                 = 0;
+  editInt.name               = '';
+  editInt.type               = 0;
+  editInt.activable          = false;
+  editInt.pickable           = false;
+  editInt.grabbable          = false;
+  editInt.breakable          = false;
+  editInt.crossable          = false;
+  editInt.crossable_active   = false;
+  editInt.sprite_start_id    = 0;
+  editInt.sprite_start_name  = '';
+  editInt.sprite_start_url   = '';
+  editInt.sprite_active_id   = 0;
+  editInt.sprite_active_name = '';
+  editInt.sprite_active_url  = '';
+  editInt.drops              = 0;
+  editInt.quantity           = 0;
+  editInt.active_time        = 0;
   
-  editInt.id = 0;
-  editInt.name = '';
-  editInt.sprite_start = 0;
-  editInt.sprite_end = 0;
-  
-  selectSprites.forEach( spr => { spr.className = 'cell-detail-option-sample'; } );
-  const names = document.querySelectorAll('.cell-detail-option .cell-detail-option-name');
-  names.forEach( name => {
-    name.innerHTML = '';
-    name.style.display = 'none';
-  } );
-  detailDeletes.forEach( del => { del.style.display = 'none'; } );
-  
-  ovlInt.classList.add('add-box-show');
-  name.focus();
+  showLoadedInteractive();
 }
 
 /*
@@ -67,6 +92,67 @@ function showAddInteractiveBox(e){
 function closeAddInteractiveBox(e){
   if (e){ e.preventDefault(); }
   ovlInt.classList.remove('add-box-show');
+}
+
+/*
+ * Función para mostrar en el formulario el elemento interactivo cargado
+ */
+function showLoadedInteractive(){
+  intTitle.innerHTML = (editInt.id==0) ? 'Añadir elemento interactivo' : 'Editar elemento interactivo';
+  const name            = document.getElementById('int-name');
+  const type            = document.getElementById('int-type');
+  const pickable        = document.getElementById('int-pickable');
+  const activable       = document.getElementById('int-activable');
+  const activeTime      = document.getElementById('int-active-time');
+  const grabbable       = document.getElementById('int-grabbable');
+  const breakable       = document.getElementById('int-breakable');
+  const crossable       = document.getElementById('int-crossable');
+  const crossableActive = document.getElementById('int-crossable-active');
+  const drops           = document.getElementById('int-drops');
+  const quantity        = document.getElementById('int-quantity');
+  
+  name.value              = editInt.name;
+  type.value              = editInt.type;
+  pickable.checked        = editInt.pickable;
+  activable.checked       = editInt.activable;
+  activeTime.value        = editInt.active_time;
+  grabbable.checked       = editInt.grabbable;
+  breakable.checked       = editInt.breakable;
+  crossable.checked       = editInt.crossable;
+  crossableActive.checked = editInt.crossable_active;
+  drops.value             = editInt.drops;
+  quantity.value          = editInt.quantity;
+  
+  detailStartName.innerHTML       = '';
+  detailStartName.style.display   = 'none';
+  detailStartImage.innerHTML      = '';
+  detailStartDelete.style.display = 'none';
+  if (editInt.sprite_start_id!=0){
+    detailStartName.innerHTML     = editInt.sprite_start_name;
+    detailStartName.style.display = 'block';
+    const start_img = document.createElement('img');
+    start_img.src   = editInt.sprite_start_url;
+    detailStartImage.appendChild(start_img);
+    detailStartDelete.style.display = 'block';
+  }
+  
+  detailActiveName.innerHTML = '';
+  detailActiveName.style.display = 'none';
+  detailActiveImage.innerHTML = '';
+  detailActiveDelete.style.display = 'none';
+  if (editInt.sprite_active_id!=0){
+    detailActiveName.innerHTML = editInt.sprite_active_name;
+    detailActiveName.style.display = 'block';
+    const active_img = document.createElement('img');
+    active_img.src = editInt.sprite_active_url;
+    detailActiveImage.appendChild(active_img);
+    detailActiveDelete.style.display = 'block';
+  }
+  
+  intDel.style.display = (editInt.id==0) ? 'none' : 'inline-block';
+  
+  ovlInt.classList.add('add-box-show');
+  name.focus();
 }
 
 /*
@@ -98,7 +184,8 @@ let spriteType = '';
  * Función para abrir la ventana de seleccionar sprite
  */
 function selectSprite(e){
-  spriteType = e.target.parentNode.id.replace('cell-detail-sprite-', '');
+  const obj = this;
+  spriteType = obj.parentNode.id.replace('cell-detail-sprite-', '');
   let title = '';
   if (spriteType=='start'){
     title = 'Añadir sprite inicial';
@@ -143,19 +230,33 @@ function deployGroup(){
 function selectItem(){
   const obj = this;
   
-  editInt['sprite_'+spriteType] = parseInt(obj.dataset.id);
+  editInt['sprite_'+spriteType+'_id'] = parseInt(obj.dataset.id);
   
-  const cls = obj.querySelector('.cell-detail-item-sample').className.replace('cell-detail-item-sample ', '');
-  const txt_name = obj.querySelector('span').innerHTML;
+  if (spriteType=='start'){
+    editInt.sprite_start_name = sprites_json['spr_'+editInt.sprite_start_id].name;
+    editInt.sprite_start_url  = sprites_json['spr_'+editInt.sprite_start_id].url;
+    
+    detailStartName.innerHTML = editInt.sprite_start_name;
+    detailStartName.style.display = 'block';
+    detailStartImage.innerHTML = '';
+    const start_img = document.createElement('img');
+    start_img.src = editInt.sprite_start_url;
+    detailStartImage.appendChild(start_img);
+    detailStartDelete.style.display = 'block';
+  }
+  else{
+    editInt.sprite_active_name = sprites_json['spr_'+editInt.sprite_active_id].name;
+    editInt.sprite_active_url  = sprites_json['spr_'+editInt.sprite_active_id].url;
+    
+    detailActiveName.innerHTML = editInt.sprite_active_name;
+    detailActiveName.style.display = 'block';
+    detailActiveImage.innerHTML = '';
+    const active_img = document.createElement('img');
+    active_img.src = editInt.sprite_active_url;
+    detailActiveImage.appendChild(active_img);
+    detailActiveDelete.style.display = 'block';
+  }
   
-  const spr = document.getElementById('cell-detail-sprite-'+spriteType);
-  const sample = spr.querySelector('.cell-detail-option-sample');
-  sample.className = 'cell-detail-option-sample '+cls;
-  const name = spr.querySelector('.cell-detail-option-name');
-  name.innerHTML = txt_name;
-  name.style.display = 'block';
-  const delSprite = spr.querySelector('.cell-detail-option-delete');
-  delSprite.style.display = 'block';
   closeSelSpriteBox();
 }
 
@@ -163,15 +264,25 @@ function selectItem(){
  * Función para quitar un sprite seleccionado
  */
 function deleteItem(e){
-  console.log(e.target.parentNode.id);
   const spr = e.target.parentNode;
   spriteType = spr.id.replace('cell-detail-sprite-','');
-  editInt['sprite_'+spriteType] = 0;
-  spr.querySelector('.cell-detail-option-sample').className = 'cell-detail-option-sample';
-  const name = spr.querySelector('.cell-detail-option-name');
-  name.innerHTML = '';
-  name.style.display = 'none';
-  spr.querySelector('.cell-detail-option-delete').style.display = 'none';
+  
+  editInt['sprite_'+spriteType+'_id'] = 0;
+  editInt['sprite_'+spriteType+'_name'] = '';
+  editInt['sprite_'+spriteType+'_url'] = '';
+  
+  if (spriteType=='start'){
+    detailStartName.innerHTML       = '';
+    detailStartName.style.display   = 'none';
+    detailStartImage.innerHTML      = '';
+    detailStartDelete.style.display = 'none';
+  }
+  else{
+    detailActiveName.innerHTML       = '';
+    detailActiveName.style.display   = 'none';
+    detailActiveImage.innerHTML      = '';
+    detailActiveDelete.style.display = 'none';
+  }
 }
 
 /*
@@ -185,16 +296,23 @@ function saveInteractive(e){
     name.focus();
     return false;
   }
-  if (editInt.sprite_start===0){
+  if (editInt.sprite_start_id===0){
     alert('¡No has elegido sprite inicial!');
     return false;
   }
-  if (editInt.sprite_end===0){
-    alert('¡No has elegido sprite final!');
-    return false;
-  }
   
-  editInt.name = urlencode(name.value);
+  editInt.name               = name.value;
+  editInt.type               = document.getElementById('int-type').value;
+  editInt.activable          = document.getElementById('int-activable').checked;
+  editInt.pickable           = document.getElementById('int-pickable').checked;
+  editInt.grabbable          = document.getElementById('int-grabbable').checked;
+  editInt.breakable          = document.getElementById('int-breakable').checked;
+  editInt.crossable          = document.getElementById('int-crossable').checked;
+  editInt.crossable_active   = document.getElementById('int-crossable-active').checked;
+  editInt.drops              = document.getElementById('int-drops').value;
+  editInt.quantity           = document.getElementById('int-quantity').value;
+  editInt.active_time        = document.getElementById('int-active-time').value;
+  
   postAjax('/api/save-interactive', editInt, saveInteractiveSuccess);
 }
 
@@ -206,18 +324,14 @@ function saveInteractiveSuccess(data){
     let str = template('int-tpl',{
       id: data.id,
       name: urldecode(data.name),
-      url: urldecode(data.url_start),
-      sprite_start: data.sprite_start,
-      sprite_end: data.sprite_end
+      url: urldecode(data.url)
     });
     intList.innerHTML += str;
   }
   else{
     let intItem = document.getElementById('int-'+data.id);
-    intItem.querySelector('.item-list-sample img').src = urldecode(data.url_start);
+    intItem.querySelector('.item-list-sample img').src = urldecode(data.url);
     intItem.querySelector('span').innerHTML = urldecode(data.name);
-    intItem.dataset.spritestart = data.sprite_start;
-    intItem.dataset.spriteend = data.sprite_end;
   }
   closeAddInteractiveBox();
 }
@@ -227,36 +341,30 @@ function saveInteractiveSuccess(data){
  */
 function editInteractive(e){
   const interactive = this;
-  intTitle.innerHTML = 'Editar elemento interactivo';
-  const name_txt = interactive.querySelector('span').innerHTML;
   
-  const name = document.getElementById('int-name');
-  name.value = name_txt;
-  intDel.style.display = 'inline-block';
+  const id = parseInt(interactive.dataset.id);
+  postAjax('/api/get-interactive', {id: id}, getInteractiveSuccess);
+}
+
+function getInteractiveSuccess(data){
+  editInt.id                 = data.id;
+  editInt.name               = urldecode(data.name);
+  editInt.type               = data.type;
+  editInt.activable          = data.activable;
+  editInt.pickable           = data.pickable;
+  editInt.grabbable          = data.grabbable;
+  editInt.breakable          = data.breakable;
+  editInt.crossable          = data.crossable;
+  editInt.crossable_active   = data.crossable_active;
+  editInt.sprite_start_id    = data.sprite_start_id;
+  editInt.sprite_start_name  = urldecode(data.sprite_start_name);
+  editInt.sprite_start_url   = urldecode(data.sprite_start_url);
+  editInt.sprite_active_id   = data.sprite_active_id;
+  editInt.sprite_active_name = urldecode(data.sprite_active_name);
+  editInt.sprite_active_url  = urldecode(data.sprite_active_url);
+  editInt.drops              = data.drops;
+  editInt.quantity           = data.quantity;
+  editInt.active_time        = data.active_time;
   
-  editInt.id = parseInt(interactive.dataset.id);
-  editInt.name = name_txt;
-  editInt.sprite_start = parseInt(interactive.dataset.spritestart);
-  editInt.sprite_end = parseInt(interactive.dataset.spriteend);
-  
-  const startSprite = document.querySelector('.cell-detail-item[data-id="'+editInt.sprite_start+'"]');
-  const endSprite = document.querySelector('.cell-detail-item[data-id="'+editInt.sprite_end+'"]');
-  
-  const startItem = document.getElementById('cell-detail-sprite-start');
-  const endItem = document.getElementById('cell-detail-sprite-end');
-  
-  startItem.querySelector('.cell-detail-option-name').innerHTML   = startSprite.querySelector('span').innerHTML;
-  startItem.querySelector('.cell-detail-option-sample').className = startSprite.querySelector('.cell-detail-item-sample').className.replace('cell-detail-item-sample', 'cell-detail-option-sample');
-  endItem.querySelector('.cell-detail-option-name').innerHTML   = endSprite.querySelector('span').innerHTML;
-  endItem.querySelector('.cell-detail-option-sample').className = endSprite.querySelector('.cell-detail-item-sample').className.replace('cell-detail-item-sample', 'cell-detail-option-sample');
-  
-  const names = document.querySelectorAll('.cell-detail-option .cell-detail-option-name');
-  names.forEach( name => {
-    name.style.display = 'block';
-  } );
-  const deletes = document.querySelectorAll('.cell-detail-option .cell-detail-option-delete');
-  deletes.forEach( del => { del.style.display = 'block'; } );
-  
-  ovlInt.classList.add('add-box-show');
-  name.focus();
+  showLoadedInteractive();
 }

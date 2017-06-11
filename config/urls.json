@@ -210,6 +210,14 @@
         "filter": "adminFilter"
       },
       {
+        "id": "getInteractive",
+        "url": "/api/get-interactive",
+        "module": "api",
+        "action": "getInteractive",
+        "comment": "Función para obtener los datos de un elemento interactivo",
+        "filter": "adminFilter"
+      },
+      {
         "id": "saveInteractive",
         "url": "/api/save-interactive",
         "module": "api",

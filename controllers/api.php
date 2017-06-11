@@ -8,11 +8,11 @@
     $status = 'ok';
     $email  = Base::getParam('email', $req['url_params'], false);
     $pass   = Base::getParam('pass',  $req['url_params'], false);
-    
+
     if ($email===false || $pass===false){
       $status = 'error';
     }
-    
+
     if ($status=='ok'){
       $email = urldecode($email);
       $pass  = urldecode($pass);
@@ -32,7 +32,7 @@
     $t->add('status', $status);
     $t->process();
   }
-  
+
   /*
    * Función para registrar un nuevo usuario
    */
@@ -42,16 +42,16 @@
     $status = 'ok';
     $email  = Base::getParam('email', $req['url_params'], false);
     $pass   = Base::getParam('pass',  $req['url_params'], false);
-    
+
     if ($email===false || $pass===false){
       $status = 'error';
     }
-    
+
     if ($status=='ok'){
       $u = new User();
       $email = urldecode($email);
       $pass  = urldecode($pass);
-      
+
       if ($u->find(array('email'=>$email))){
         $status = 'error';
       }
@@ -59,7 +59,7 @@
         $u->set('email', $email);
         $u->set('pass',  sha1('gam_'.$pass.'_gam'));
         $u->save();
-        
+
         for ($i=0;$i<3;$i++){
           $game = new Game();
           $game->set('id_user', $u->get('id'));
@@ -69,7 +69,7 @@
           $game->set('position_y', null);
           $game->save();
         }
-        
+
         $s->addParam('logged', true);
         $s->addParam('id',     $u->get('id'));
       }
@@ -81,7 +81,7 @@
     $t->add('status', $status);
     $t->process();
   }
-  
+
   /*
    * Función para crear una nueva partida
    */
@@ -91,11 +91,11 @@
     $status = 'ok';
     $id     = Base::getParam('id',   $req['url_params'], false);
     $name   = Base::getParam('name', $req['url_params'], false);
-    
+
     if ($id===false || $name===false){
       $status = 'error';
     }
-    
+
     if ($status=='ok'){
       $name = urldecode($name);
       $game = new Game();
@@ -119,7 +119,7 @@
     $t->add('status', $status);
     $t->process();
   }
-  
+
   /*
    * Función para añadir un nuevo escenario
    */
@@ -129,16 +129,16 @@
     $status = 'ok';
     $name   = Base::getParam('name', $req['url_params'], false);
     $id     = 0;
-    
+
     if ($name===false){
       $status = 'error';
     }
-    
+
     if ($status=='ok'){
       $name = urldecode($name);
       $scn = new Scenario();
       $scn->set('name', $name);
-      
+
       // Creo escenario vacío
       $data = array();
       for ($i=0;$i<$c->getExtra('height');$i++){
@@ -148,10 +148,10 @@
         }
         array_push($data, $row);
       }
-      
+
       $scn->set('data', json_encode($data));
       $scn->save();
-      
+
       $id = $scn->get('id');
     }
 
@@ -163,7 +163,7 @@
     $t->add('name',   $name);
     $t->process();
   }
-  
+
   /*
    * Función para guardar un escenario editado
    */
@@ -177,11 +177,11 @@
     $start_x  = Base::getParam('start_x',  $req['url_params'], false);
     $start_y  = Base::getParam('start_y',  $req['url_params'], false);
     $initial  = Base::getParam('initial',  $req['url_params'], false);
-    
+
     if ($id===false || $name===false || $scenario===false || $start_x===false || $start_y===false || $initial===false){
       $status = 'error';
     }
-    
+
     if ($status=='ok'){
       $scn = new Scenario();
       if ($scn->find(array('id'=>$id))){
@@ -191,7 +191,6 @@
         $scn->set('start_y', $start_y);
         $scn->set('initial', $initial);
         $scn->save();
-
       }
       else{
         $status = 'error';
@@ -204,7 +203,7 @@
     $t->add('status', $status);
     $t->process();
   }
-  
+
   /*
    * Función para guardar una categoría de fondos
    */
@@ -309,7 +308,7 @@
       }
       $bck->set('crossable',   ($crossable=='true'));
       $bck->save();
-      
+
       if ($file_name!=''){
         $bckc = new BackgroundCategory();
         $bckc->find(array('id'=>$id_category));
@@ -336,7 +335,7 @@
     $t->add('is_new',      $is_new);
     $t->process();
   }
-  
+
   /*
    * Función para borrar un fondo
    */
@@ -377,7 +376,7 @@
     $t->add('id',     $id);
     $t->process();
   }
-  
+
   /*
    * Función para guardar una categoría de sprites
    */
@@ -448,7 +447,7 @@
     $t->add('id',     $id);
     $t->process();
   }
-  
+
   /*
    * Función para obtener los datos de un sprite
    */
@@ -456,8 +455,8 @@
     global $c, $s;
 
     $status = 'ok';
-    $id     = Base::getParam('id',   $req['url_params'], false);
-    
+    $id     = Base::getParam('id', $req['url_params'], false);
+
     $id_category = 0;
     $name        = '';
     $file        = '';
@@ -469,6 +468,7 @@
 
     if ($id===false){
       $status = 'error';
+      $id = 0;
     }
 
     if ($status=='ok'){
@@ -551,19 +551,19 @@
         $ruta = $c->getDir('assets').'sprite/'.$spr->getCategory()->get('slug').'/'.$file;
         stPublic::saveImage($ruta, $data);
       }
-      
+
       if (count($frames)>0){
         $order = 0;
         foreach ($frames as $frame){
           $order++;
-          
+
           $fr = new SpriteFrame();
           if ($frame['id']!=0){
             $fr->find(array('id'=>$frame['id']));
           }
           $fr->set('id_sprite',$spr->get('id'));
           $fr->set('order',$order);
-          
+
           if (array_key_exists('data', $frame)){
             if ($frame['file']!=$fr->get('file') && $fr->get('file')!=''){
               $ruta = $c->getDir('assets').'sprite/'.$spr->getCategory()->get('slug').'/'.$fr->get('file');
@@ -585,7 +585,7 @@
         $spr->set('frames',$order);
         $spr->save();
       }
-      
+
       $id  = $spr->get('id');
       $url = $spr->getUrl();
     }
@@ -605,7 +605,7 @@
     $t->add('is_new',      $is_new);
     $t->process();
   }
-  
+
   /*
    * Función para borrar un sprite
    */
@@ -613,7 +613,7 @@
     global $c, $s;
 
     $status = 'ok';
-    $id     = Base::getParam('id',   $req['url_params'], false);
+    $id     = Base::getParam('id', $req['url_params'], false);
 
     if ($id===false){
       $status = 'error';
@@ -625,12 +625,12 @@
         // Primero borro el archivo
         $sprc = new SpriteCategory();
         $sprc->find(array('id'=>$spr->get('id_category')));
-      
+
         $ruta = $c->getDir('assets').'sprite/'.$sprc->get('slug').'/'.$spr->get('file').'.png';
         if (file_exists($ruta)){
           unlink($ruta);
         }
-        
+
         // Luego el registro
         $spr->delete();
       }
@@ -646,59 +646,162 @@
     $t->add('id',     $id);
     $t->process();
   }
-  
+
+  /*
+   * Función para obtener los datos de un elemento interactivo
+   */
+  function executeGetInteractive($req, $t){
+    global $c, $s;
+
+    $status = 'ok';
+    $id     = Base::getParam('id', $req['url_params'], false);
+
+    $name               = '';
+    $type               = 0;
+    $activable          = 'false';
+    $pickable           = 'false';
+    $grabbable          = 'false';
+    $breakable          = 'false';
+    $crossable          = 'false';
+    $crossable_active   = 'false';
+    $sprite_start_id    = 0;
+    $sprite_start_name  = '';
+    $sprite_start_url   = '';
+    $sprite_active_id   = 0;
+    $sprite_active_name = '';
+    $sprite_active_url  = '';
+    $drops              = 0;
+    $quantity           = 0;
+    $active_time        = 0;
+
+    if ($id===false){
+      $status = 'error';
+      $id = 0;
+    }
+
+    if ($status=='ok'){
+      $int = new Interactive();
+      if ($int->find(array('id'=>$id))){
+        $spr_start  = $int->getSpriteStart();
+        $spr_active = $int->getSpriteActive();
+
+        $name               = $int->get('name');
+        $type               = $int->get('type');
+        $activable          = $int->get('activable') ? 'true' : 'false';
+        $pickable           = $int->get('pickable') ? 'true' : 'false';
+        $grabbable          = $int->get('grabbable') ? 'true' : 'false';
+        $breakable          = $int->get('breakable') ? 'true' : 'false';
+        $crossable          = $int->get('crossable') ? 'true' : 'false';
+        $crossable_active   = $int->get('crossable_active') ? 'true' : 'false';
+        $sprite_start_id    = $spr_start->get('id');
+        $sprite_start_name  = $spr_start->get('name');
+        $sprite_start_url   = $spr_start->getUrl();
+        $sprite_active_id   = $spr_active->get('id');
+        $sprite_active_name = $spr_active->get('name');
+        $sprite_active_url  = $spr_active->getUrl();
+        $drops              = $int->get('drops');
+        $quantity           = $int->get('quantity');
+        $active_time        = $int->get('active_time');
+      }
+      else{
+        $status = 'error';
+      }
+    }
+
+    $t->setLayout(false);
+    $t->setJson(true);
+
+    $t->add('status',             $status);
+    $t->add('id',                 $id);
+    $t->add('name',               $name);
+    $t->add('type',               $type);
+    $t->add('activable',          $activable);
+    $t->add('pickable',           $pickable);
+    $t->add('grabbable',          $grabbable);
+    $t->add('breakable',          $breakable);
+    $t->add('crossable',          $crossable);
+    $t->add('crossable_active',   $crossable_active);
+    $t->add('sprite_start_id',    $sprite_start_id);
+    $t->add('sprite_start_name',  $sprite_start_name);
+    $t->add('sprite_start_url',   $sprite_start_url);
+    $t->add('sprite_active_id',   $sprite_active_id);
+    $t->add('sprite_active_name', $sprite_active_name);
+    $t->add('sprite_active_url',  $sprite_active_url);
+    $t->add('drops',              $drops);
+    $t->add('quantity',           $quantity);
+    $t->add('active_time',        $active_time);
+    $t->process();
+  }
+
   /*
    * Función para guardar un elemento interactivo
    */
   function executeSaveInteractive($req, $t){
     global $c, $s;
 
-    $status       = 'ok';
-    $id           = Base::getParam('id',           $req['url_params'], false);
-    $name         = Base::getParam('name',         $req['url_params'], false);
-    $sprite_start = Base::getParam('sprite_start', $req['url_params'], false);
-    $sprite_end   = Base::getParam('sprite_end',   $req['url_params'], false);
-    $url_start    = '';
-    $is_new       = 'true';
+    $status           = 'ok';
+    $id               = Base::getParam('id',               $req['url_params'], false);
+    $name             = Base::getParam('name',             $req['url_params'], false);
+    $type             = Base::getParam('type',             $req['url_params'], false);
+    $activable        = Base::getParam('activable',        $req['url_params'], false);
+    $pickable         = Base::getParam('pickable',         $req['url_params'], false);
+    $grabbable        = Base::getParam('grabbable',        $req['url_params'], false);
+    $breakable        = Base::getParam('breakable',        $req['url_params'], false);
+    $crossable        = Base::getParam('crossable',        $req['url_params'], false);
+    $crossable_active = Base::getParam('crossable_active', $req['url_params'], false);
+    $drops            = Base::getParam('drops',            $req['url_params'], false);
+    $quantity         = Base::getParam('quantity',         $req['url_params'], false);
+    $active_time      = Base::getParam('active_time',      $req['url_params'], false);
+    $sprite_start_id  = Base::getParam('sprite_start_id',  $req['url_params'], false);
+    $sprite_active_id = Base::getParam('sprite_active_id', $req['url_params'], false);
 
-    if ($id===false || $name===false || $sprite_start===false || $sprite_end===false){
+    $url    = '';
+    $is_new = 'true';
+
+    if ($id===false || $name===false || $type===false || $drops===false || $quantity===false || $active_time===false || $sprite_start_id===false || $sprite_active_id===false){
       $status = 'error';
     }
 
     if ($status=='ok'){
       $id    = (int)$id;
       $name = urldecode($name);
-      
+
       $int = new Interactive();
       if ($id!==0){
         $int->find(array('id'=>$id));
         $is_new = 'false';
       }
-      $int->set('name',         $name);
-      $int->set('sprite_start', $sprite_start);
-      $int->set('sprite_end',   $sprite_end);
-      
+      $int->set('name',             $name);
+      $int->set('type',             $type);
+      $int->set('activable',        ($activable=='true'));
+      $int->set('pickable',         ($pickable=='true'));
+      $int->set('grabbable',        ($grabbable=='true'));
+      $int->set('breakable',        ($breakable=='true'));
+      $int->set('crossable',        ($crossable=='true'));
+      $int->set('crossable_active', ($crossable_active=='true'));
+      $int->set('drops',            $drops);
+      $int->set('quantity',         $quantity);
+      $int->set('active_time',      $active_time);
+      $int->set('sprite_start',     $sprite_start_id);
+      $int->set('sprite_active',    $sprite_active_id);
+
       $int->save();
-      
-      $id = $int->get('id');
-      $int->loadSprites();
-      
-      $url_start = '/assets/sprite/'.$int->getSpriteStart()->getCategory()->get('slug').'/'.$int->getSpriteStart()->get('file').'.png';
+
+      $id  = $int->get('id');
+      $url = $int->getSpriteStart()->getUrl();
     }
 
     $t->setLayout(false);
     $t->setJson(true);
 
-    $t->add('status',       $status);
-    $t->add('is_new',       $is_new);
-    $t->add('id',           $id);
-    $t->add('name',         $name);
-    $t->add('url_start',    $url_start);
-    $t->add('sprite_start', $sprite_start);
-    $t->add('sprite_end',   $sprite_end);
+    $t->add('status', $status);
+    $t->add('is_new', $is_new);
+    $t->add('id',     $id);
+    $t->add('name',   $name);
+    $t->add('url',    $url);
     $t->process();
   }
-  
+
   /*
    * Función para borrar un elemento interactivo
    */
@@ -729,7 +832,7 @@
     $t->add('id',     $id);
     $t->process();
   }
-  
+
   /*
    * Función para guardar un usuario
    */
@@ -748,7 +851,7 @@
     if ($status=='ok'){
       $email = urldecode($email);
       $pass  = urldecode($pass);
-      
+
       $u = new User();
       if ($u->find(array('id'=>$id))){
         $u->set('email', $email);
@@ -770,7 +873,7 @@
     $t->add('email',  $email);
     $t->process();
   }
-  
+
   /*
    * Función para borrar un usuario
    */
@@ -801,7 +904,7 @@
     $t->add('id',     $id);
     $t->process();
   }
-  
+
   /*
    * Función para guardar una partida
    */
@@ -829,7 +932,7 @@
         $game->set('position_x',  $x);
         $game->set('position_y',  $y);
         $game->save();
-        
+
         $scenario = $game->getScenario()->get('name');
       }
       else{
@@ -849,7 +952,7 @@
     $t->add('y',           $y);
     $t->process();
   }
-  
+
   /*
    * Función para borrar una partida
    */

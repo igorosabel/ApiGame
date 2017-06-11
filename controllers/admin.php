@@ -136,9 +136,10 @@
     $sprites      = stPublic::getSprites();
 
     $t->addCss('admin');
-    $t->addPartial('sprites_css',  'public/sprites_css',      array('sprites'=>$sprites));
     $t->addPartial('interactives', 'admin/interactives_edit', array('interactives'=>$interactives));
+    $t->addPartial('sprites_css',  'public/sprites_css',      array('sprites'=>$sprites));
     $t->addPartial('sprites',      'admin/sprites',           array('sprites'=>$sprites));
+    $t->addPartial('sprites_json', 'admin/sprites_json',      array('sprites'=>$sprites));
     $t->process();
   }
   

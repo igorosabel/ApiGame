@@ -37,7 +37,7 @@ class Interactive extends OBase{
   public function loadSpriteActive(){
     $spra = new Sprite();
     $spra->find(array('id'=>$this->get('sprite_active')));
-    $this->sprite_start = $spra;
+    $this->sprite_active = $spra;
   }
   
   public function getSpriteStart(){

@@ -148,6 +148,10 @@
   top: 20%;
 }
 
+.add-box-tall{
+  top: 2%;
+}
+
 .add-box h3{
   color: #000;
   padding: 16px;
@@ -573,6 +577,11 @@
   position: relative;
 }
 
+.cell-detail-option-small{
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 .cell-detail-option-title{
   color: #000;
   text-align: center;
@@ -590,6 +599,10 @@
 
 .cell-detail-option-sample:hover{
   border: 1px solid #000;
+}
+
+.cell-detail-option-sample img{
+  width: 100%;
 }
 
 .cell-detail-option-name{

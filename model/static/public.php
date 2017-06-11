@@ -8,14 +8,14 @@ class stPublic{
     $db = new ODB();
     $sql = sprintf("SELECT * FROM `game` WHERE `id_user` = %s", $id_user);
     $db->query($sql);
-    
+
     while ($res = $db->next()){
       $game = new Game();
       $game->update($res);
       
       array_push($ret, $game);
     }
-    
+
     return $ret;
   }
 
@@ -30,7 +30,7 @@ class stPublic{
 
     return $scn;
   }
-  
+
   public static function getBackgroundCategories(){
     $db = new ODB();
     $sql = "SELECT * FROM `background_category`";
@@ -39,41 +39,41 @@ class stPublic{
     while ($res=$db->next()){
       $bckc = new BackgroundCategory();
       $bckc->update($res);
-      
+
       $bckcs['bckc_'.$bckc->get('id')] = $bckc;
     }
-    
+
     return $bckcs;
   }
-  
+
   public static function getBackgrounds(){
     $ret = array();
     $db = new ODB();
     $sql = "SELECT * FROM `background_category` ORDER BY `name`";
     $db->query($sql);
-    
+
     while ($res=$db->next()){
       $bckc = new BackgroundCategory();
       $bckc->update($res);
       $bckc->loadBackgrounds();
-      
+
       array_push($ret, $bckc);
     }
-    
+
     return $ret;
   }
-  
+
   public static function getBackgroundsData($list){
     $data = array();
     $all = array();
-    
+
     foreach ($list as $bckc){
       $item = array(
         'id' => $bckc->get('id'),
         'name' => urlencode($bckc->get('name')),
         'list' => array()
       );
-      
+
       foreach ($bckc->getBackgrounds() as $bck){
         $item_bck = array(
           'id' => $bck->get('id'),
@@ -84,7 +84,7 @@ class stPublic{
         array_push($item['list'], (int)$bck->get('id'));
         $all['bck_'.$bck->get('id')] = $item_bck;
       }
-      
+
       $data['bckc_'.$item['id']] = $item;
     }
     $data['list'] = $all;
@@ -111,10 +111,10 @@ class stPublic{
     $db = new ODB();
     if (count($ids['bck'])>0){
       $bckcs = self::getBackgroundCategories();
-      
+
       $sql = 'SELECT * FROM `background` WHERE `id` IN ('.implode(',', $ids['bck']).')';
       $db->query($sql);
-  
+
       while ($res=$db->next()){
         $bck = new Background();
         $bck->update($res);
@@ -123,10 +123,10 @@ class stPublic{
     }
     if (count($ids['spr'])>0){
       $sprcs = self::getSpriteCategories();
-      
+
       $sql = 'SELECT * FROM `sprite` WHERE `id` IN ('.implode(',', $ids['spr']).')';
       $db->query($sql);
-  
+
       while ($res=$db->next()){
         $spr = new Sprite();
         $spr->update($res);
@@ -136,7 +136,7 @@ class stPublic{
 
     return $ret;
   }
-  
+
   public static function getSpriteCategories(){
     $db = new ODB();
     $sql = "SELECT * FROM `sprite_category`";
@@ -148,38 +148,38 @@ class stPublic{
       
       $sprcs['sprc_'.$sprc->get('id')] = $sprc;
     }
-    
+
     return $sprcs;
   }
-  
+
   public static function getSprites(){
     $ret = array();
     $db = new ODB();
     $sql = "SELECT * FROM `sprite_category` ORDER BY `name`";
     $db->query($sql);
-    
+
     while ($res=$db->next()){
       $sprc = new SpriteCategory();
       $sprc->update($res);
       $sprc->loadSprites();
-      
+
       array_push($ret, $sprc);
     }
-    
+
     return $ret;
   }
-  
+
   public static function getSpritesData($list){
     $data = array();
     $all = array();
-    
+
     foreach ($list as $sprc){
       $item = array(
         'id' => $sprc->get('id'),
         'name' => urlencode($sprc->get('name')),
         'list' => array()
       );
-      
+
       foreach ($sprc->getSprites() as $spr){
         $item_spr = array(
           'id' => $spr->get('id'),
@@ -192,33 +192,33 @@ class stPublic{
         array_push($item['list'], (int)$spr->get('id'));
         $all['spr_'.$spr->get('id')] = $item_spr;
       }
-      
+
       $data['sprc_'.$item['id']] = $item;
     }
     $data['list'] = $all;
     return $data;
   }
-  
+
   public static function getInteractives(){
     $ret = array();
     $db = new ODB();
     $sql = "SELECT * FROM `interactive` ORDER BY `name`";
     $db->query($sql);
-    
+
     while ($res=$db->next()){
       $int = new Interactive();
       $int->update($res);
-      $int->loadSprites();
-      
+      $int->loadSpriteStart();
+
       array_push($ret, $int);
     }
-    
+
     return $ret;
   }
-  
+
   public static function getInteractivesData($list){
     $data = array();
-    
+
     foreach ($list as $int){
       $item_int = array(
         'id' => $int->get('id'),
@@ -229,10 +229,10 @@ class stPublic{
       );
       $data['int_'.$item_int['id']] = $item_int;
     }
-    
+
     return $data;
   }
-  
+
   public static function saveImage($ruta, $base64_string) {
     if (file_exists($ruta)){
       unlink($ruta);
