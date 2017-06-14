@@ -125,6 +125,7 @@
 
 <script>
   var sprites_json = {{sprites_json}};
+  var interactives_json = {{interactives_json}};
 </script>
 
 <script src="/js/admin-interactives.js"></script>

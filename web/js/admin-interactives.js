@@ -35,6 +35,21 @@ detailDeletes.forEach( del => del.addEventListener('click', deleteItem));
 frmInt.addEventListener('submit', saveInteractive);
 items.forEach(item => item.addEventListener('click', editInteractive));
 
+loadPickables();
+
+/*
+ * Función para cargar la lista de elementos interactivos que se pueden coger
+ */
+function loadPickables(){
+  const list = document.getElementById('int-drops');
+  for (let i in interactives_json){
+    var opt = document.createElement('option');
+    opt.value = interactives_json[i].id;
+    opt.text = interactives_json[i].name;
+    list.appendChild(opt);
+  }
+}
+
 /*
  * Elemento interactivo que se está editando
  */

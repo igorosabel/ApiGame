@@ -134,12 +134,20 @@
   function executeInteractives($req, $t){
     $interactives = stPublic::getInteractives();
     $sprites      = stPublic::getSprites();
+    
+    $pickables = array();
+    foreach ($interactives as $int){
+      if ($int->get('pickable')){
+        array_push($pickables, $int);
+      }
+    }
 
     $t->addCss('admin');
-    $t->addPartial('interactives', 'admin/interactives_edit', array('interactives'=>$interactives));
-    $t->addPartial('sprites_css',  'public/sprites_css',      array('sprites'=>$sprites));
-    $t->addPartial('sprites',      'admin/sprites',           array('sprites'=>$sprites));
-    $t->addPartial('sprites_json', 'admin/sprites_json',      array('sprites'=>$sprites));
+    $t->addPartial('interactives',      'admin/interactives_edit', array('interactives'=>$interactives));
+    $t->addPartial('interactives_json', 'admin/interactives_json', array('pickables'=>$pickables));
+    $t->addPartial('sprites_css',       'public/sprites_css',      array('sprites'=>$sprites));
+    $t->addPartial('sprites',           'admin/sprites',           array('sprites'=>$sprites));
+    $t->addPartial('sprites_json',      'admin/sprites_json',      array('sprites'=>$sprites));
     $t->process();
   }
   
