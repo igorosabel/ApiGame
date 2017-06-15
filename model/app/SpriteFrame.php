@@ -33,10 +33,14 @@ class SpriteFrame extends OBase{
     return $this->sprite;
   }
   
+  public function setSprite($spr){
+    $this->sprite = $spr;
+  }
+  
   public function loadSprite(){
     $spr = new Sprite();
     $spr->find(array('id'=>$this->get('id_sprite')));
-    $this->sprite = $spr;
+    $this->setSprite($spr);
   }
   
   public function getUrl(){

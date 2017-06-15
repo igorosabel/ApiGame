@@ -21,10 +21,19 @@ class Sprite extends OBase{
   
   public function deleteFull(){
     global $c;
-    $ruta = $c->getDir('assets').$this->getCategory()->get('slug').'/'.$this->get('file').'.png';
+    
+    $frames = $this->getFrames();
+    foreach ($frames as $fr){
+      $fr->setSprite($this);
+      $fr->deleteFull();
+    }
+    
+    $ruta = $c->getDir('assets').'sprite/'.$this->getCategory()->get('slug').'/'.$this->get('file').'.png';
     if (file_exists($ruta)){
       unlink($ruta);
     }
+    
+    $this->delete();
   }
   
   private $category = null;

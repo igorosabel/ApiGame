@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 04-06-2017 a las 21:26:26
+-- Tiempo de generación: 15-06-2017 a las 22:10:59
 -- Versión del servidor: 5.5.55-0+deb8u1
 -- Versión de PHP: 5.6.30
 
@@ -128,6 +128,48 @@ INSERT INTO `background_category` (`id`, `name`, `slug`, `created_at`, `updated_
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `character`
+--
+
+DROP TABLE IF EXISTS `character`;
+CREATE TABLE `character` (
+  `id` int(11) NOT NULL COMMENT 'Id único de cada tipo de personaje',
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Nombre del tipo de personaje',
+  `slug` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Slug del nombre del tipo de personaje',
+  `file_up` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Imagen del personaje al mirar hacia arriba',
+  `file_down` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Imagen del personaje al mirar hacia abajo',
+  `file_left` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Imagen del personaje al mirar hacia la izquierda',
+  `file_right` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Imagen del personaje al mirar hacia la derecha',
+  `is_npc` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el tipo de personaje es un NPC',
+  `is_enemy` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el tipo de personaje es un enemigo',
+  `health` int(11) NOT NULL DEFAULT '3' COMMENT 'Salud del tipo de personaje',
+  `attack` int(11) NOT NULL DEFAULT '1' COMMENT 'Daño que hace el tipo de personaje',
+  `speed` int(11) NOT NULL DEFAULT '1' COMMENT 'Velocidad el tipo de personaje',
+  `drops` int(11) DEFAULT NULL COMMENT 'Id del elemento que da el tipo de personaje',
+  `created_at` datetime NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` datetime DEFAULT NULL COMMENT 'Fecha de última modificación del registro'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `character_frame`
+--
+
+DROP TABLE IF EXISTS `character_frame`;
+CREATE TABLE `character_frame` (
+  `id` int(11) NOT NULL COMMENT 'Id único de cada frame del tipo de personaje',
+  `id_character` int(11) NOT NULL COMMENT 'Id del tipo de personaje al que pertenece el frame',
+  `orientation` varchar(5) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Orientación de la imagen del frame',
+  `order` int(11) NOT NULL DEFAULT '1' COMMENT 'Orden del frame en la animación',
+  `file` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Nombre del archivo',
+  `created_at` datetime NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` datetime DEFAULT NULL COMMENT 'Fecha de última modificación del registro'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `connection`
 --
 
@@ -182,7 +224,7 @@ CREATE TABLE `interactive` (
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Nombre del elemento',
   `type` int(11) NOT NULL COMMENT 'Tipo del elemento',
   `activable` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el elemento se puede activar',
-  `picakble` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el elemento se puede coger al inventario',
+  `pickable` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el elemento se puede coger al inventario',
   `grabbable` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el elemento se puede coger',
   `breakable` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el elemento se puede romper',
   `crossable` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el elemento se puede cruzar',
@@ -200,9 +242,13 @@ CREATE TABLE `interactive` (
 -- Volcado de datos para la tabla `interactive`
 --
 
-INSERT INTO `interactive` (`id`, `name`, `type`, `activable`, `picakble`, `grabbable`, `breakable`, `crossable`, `crossable_active`, `sprite_start`, `sprite_active`, `drops`, `quantity`, `active_time`, `created_at`, `updated_at`) VALUES
+INSERT INTO `interactive` (`id`, `name`, `type`, `activable`, `pickable`, `grabbable`, `breakable`, `crossable`, `crossable_active`, `sprite_start`, `sprite_active`, `drops`, `quantity`, `active_time`, `created_at`, `updated_at`) VALUES
 (1, 'Cofre', 0, 0, 0, 0, 0, 0, 0, 47, 48, 0, 0, 0, '2017-06-02 19:21:18', '2017-06-02 20:29:02'),
-(5, 'Cofre grande', 0, 0, 0, 0, 0, 0, 0, 84, 85, 0, 0, 0, '2017-06-02 21:47:44', '2017-06-02 21:47:44');
+(5, 'Cofre grande', 4, 1, 0, 0, 0, 0, 0, 84, 85, 0, 0, 0, '2017-06-02 21:47:44', '2017-06-11 13:11:34'),
+(6, 'Arbusto', 4, 0, 0, 1, 1, 0, 1, 1, 91, 0, 0, 0, '2017-06-13 20:50:53', '2017-06-13 20:50:53'),
+(7, 'Moneda (verde)', 2, 0, 1, 0, 0, 0, 0, 87, 0, 0, 1, 0, '2017-06-13 21:00:41', '2017-06-13 21:01:04'),
+(8, 'Moneda (roja)', 2, 0, 1, 0, 0, 0, 0, 89, 0, 0, 5, 0, '2017-06-13 21:01:31', '2017-06-13 21:01:31'),
+(9, 'Moneda (Azul)', 2, 0, 1, 0, 0, 0, 0, 88, 0, 0, 10, 0, '2017-06-13 21:02:04', '2017-06-13 21:02:04');
 
 -- --------------------------------------------------------
 
@@ -296,10 +342,8 @@ INSERT INTO `sprite` (`id`, `id_category`, `name`, `file`, `crossable`, `width`,
 (23, 4, 'Onda', 'water-ripple', 1, 1, 1, 0, '2017-03-05 00:00:00', '2017-03-22 23:41:05'),
 (24, 4, 'Burbujas 1', 'water-bubbles-1', 1, 1, 1, 0, '2017-03-05 00:00:00', '2017-03-22 23:40:50'),
 (25, 4, 'Burbujas 2', 'water-bubbles-2', 1, 1, 1, 0, '2017-03-05 00:00:00', '2017-03-22 23:40:55'),
-(26, 4, 'Piedra', 'stone-water', 0, 1, 1, 0, '2017-03-05 00:00:00', '2017-03-22 23:41:09'),
+(26, 4, 'Piedra', 'stone-water', 0, 1, 1, 0, '2017-03-05 00:00:00', '2017-06-04 21:35:00'),
 (27, 3, 'Valla piedra', 'fence-stone', 0, 1, 1, 0, '2017-03-05 00:00:00', '2017-03-22 23:46:21'),
-(40, 1, 'Cactus inf', 'cactus-down', 0, 1, 1, 0, '2017-03-16 21:15:11', '2017-03-22 23:42:44'),
-(41, 1, 'Cactus sup', 'cactus-up', 0, 1, 1, 0, '2017-03-16 21:15:36', '2017-03-22 23:42:49'),
 (46, 3, 'Jarrón', 'jar', 0, 1, 1, 0, '2017-03-20 00:01:53', '2017-03-22 23:45:58'),
 (47, 3, 'Cofre', 'chest', 0, 1, 1, 0, '2017-03-20 00:06:05', '2017-03-22 23:45:08'),
 (48, 3, 'Cofre abierto', 'chest-open', 0, 1, 1, 0, '2017-03-20 00:06:38', '2017-03-22 23:45:12'),
@@ -333,7 +377,12 @@ INSERT INTO `sprite` (`id`, `id_category`, `name`, `file`, `crossable`, `width`,
 (82, 3, 'Estatua', 'statue', 0, 2, 3, 0, '2017-05-31 20:19:07', '2017-05-31 20:19:07'),
 (83, 2, 'Roca grande', 'big-stone', 0, 2, 2, 0, '2017-05-31 20:23:07', '2017-05-31 20:23:07'),
 (84, 3, 'Cofre grande', 'big-chest', 0, 3, 2, 0, '2017-06-02 20:33:50', '2017-06-02 20:33:50'),
-(85, 3, 'Cofre grande abierto', 'big-chest-open', 0, 3, 2, 0, '2017-06-02 20:35:19', '2017-06-02 20:35:19');
+(85, 3, 'Cofre grande abierto', 'big-chest-open', 0, 3, 2, 0, '2017-06-02 20:35:19', '2017-06-02 20:35:19'),
+(87, 3, 'Moneda (verde)', 'coin-green', 0, 1, 1, 2, '2017-06-08 20:31:28', '2017-06-10 11:39:29'),
+(88, 3, 'Moneda (azul)', 'coin-blue', 0, 1, 1, 2, '2017-06-10 11:43:16', '2017-06-10 11:43:16'),
+(89, 3, 'Moneda (roja)', 'coin-red', 0, 1, 1, 2, '2017-06-10 11:43:41', '2017-06-10 11:43:41'),
+(90, 1, 'Cactus', 'cactus', 0, 1, 2, 0, '2017-06-12 20:19:47', '2017-06-12 20:19:47'),
+(91, 1, 'Arbusto cortado', 'green-bush-cut', 1, 1, 1, 0, '2017-06-13 20:45:57', '2017-06-13 20:45:57');
 
 -- --------------------------------------------------------
 
@@ -376,6 +425,18 @@ CREATE TABLE `sprite_frame` (
   `updated_at` datetime NOT NULL COMMENT 'Fecha de última modificación del registro'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `sprite_frame`
+--
+
+INSERT INTO `sprite_frame` (`id`, `id_sprite`, `order`, `file`, `created_at`, `updated_at`) VALUES
+(3, 87, 1, 'coin-green-1', '2017-06-10 11:39:29', '2017-06-10 11:39:29'),
+(4, 87, 2, 'coin-green-2', '2017-06-10 11:39:29', '2017-06-10 11:39:29'),
+(5, 88, 1, 'coin-blue-1', '2017-06-10 11:43:16', '2017-06-10 11:43:16'),
+(6, 88, 2, 'coin-blue-2', '2017-06-10 11:43:16', '2017-06-10 11:43:16'),
+(7, 89, 1, 'coin-red-1', '2017-06-10 11:43:41', '2017-06-10 11:43:41'),
+(8, 89, 2, 'coin-red-2', '2017-06-10 11:43:41', '2017-06-10 11:43:41');
+
 -- --------------------------------------------------------
 
 --
@@ -412,6 +473,18 @@ ALTER TABLE `background`
 -- Indices de la tabla `background_category`
 --
 ALTER TABLE `background_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `character`
+--
+ALTER TABLE `character`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `character_frame`
+--
+ALTER TABLE `character_frame`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -483,6 +556,16 @@ ALTER TABLE `background`
 ALTER TABLE `background_category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único de cada categoría', AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT de la tabla `character`
+--
+ALTER TABLE `character`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único de cada tipo de personaje';
+--
+-- AUTO_INCREMENT de la tabla `character_frame`
+--
+ALTER TABLE `character_frame`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único de cada frame del tipo de personaje';
+--
 -- AUTO_INCREMENT de la tabla `game`
 --
 ALTER TABLE `game`
@@ -491,7 +574,7 @@ ALTER TABLE `game`
 -- AUTO_INCREMENT de la tabla `interactive`
 --
 ALTER TABLE `interactive`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del elemento interactivo', AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del elemento interactivo', AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `inventory`
 --
@@ -506,7 +589,7 @@ ALTER TABLE `scenario`
 -- AUTO_INCREMENT de la tabla `sprite`
 --
 ALTER TABLE `sprite`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único de cada fondo', AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único de cada fondo', AUTO_INCREMENT=92;
 --
 -- AUTO_INCREMENT de la tabla `sprite_category`
 --
@@ -516,7 +599,7 @@ ALTER TABLE `sprite_category`
 -- AUTO_INCREMENT de la tabla `sprite_frame`
 --
 ALTER TABLE `sprite_frame`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único del frame';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único del frame', AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
