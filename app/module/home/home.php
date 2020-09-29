@@ -43,35 +43,6 @@ class home extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function game(ORequest $req): void {
-		$game = new Game();
-	    $game->find(['id'=>$req->getParamInt('id')]);
-	    $scn = $game->getScenario();
-
-	    $backgrounds = $this->web_service->getBackgrounds();
-	    $sprites     = $this->web_service->getSprites();
-
-	    $this->getTemplate()->addComponent('backgrounds_css', 'public/backgrounds_css', ['backgrounds' => $backgrounds]);
-	    $this->getTemplate()->addComponent('sprites_css',     'public/sprites_css',     ['sprites'     => $sprites]);
-
-	    $this->getTemplate()->add('scn_data',    $scn->get('data'));
-	    $this->getTemplate()->add('position_x',  $game->get('position_x'));
-	    $this->getTemplate()->add('position_y',  $game->get('position_y'));
-	    $this->getTemplate()->add('player_name', $game->get('name'));
-	    $this->getTemplate()->add('bcks_data', json_encode($this->web_service->getBackgroundsData($backgrounds)));
-	    $this->getTemplate()->add('sprs_data', json_encode($this->web_service->getSpritesData($sprites)));
-
-	    $this->getTemplate()->addCss('game');
-	}
-
-	/**
-	 * Nueva acción canvas
-	 *
-	 * @url /canvas/:id
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
 	public function canvas(ORequest $req): void {
 		$game = new Game();
 	    $game->find(['id'=>$req->getParamInt('id')]);

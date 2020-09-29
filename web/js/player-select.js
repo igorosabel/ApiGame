@@ -136,7 +136,7 @@ function sendAddGame(e) {
  */
 function sendAddGameSuccess(data) {
 	if (data.status=='ok') {
-		document.location.href = '/canvas/' + selectedGameId;
+		document.location.href = '/game/' + selectedGameId;
 	}
 	else {
 		alert('¡Ocurrió un error!');
