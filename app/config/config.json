@@ -1,0 +1,25 @@
+{
+	"db": {
+		"host": "localhost",
+		"user": "game",
+		"pass": "384Q#mrb",
+		"name": "game",
+		"charset": "utf8mb4",
+		"collate": "utf8mb4_unicode_ci"
+	},
+	"base_url": "https://game.osumi.es",
+	"admin_email": "inigo.gorosabel@gmail.com",
+	"default_title": "Game",
+	"lang": "es",
+	"log_level": "ALL",
+	"extra": {
+		"width": 24,
+		"height": 18,
+		"admin_pass": "patata"
+	},
+	"dir": {
+		"assets": "{{web}}assets/"
+	},
+	"css": ["common"],
+	"js": ["common"]
+}
