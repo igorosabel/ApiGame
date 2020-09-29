@@ -90,7 +90,7 @@ function selectGame(e, num) {
 
 	// Partida existente
 	if (name.innerHTML!='') {
-		document.location.href = '/canvas/' + selectedGameId;
+		document.location.href = '/game/' + selectedGameId;
 	}
 	else {
 		// Partida nueva

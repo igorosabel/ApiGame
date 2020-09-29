@@ -43,7 +43,7 @@ class home extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function canvas(ORequest $req): void {
+	public function game(ORequest $req): void {
 		$game = new Game();
 	    $game->find(['id'=>$req->getParamInt('id')]);
 	    $scn = $game->getScenario();
