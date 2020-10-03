@@ -1,39 +1,34 @@
 <?php declare(strict_types=1);
-class Inventory extends OModel {
+class Asset extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
 	 */	function __construct() {
-		$table_name  = 'inventory';
+		$table_name  = 'asset';
 		$model = [
 			'id' => [
 				'type'    => OCore::PK,
-				'comment' => 'Id único del elemento del inventario'
+				'comment' => 'Id único de cada recurso'
 			],
-			'id_game' => [
+			'id_world' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
-				'ref' => 'game.id',
-				'comment' => 'Id de la partida en la que está el elemento'
+				'ref' => 'world.id',
+				'comment' => 'Id del mundo en el que se usa el recurso o NULL si sirve para todos'
 			],
-			'id_item' => [
-				'type'    => OCore::NUM,
+			'name' => [
+				'type'    => OCore::TEXT,
 				'nullable' => false,
 				'default' => null,
-				'ref' => 'item.id',
-				'comment' => 'Id del elemento'
+				'size' => 50,
+				'comment' => 'Nombre del recurso'
 			],
-			'order' => [
-				'type'    => OCore::NUM,
+			'file' => [
+				'type'    => OCore::TEXT,
 				'nullable' => false,
 				'default' => null,
-				'comment' => 'Orden del elemento en el inventario'
-			],
-			'num' => [
-				'type'    => OCore::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Cantidad del item en el inventario'
+				'size' => 100,
+				'comment' => 'URL al archivo del recurso'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,

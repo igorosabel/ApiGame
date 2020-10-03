@@ -415,6 +415,8 @@ function selectItem() {
 	}
 	if (item.dataset.type=='int') {
 		console.log(item);
+		obj = interactives['int_' + item.dataset.id];
+		console.log(obj);
 	}
 }
 

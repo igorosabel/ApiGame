@@ -2,19 +2,26 @@
 class Background extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
-	 */
-	function __construct() {
+	 */	function __construct() {
 		$table_name  = 'background';
 		$model = [
 			'id' => [
 				'type'    => OCore::PK,
 				'comment' => 'Id único de cada fondo'
 			],
-			'id_category' => [
+			'id_background_category' => [
 				'type'    => OCore::NUM,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => null,
+				'ref' => 'background_category.id',
 				'comment' => 'Id de la categoría a la que pertenece'
+			],
+			'id_asset' => [
+				'type'    => OCore::NUM,
+				'nullable' => false,
+				'default' => null,
+				'ref' => 'asset.id',
+				'comment' => 'Id del recurso que se utiliza para el fondo'
 			],
 			'name' => [
 				'type'    => OCore::TEXT,
@@ -23,17 +30,8 @@ class Background extends OModel {
 				'size' => 50,
 				'comment' => 'Nombre del fondo'
 			],
-			'file' => [
-				'type'    => OCore::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre del archivo'
-			],
 			'crossable' => [
 				'type'    => OCore::BOOL,
-				'nullable' => false,
-				'default' => true,
 				'comment' => 'Indica si la casilla se puede cruzar 1 o no 0'
 			],
 			'created_at' => [
@@ -50,29 +48,4 @@ class Background extends OModel {
 
 		parent::load($table_name, $model);
 	}
-
-	private ?BackgroundCategory $category = null;
-
-	/**
-	 * Obtiene la categoría del fondo
-	 *
-	 * @return BackgroundCategory Categoría del fondo
-	 */
-    public function getCategory(): BackgroundCategory {
-      if (is_null($this->category)) {
-        $this->loadCategory();
-      }
-      return $this->category;
-    }
-
-	/**
-	 * Carga la categoría del fondo
-	 *
-	 * @return void
-	 */
-    public function loadCategory(): void {
-      $bckc = new BackgroundCategory();
-      $bckc->find(['id' => $this->get('id_category')]);
-      $this->category = $bckc;
-    }
 }

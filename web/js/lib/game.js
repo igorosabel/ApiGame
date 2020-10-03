@@ -11,13 +11,15 @@ let scenario,
 
 function setup() {
 	scenario = makeScenario(800, 600, 18, 24);
-	player = makePlayer({
-		x: startPos.x * scenario.tile_width,
-		y: startPos.y * scenario.tile_height
-	}, {
-		w: scenario.tile_width,
-		h: (scenario.tile_height * 1.5)
-	});
+	player = makePlayer(
+		{
+			x: startPos.x * scenario.tile_width,
+			y: startPos.y * scenario.tile_height
+		}, {
+			w: scenario.tile_width,
+			h: (scenario.tile_height * 1.5)
+		}
+	);
 	hud = makeHud(player.health, player.currentHealth, player.money);
 
 	// Cargo assets en el escenario
@@ -48,21 +50,36 @@ function setup() {
 	hud.render();
 
 	// Eventos de teclado
-	let up = keyboard(38);
+
+	// W - Arriba
+	let up = keyboard(87);
 	up.press = () => player.up();
 	up.release = () => player.stopUp();
 
-	let down = keyboard(40);
+	// S - Abajo
+	let down = keyboard(83);
 	down.press = () => player.down();
 	down.release = () => player.stopDown();
 
-	let right = keyboard(39);
+	// D - Derecha
+	let right = keyboard(68);
 	right.press = () => player.right();
 	right.release = () => player.stopRight();
 
-	let left = keyboard(37);
+	// A - Izquierda
+	let left = keyboard(65);
 	left.press = () => player.left();
 	left.release = () => player.stopLeft();
+	
+	// E - Acción
+	let doAction = keyboard(69);
+	doAction.press = () => player.doAction();
+	doAction.release = () => player.stopAction();
+	
+	// Espacio - Golpe
+	let hit = keyboard(32);
+	hit.press = () => player.hit();
+	hit.release = () => player.stopHit();
 
 	// Bucle del juego
 	gameLoop();

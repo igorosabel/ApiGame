@@ -2,8 +2,7 @@
 class Game extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
-	 */
-	function __construct() {
+	 */	function __construct() {
 		$table_name  = 'game';
 		$model = [
 			'id' => [
@@ -12,8 +11,9 @@ class Game extends OModel {
 			],
 			'id_user' => [
 				'type'    => OCore::NUM,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => null,
+				'ref' => 'user.id',
 				'comment' => 'Id del usuario al que pertenece la partida'
 			],
 			'name' => [
@@ -27,6 +27,7 @@ class Game extends OModel {
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
+				'ref' => 'scenario.id',
 				'comment' => 'Id del escenario en el que está el usuario'
 			],
 			'position_x' => [
@@ -50,14 +51,32 @@ class Game extends OModel {
 			'health' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
-				'default' => null,
+				'default' => '100',
 				'comment' => 'Salud actual del jugador'
 			],
 			'max_health' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
-				'default' => null,
+				'default' => '100',
 				'comment' => 'Máxima salud del jugador'
+			],
+			'attack' => [
+				'type'    => OCore::NUM,
+				'nullable' => false,
+				'default' => null,
+				'comment' => 'Puntos de daño que hace el personaje'
+			],
+			'defense' => [
+				'type'    => OCore::NUM,
+				'nullable' => false,
+				'default' => null,
+				'comment' => 'Puntos de defensa del personaje'
+			],
+			'speed' => [
+				'type'    => OCore::NUM,
+				'nullable' => false,
+				'default' => null,
+				'comment' => 'Puntos de velocidad del personaje'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
@@ -73,41 +92,4 @@ class Game extends OModel {
 
 		parent::load($table_name, $model);
 	}
-
-	private ?Scenario $scenario = null;
-
-	/**
-	 * Guarda el escenario en el que está jugador
-	 *
-	 * @param Scenario $scn Escenario en el que está el jugador
-	 *
-	 * @return void
-	 */
-    public function setScenario(Scenario $scn): void {
-      $this->scenario = $scn;
-    }
-
-	/**
-	 * Obtiene el escenario en el que está el jugador
-	 *
-	 * @return Scenario Escenario en el que está el jugador
-	 */
-    public function getScenario(): Scenario {
-      if (is_null($this->scenario)) {
-        $this->loadScenario();
-      }
-      return $this->scenario;
-    }
-
-	/**
-	 * Carga el escenario en el que está el jugador
-	 *
-	 * @return void
-	 */
-    public function loadScenario(): void {
-      $scn = new Scenario();
-      $scn->find(['id' => $this->get('id_scenario')]);
-
-      $this->setScenario($scn);
-    }
 }

@@ -1,27 +1,21 @@
 <?php declare(strict_types=1);
-class BackgroundCategory extends OModel {
+class WorldUnlocked extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
 	 */	function __construct() {
-		$table_name  = 'background_category';
+		$table_name  = 'world_unlocked';
 		$model = [
-			'id' => [
+			'id_game' => [
 				'type'    => OCore::PK,
-				'comment' => 'Id único de cada categoría'
+				'incr' => false,
+				'ref' => 'game.id',
+				'comment' => 'Id de la partida'
 			],
-			'name' => [
-				'type'    => OCore::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre de la categoría'
-			],
-			'slug' => [
-				'type'    => OCore::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Slug del nombre de la categoría'
+			'id_world' => [
+				'type'    => OCore::PK,
+				'incr' => false,
+				'ref' => 'world.id',
+				'comment' => 'Id del mundo desbloqueado'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,

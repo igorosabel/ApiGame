@@ -1,27 +1,21 @@
 <?php declare(strict_types=1);
-class BackgroundCategory extends OModel {
+class AssetTag extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
 	 */	function __construct() {
-		$table_name  = 'background_category';
+		$table_name  = 'asset_tag';
 		$model = [
-			'id' => [
+			'id_asset' => [
 				'type'    => OCore::PK,
-				'comment' => 'Id único de cada categoría'
+				'incr' => false,
+				'ref' => 'asset.id',
+				'comment' => 'Id del recurso'
 			],
-			'name' => [
-				'type'    => OCore::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre de la categoría'
-			],
-			'slug' => [
-				'type'    => OCore::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Slug del nombre de la categoría'
+			'id_tag' => [
+				'type'    => OCore::PK,
+				'incr' => false,
+				'ref' => 'tag.id',
+				'comment' => 'Id de la tag'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,

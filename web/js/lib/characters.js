@@ -107,6 +107,18 @@ class Character {
 		this.orientationList.splice( this.orientationList.indexOf('left'), 1 );
 		this.updateOrientation();
 	}
+	doAction() {
+		console.log('doAction');
+	}
+	stopAction() {
+		console.log('stopAction');
+	}
+	hit() {
+		console.log('hit');
+	}
+	stopHit() {
+		console.log('stopHit');
+	}
 	playAnimation() {
 		if (!this.playing) {
 			this.playing = true;

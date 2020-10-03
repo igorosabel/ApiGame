@@ -1,39 +1,33 @@
 <?php declare(strict_types=1);
-class Inventory extends OModel {
+class ScenarioObjectDrop extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
 	 */	function __construct() {
-		$table_name  = 'inventory';
+		$table_name  = 'scenario_object_drop';
 		$model = [
 			'id' => [
 				'type'    => OCore::PK,
-				'comment' => 'Id único del elemento del inventario'
+				'comment' => 'Id único para cada recurso de un objeto'
 			],
-			'id_game' => [
+			'id_scenario_object' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
-				'ref' => 'game.id',
-				'comment' => 'Id de la partida en la que está el elemento'
+				'ref' => 'scenario_object.id',
+				'comment' => 'Id del objeto de escenario'
 			],
 			'id_item' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'item.id',
-				'comment' => 'Id del elemento'
-			],
-			'order' => [
-				'type'    => OCore::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Orden del elemento en el inventario'
+				'comment' => 'Id del item obtenido'
 			],
 			'num' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
-				'comment' => 'Cantidad del item en el inventario'
+				'comment' => 'Número de items que se obtienen'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,

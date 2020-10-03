@@ -1,39 +1,55 @@
 <?php declare(strict_types=1);
-class Inventory extends OModel {
+class Equipment extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
 	 */	function __construct() {
-		$table_name  = 'inventory';
+		$table_name  = 'equipment';
 		$model = [
 			'id' => [
 				'type'    => OCore::PK,
-				'comment' => 'Id único del elemento del inventario'
+				'comment' => 'Id único para cada equipamiento'
 			],
 			'id_game' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'game.id',
-				'comment' => 'Id de la partida en la que está el elemento'
+				'comment' => 'Id de la partida a la que pertenece el equipamiento'
 			],
-			'id_item' => [
+			'head' => [
 				'type'    => OCore::NUM,
-				'nullable' => false,
+				'nullable' => true,
 				'default' => null,
 				'ref' => 'item.id',
-				'comment' => 'Id del elemento'
+				'comment' => 'Id del item que va en la cabeza'
 			],
-			'order' => [
+			'necklace' => [
 				'type'    => OCore::NUM,
-				'nullable' => false,
+				'nullable' => true,
 				'default' => null,
-				'comment' => 'Orden del elemento en el inventario'
+				'ref' => 'item.id',
+				'comment' => 'Id del item que va al cuello'
 			],
-			'num' => [
+			'body' => [
 				'type'    => OCore::NUM,
-				'nullable' => false,
+				'nullable' => true,
 				'default' => null,
-				'comment' => 'Cantidad del item en el inventario'
+				'ref' => 'item.id',
+				'comment' => 'Id del item que viste'
+			],
+			'boots' => [
+				'type'    => OCore::NUM,
+				'nullable' => true,
+				'default' => null,
+				'ref' => 'item.id',
+				'comment' => 'Id del item usado como botas'
+			],
+			'weapon' => [
+				'type'    => OCore::NUM,
+				'nullable' => true,
+				'default' => null,
+				'ref' => 'item.id',
+				'comment' => 'Id del item que usa como arma'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,

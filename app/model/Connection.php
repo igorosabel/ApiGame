@@ -2,25 +2,26 @@
 class Connection extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
-	 */
-	function __construct() {
+	 */	function __construct() {
 		$table_name  = 'connection';
 		$model = [
 			'id_from' => [
 				'type'    => OCore::PK,
 				'incr' => false,
-				'comment' => 'Id de la categoría en la que está el producto'
+				'ref' => 'scenario.id',
+				'comment' => 'Id de un escenario'
 			],
 			'id_to' => [
 				'type'    => OCore::PK,
 				'incr' => false,
-				'comment' => 'Id del producto'
+				'ref' => 'scenario.id',
+				'comment' => 'Id del escenario con el que conecta'
 			],
 			'direction' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
-				'comment' => 'Id del producto'
+				'comment' => 'Sentido de la conexión 1 arriba 2 derecha 3 abajo 4 izquierda'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,

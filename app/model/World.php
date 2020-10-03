@@ -1,39 +1,47 @@
 <?php declare(strict_types=1);
-class Inventory extends OModel {
+class World extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
 	 */	function __construct() {
-		$table_name  = 'inventory';
+		$table_name  = 'world';
 		$model = [
 			'id' => [
 				'type'    => OCore::PK,
-				'comment' => 'Id único del elemento del inventario'
+				'comment' => 'Id único para cada mundo'
 			],
-			'id_game' => [
-				'type'    => OCore::NUM,
+			'name' => [
+				'type'    => OCore::TEXT,
 				'nullable' => false,
 				'default' => null,
-				'ref' => 'game.id',
-				'comment' => 'Id de la partida en la que está el elemento'
+				'size' => 50,
+				'comment' => 'Nombre del mundo'
 			],
-			'id_item' => [
-				'type'    => OCore::NUM,
+			'description' => [
+				'type'    => OCore::LONGTEXT,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Descripción del mundo'
+			],
+			'word_one' => [
+				'type'    => OCore::TEXT,
 				'nullable' => false,
 				'default' => null,
-				'ref' => 'item.id',
-				'comment' => 'Id del elemento'
+				'size' => 20,
+				'comment' => 'Primera palabra para acceder al mundo'
 			],
-			'order' => [
-				'type'    => OCore::NUM,
+			'word_two' => [
+				'type'    => OCore::TEXT,
 				'nullable' => false,
 				'default' => null,
-				'comment' => 'Orden del elemento en el inventario'
+				'size' => 20,
+				'comment' => 'Segunda palabra para acceder al mundo'
 			],
-			'num' => [
-				'type'    => OCore::NUM,
+			'word_three' => [
+				'type'    => OCore::TEXT,
 				'nullable' => false,
 				'default' => null,
-				'comment' => 'Cantidad del item en el inventario'
+				'size' => 20,
+				'comment' => 'Tercera palabra para acceder al mundo'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
