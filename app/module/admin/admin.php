@@ -69,6 +69,7 @@ class admin extends OModule {
 	 * Nueva acción logout
 	 *
 	 * @url /admin/logout
+	 * @filter adminFilter
 	 * @type html
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
@@ -78,4 +79,136 @@ class admin extends OModule {
 		header('location: /admin');
 		exit;
 	}
+
+	/**
+	 * Nueva acción worlds
+	 *
+	 * @url /admin/worlds
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function worlds(ORequest $req): void {}
+
+	/**
+	 * Nueva acción scenarios
+	 *
+	 * @url /admin/world/:id_world/scenarios
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function scenarios(ORequest $req): void {}
+
+	/**
+	 * Nueva acción editScenario
+	 *
+	 * @url /admin/world/:id_world/scenario/:id_scenario
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function editScenario(ORequest $req): void {}
+
+	/**
+	 * Nueva acción resources
+	 *
+	 * @url /admin/resources
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function resources(ORequest $req): void {}
+
+	/**
+	 * Nueva acción backgrounds
+	 *
+	 * @url /admin/resources/backgrounds
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function backgrounds(ORequest $req): void {}
+
+	/**
+	 * Nueva acción backgroundCategories
+	 *
+	 * @url /admin/resources/backgrounds/categories
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function backgroundCategories(ORequest $req): void {}
+
+	/**
+	 * Nueva acción characters
+	 *
+	 * @url /admin/resources/characters
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function characters(ORequest $req): void {}
+
+	/**
+	 * Nueva acción scenarioObjects
+	 *
+	 * @url /admin/resources/scenario-objects
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function scenarioObjects(ORequest $req): void {}
+
+	/**
+	 * Nueva acción items
+	 *
+	 * @url /admin/resources/items
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function items(ORequest $req): void {}
+
+	/**
+	 * Nueva acción assets
+	 *
+	 * @url /admin/resources/assets
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function assets(ORequest $req): void {}
+
+	/**
+	 * Nueva acción users
+	 *
+	 * @url /admin/users
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function users(ORequest $req): void {}
+
+	/**
+	 * Nueva acción userGames
+	 *
+	 * @url /admin/user/:id_user/games
+	 * @filter adminFilter
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function userGames(ORequest $req): void {}
 }
