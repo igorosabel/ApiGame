@@ -61,5 +61,21 @@ class admin extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function main(ORequest $req): void {}
+	public function main(ORequest $req): void {
+		$this->getTemplate()->addCss('admin');
+	}
+
+	/**
+	 * Nueva acción logout
+	 *
+	 * @url /admin/logout
+	 * @type html
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function logout(ORequest $req): void {
+		$this->getSession()->removeParam('admin_login');
+		header('location: /admin');
+		exit;
+	}
 }
