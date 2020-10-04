@@ -46,11 +46,24 @@ header {
 	}
 
 	a {
+		position: absolute;
+		display: flex;
+		height: 50px;
+		align-items: center;
 		color: #fff;
 		text-decoration: none;
+		padding: 0 16px;
 
 		&:hover {
 			color: #ff0;
 		}
+	}
+	
+	.header-left {
+		left: 0;
+	}
+	
+	.header-right {
+		right: 0;
 	}
 }
