@@ -1,0 +1,21 @@
+<header>
+	The Game
+</header>
+
+<form action="/admin/login" method="post" class="admin-login-form">
+	<div class="box">
+		<div class="header">Iniciar sesión</div>
+		<div class="body">
+			<div class="row">
+				<input type="text" name="login-name" id="login-name" placeholder="Usuario">
+			</div>
+			<div class="row">
+				<input type="password" name="login-password" id="login-password" placeholder="Contraseña">
+			</div>
+		</div>
+		<div class="footer">
+			<input type="submit" value="Continuar">
+		</div>
+		<div class="error error-{{errormsg}}">Nombre de usuario o contraseña incorrecto</div>
+	</div>
+</form>

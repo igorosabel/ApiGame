@@ -12,8 +12,8 @@ function adminFilter(array $params, array $headers): array {
 	global $core;
 	$ret = ['status'=>'error', 'id'=>null];
 
-	if ($core->session->getParam('admin')){
-      $ret['status'] = 'ok';
+	if ($core->session->getParam('admin_login')===true) {
+        $ret['status'] = 'ok';
     }
 
 	return $ret;
