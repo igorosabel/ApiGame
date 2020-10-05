@@ -47,6 +47,14 @@ function updateList() {
 			});
 			list.innerHTML += str;
 		}
+		let editButtons = document.querySelectorAll('.world-edit');
+		editButtons.forEach((item, i) => {
+			item.addEventListener('click', editWorld);
+		});
+		let deleteButtons = document.querySelectorAll('.world-delete');
+		deleteButtons.forEach((item, i) => {
+			item.addEventListener('click', deleteWorld);
+		});
 	}
 	else {
 		list.innerHTML = template('world-list-empty', {mesg: 'Todavía no hay ningún mundo.'});
@@ -143,4 +151,12 @@ function saveWorldSuccess(result) {
 	else {
 		alert('¡Ocurrió un error al guardar el mundo!');
 	}
+}
+
+function editWorld(ev) {
+	console.log(ev);
+}
+
+function deleteWorld(ev) {
+	console.log(ev);
 }

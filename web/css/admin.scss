@@ -127,20 +127,46 @@
     margin: 50px auto 0;
     color: #000;
 
-	& > div {
+	.header {
 		display: flex;
 		height: 50px;
 		align-items: center;
 		padding-left: 16px;
-	}
-
-	.header {
 		font-size: 1.2em;
 		border-bottom: 1px solid #ccc;
 	}
 
 	.row {
+		display: flex;
+		height: 50px;
+		align-items: center;
+		position: relative;
 
+		a {
+			color: #000;
+			text-decoration: none;
+			height: 50px;
+			display: inline-flex;
+			align-items: center;
+			width: 100%;
+			padding-left: 16px;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		.world-edit {
+			position: absolute;
+			cursor: pointer;
+			right: 48px;
+		}
+
+		.world-delete {
+			position: absolute;
+			cursor: pointer;
+			right: 16px;
+		}
 	}
 }
 
@@ -169,13 +195,13 @@
 			font-size: 1.2em;
 			border-bottom: 1px solid #ccc;
 			position: relative;
-			
+
 			a {
 				position: absolute;
 				right: 16px;
 				color: #888;
 				text-decoration: none;
-				
+
 				&:hover {
 					color: #000;
 				}
