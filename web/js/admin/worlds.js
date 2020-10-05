@@ -3,6 +3,8 @@ const addBtn = document.querySelector('#add-btn');
 addBtn.addEventListener('click', showAddWorld);
 const worldDetail = document.querySelector('#world');
 const worldDetailHeader = document.querySelector('#world-header');
+const worldDetailClose = document.querySelector('#world-close');
+worldDetailClose.addEventListener('click', showAddWorld);
 const worldDetailName = document.querySelector('#world-name');
 const worldDetailDescription = document.querySelector('#world-description');
 const worldDetailWordOne = document.querySelector('#world-word-one');
