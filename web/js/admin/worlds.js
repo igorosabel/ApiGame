@@ -154,7 +154,20 @@ function saveWorldSuccess(result) {
 }
 
 function editWorld(ev) {
-	console.log(ev);
+	const worldId = parseInt(ev.target.dataset.id);
+	const ind = worldList.findIndex(x => x.id==worldId);
+
+	loadedWorld.id = worldList[ind].id;
+	loadedWorld.name = urldecode(worldList[ind].name);
+	loadedWorld.description = urldecode(worldList[ind].description);
+	loadedWorld.word_one = urldecode(worldList[ind].word_one);
+	loadedWorld.word_two = urldecode(worldList[ind].word_two);
+	loadedWorld.word_three = urldecode(worldList[ind].word_three);
+	loadedWorld.friendly = worldList[ind].friendly;
+
+	worldDetailHeader.innerHTML = 'Editar mundo';
+	loadWorld();
+	worldDetail.classList.add('world-detail-show');
 }
 
 function deleteWorld(ev) {
