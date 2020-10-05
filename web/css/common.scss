@@ -58,12 +58,51 @@ header {
 			color: #ff0;
 		}
 	}
-	
+
 	.header-left {
 		left: 0;
 	}
-	
+
 	.header-right {
 		right: 0;
 	}
+}
+
+input[type='text'], input[type='password'] {
+	font-family: 'GraphicPixel', Helvetica, sans-serif;
+	height: 50px;
+	font-size: 1.2em;
+	padding-left: 16px;
+	width: 100%;
+	border: 0;
+	border-bottom: 1px solid #ccc;
+	outline: 0;
+
+	&:focus {
+		border-bottom: 1px solid #000;
+	}
+}
+
+input[type='checkbox'] {
+	appearance: checkbox;
+}
+
+textarea {
+	font-family: 'GraphicPixel', Helvetica, sans-serif;
+	height: 150px;
+	font-size: 1.2em;
+	padding-left: 16px;
+	width: 100%;
+	border: 0;
+	border-bottom: 1px solid #ccc;
+	outline: 0;
+
+	&:focus {
+		border-bottom: 1px solid #000;
+	}
+}
+
+.center {
+	justify-content: center;
+	text-align: center;
 }

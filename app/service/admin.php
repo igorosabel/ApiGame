@@ -8,43 +8,20 @@ class adminService extends OService {
 	}
 
 	/**
-	 * Obtiene la lista de escenarios ordenados por nombre
+	 * Función para obtener el listado de mundos
 	 *
-	 * @return array Lista de escenarios
+	 * @return array Listado de mundos
 	 */
-	public function getScenarios(): array {
-		$ret = [];
+	public function getWorlds(): array {
 		$db = new ODB();
-		$sql = "SELECT * FROM `scenario` ORDER BY `name` ASC";
+		$sql = "SELECT * FROM `world` ORDER BY `name` ASC";
 		$db->query($sql);
+		$ret = [];
 
 		while ($res=$db->next()) {
-			$sce = new Scenario();
-			$sce->update($res);
-
-			array_push($ret, $sce);
-		}
-
-		return $ret;
-	}
-
-	/**
-	 * Obtiene la lista de usuarios ordenados por email
-	 *
-	 * @return array Lista de usuarios
-	 */
-	public function getUsers(): array {
-		$ret = [];
-		$db = new ODB();
-		$sql = "SELECT * FROM `user` ORDER BY `email` ASC";
-		$db->query($sql);
-
-		while ($res=$db->next()){
-			$usr = new User();
-			$usr->update($res);
-			$usr->loadGames();
-
-			array_push($ret, $usr);
+			$world = new World();
+			$world->update($res);
+			array_push($ret, $world);
 		}
 
 		return $ret;

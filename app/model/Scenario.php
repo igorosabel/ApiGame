@@ -39,6 +39,12 @@ class Scenario extends OModel {
 				'type'    => OCore::BOOL,
 				'comment' => 'Indica si es el escenario inicial 1 o no 0 del mundo'
 			],
+			'friendly' => [
+				'type' => OCore::BOOL,
+				'nullable' => false,
+				'default' => false,
+				'comment' => 'Indica si el escenario es amistoso'
+			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
 				'comment' => 'Fecha de creación del registro'

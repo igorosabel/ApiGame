@@ -1,5 +1,11 @@
 <?php declare(strict_types=1);
 class admin extends OModule {
+	private ?adminService $admin_service = null;
+
+	function __construct() {
+		$this->admin_service = new adminService();
+	}
+
 	/**
 	 * Pantalla para iniciar sesión en el admin
 	 *
@@ -40,7 +46,7 @@ class admin extends OModule {
 				$status = 'error';
 			}
 		}
-		
+
 		if ($status=='ok') {
 			$this->getSession()->addParam('admin_login', true);
 			header('location: /admin/main');
@@ -66,7 +72,7 @@ class admin extends OModule {
 	}
 
 	/**
-	 * Nueva acción logout
+	 * Función para cerrar sesión del admin
 	 *
 	 * @url /admin/logout
 	 * @filter adminFilter
@@ -81,7 +87,7 @@ class admin extends OModule {
 	}
 
 	/**
-	 * Nueva acción worlds
+	 * Página con el listado de mundos
 	 *
 	 * @url /admin/worlds
 	 * @filter adminFilter
@@ -89,10 +95,66 @@ class admin extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function worlds(ORequest $req): void {}
+	public function worlds(ORequest $req): void {
+		$this->getTemplate()->addCss('admin');
+	}
 
 	/**
-	 * Nueva acción scenarios
+	 * Función para obtener la lista de mundos
+	 *
+	 * @url /admin/world-list
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function worldList(ORequest $req): void {
+		$list = $this->admin_service->getWorlds();
+		$this->getTemplate()->addComponent('list', 'admin/worlds', ['list' => $list, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para guardar un mundo
+	 *
+	 * @url /admin/save-world
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveWorld(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$name = $req->getParamString('name');
+		$description = $req->getParamString('description');
+		$word_one = $req->getParamString('word_one');
+		$word_two = $req->getParamString('word_two');
+		$word_three = $req->getParamString('word_three');
+		$friendly = $req->getParamBool('friendly');
+
+		if (is_null($name) || is_null($word_one) || is_null($word_two) || is_null($word_three) || is_null($friendly)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+$this->getLog()->debug(var_export($req->getParams(), true));
+$this->getLog()->debug(var_export($friendly, true));
+			$world = new World();
+			if (!is_null($id)) {
+				$world->find(['id'=>$id]);
+			}
+			$world->set('name', $name);
+			$world->set('description', $description);
+			$world->set('word_one', $word_one);
+			$world->set('word_two', $word_two);
+			$world->set('word_three', $word_three);
+			$world->set('friendly', $friendly);
+			$world->save();
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Página con el listado de escenarios de un mundo
 	 *
 	 * @url /admin/world/:id_world/scenarios
 	 * @filter adminFilter
@@ -103,7 +165,7 @@ class admin extends OModule {
 	public function scenarios(ORequest $req): void {}
 
 	/**
-	 * Nueva acción editScenario
+	 * Página para editar un escenario
 	 *
 	 * @url /admin/world/:id_world/scenario/:id_scenario
 	 * @filter adminFilter
@@ -114,7 +176,7 @@ class admin extends OModule {
 	public function editScenario(ORequest $req): void {}
 
 	/**
-	 * Nueva acción resources
+	 * Página principal de recursos
 	 *
 	 * @url /admin/resources
 	 * @filter adminFilter
@@ -125,7 +187,7 @@ class admin extends OModule {
 	public function resources(ORequest $req): void {}
 
 	/**
-	 * Nueva acción backgrounds
+	 * Página con el listado de fondos
 	 *
 	 * @url /admin/resources/backgrounds
 	 * @filter adminFilter
@@ -136,7 +198,7 @@ class admin extends OModule {
 	public function backgrounds(ORequest $req): void {}
 
 	/**
-	 * Nueva acción backgroundCategories
+	 * Página con el listado de categorías de fondos
 	 *
 	 * @url /admin/resources/backgrounds/categories
 	 * @filter adminFilter
@@ -147,7 +209,7 @@ class admin extends OModule {
 	public function backgroundCategories(ORequest $req): void {}
 
 	/**
-	 * Nueva acción characters
+	 * Página con el listado de personajes
 	 *
 	 * @url /admin/resources/characters
 	 * @filter adminFilter
@@ -158,7 +220,7 @@ class admin extends OModule {
 	public function characters(ORequest $req): void {}
 
 	/**
-	 * Nueva acción scenarioObjects
+	 * Página con el listado de objetos de escenario
 	 *
 	 * @url /admin/resources/scenario-objects
 	 * @filter adminFilter
@@ -169,7 +231,7 @@ class admin extends OModule {
 	public function scenarioObjects(ORequest $req): void {}
 
 	/**
-	 * Nueva acción items
+	 * Página con el listado de items
 	 *
 	 * @url /admin/resources/items
 	 * @filter adminFilter
@@ -180,7 +242,7 @@ class admin extends OModule {
 	public function items(ORequest $req): void {}
 
 	/**
-	 * Nueva acción assets
+	 * Página con el listado de recursos
 	 *
 	 * @url /admin/resources/assets
 	 * @filter adminFilter
@@ -191,7 +253,7 @@ class admin extends OModule {
 	public function assets(ORequest $req): void {}
 
 	/**
-	 * Nueva acción users
+	 * Página con el listado de usuarios
 	 *
 	 * @url /admin/users
 	 * @filter adminFilter
@@ -202,7 +264,7 @@ class admin extends OModule {
 	public function users(ORequest $req): void {}
 
 	/**
-	 * Nueva acción userGames
+	 * Página con el listado de partidas y detalle de un jugador
 	 *
 	 * @url /admin/user/:id_user/games
 	 * @filter adminFilter

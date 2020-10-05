@@ -43,6 +43,12 @@ class World extends OModel {
 				'size' => 20,
 				'comment' => 'Tercera palabra para acceder al mundo'
 			],
+			'friendly' => [
+				'type' => OCore::BOOL,
+				'nullable' => false,
+				'default' => false,
+				'comment' => 'Indica si el mundo es amistoso'
+			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
 				'comment' => 'Fecha de creación del registro'
