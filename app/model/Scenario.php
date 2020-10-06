@@ -59,4 +59,13 @@ class Scenario extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	public function deleteFull(): void {
+		$sql = "DELETE FROM `connection` WHERE `id_from` = ? OR `id_to` = ?";
+		$this->db->query($sql, [$this->get('id'), $this->get('id')]);
+		$sql = "DELETE FROM `scenario_data` WHERE `id_scenario` = ?";
+		$this->db->query($sql, [$this->get('id')]);
+
+		$this->delete();
+	}
 }

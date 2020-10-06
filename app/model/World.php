@@ -63,4 +63,90 @@ class World extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	private ?array $scenarios = null;
+
+	/**
+	 * Función para obtener los escenarios de un mundo
+	 *
+	 * @return array Lista de escenarios del mundo
+	 */
+	public function getScenarios(): array {
+		if (is_null($this->scenarios)) {
+			$this->loadScenarios();
+		}
+		return $this->scenarios;
+	}
+
+	/**
+	 * Función para guardar los escenarios de un mundo
+	 *
+	 * @param array $scenarios Lista de escenarios
+	 *
+	 * @return void
+	 */
+	public function setScenarios(array $scenarios): void {
+		$this->scenarios = $scenarios;
+	}
+
+	/**
+	 * Función para cargar los escenarios de un mundo
+	 *
+	 * @return void
+	 */
+	public function loadScenarios(): void {
+		$list = [];
+		$sql = "SELECT * FROM `scenario` WHERE `id_world` = ?";
+		$this->db->query($sql, [$this->get('id')]);
+
+		while ($res = $this->db->next()) {
+			$scenario = new Scenario();
+			$scenario->update($res);
+			array_push($list, $scenario);
+		}
+
+		$this->setScenarios($list);
+	}
+
+	private ?Scenario $initial_scenario = null;
+
+	/**
+	 * Función para obtener el escenario inicial del mundo
+	 *
+	 * @return Scenario Escenario inicial del mundo
+	 */
+	public function getInitialScenario(): ?Scenario {
+		if (is_null($this->initial_scenario)) {
+			$this->loadInitialScenario();
+		}
+		return $this->initial_scenario;
+	}
+
+	/**
+	 * Función para guardar el escenario inicial del mundo
+	 *
+	 * @param Scenario Escenario inicial
+	 *
+	 * @return void
+	 */
+	public function setInitialScenario(Scenario $scenario): void {
+		$this->initial_scenario = $scenario;
+	}
+
+	/**
+	 * Función para cargar el escenario inicial del mundo
+	 *
+	 * @return void
+	 */
+	public function loadInitialScenario(): void {
+		$sql = "SELECT * FROM `scenario` WHERE `id_world` = ? AND `initial` = 1";
+		$this->db->query($sql, [$this->get('id')]);
+
+		if ($res = $this->db->next()) {
+			$scenario = new Scenario();
+			$scenario->update($res);
+
+			$this->setInitialScenario($scenario);
+		}
+	}
 }

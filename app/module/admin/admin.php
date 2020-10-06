@@ -1,9 +1,11 @@
 <?php declare(strict_types=1);
 class admin extends OModule {
 	private ?adminService $admin_service = null;
+	private ?webService $web_service = null;
 
 	function __construct() {
 		$this->admin_service = new adminService();
+		$this->web_service = new webService();
 	}
 
 	/**
@@ -135,8 +137,6 @@ class admin extends OModule {
 		}
 
 		if ($status=='ok') {
-$this->getLog()->debug(var_export($req->getParams(), true));
-$this->getLog()->debug(var_export($friendly, true));
 			$world = new World();
 			if (!is_null($id)) {
 				$world->find(['id'=>$id]);
@@ -148,6 +148,36 @@ $this->getLog()->debug(var_export($friendly, true));
 			$world->set('word_three', $word_three);
 			$world->set('friendly', $friendly);
 			$world->save();
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para borrar un mundo
+	 *
+	 * @url /admin/delete-world
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function deleteWorld(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$world = new World();
+			if ($world->find(['id'=>$id])) {
+				$origin_world = $this->web_service->getOriginWorld();
+				$this->admin_service->deleteWorld($world, $origin_world);
+			}
+			else {
+				$status = 'error';
+			}
 		}
 
 		$this->getTemplate()->add('status', $status);

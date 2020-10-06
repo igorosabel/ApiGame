@@ -16,9 +16,9 @@
 		"width": 24,
 		"height": 18,
 		"admin_pass": "patata",
-		"start_word_one": "origen",
-		"start_word_two": "inicio",
-		"start_word_three": "juego"
+		"origin_word_one": "origen",
+		"origin_word_two": "inicio",
+		"origin_word_three": "juego"
 	},
 	"dir": {
 		"assets": "{{web}}assets/"

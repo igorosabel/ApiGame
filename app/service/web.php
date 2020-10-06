@@ -32,4 +32,17 @@ class webService extends OService {
 
 		return null;
 	}
+
+	/**
+	 * Obtiene el mundo origen
+	 *
+	 * @return World Mundo origen
+	 */
+	public function getOriginWorld(): World {
+		return $this->getWorldByWords(
+			$this->getConfig()->getExtra('origin_word_one'),
+			$this->getConfig()->getExtra('origin_word_two'),
+			$this->getConfig()->getExtra('origin_word_three')
+		);
+	}
 }

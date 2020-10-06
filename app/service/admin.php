@@ -26,4 +26,33 @@ class adminService extends OService {
 
 		return $ret;
 	}
+
+	/**
+	 * Función para borrar un mundo y todas sus relaciones
+	 *
+	 * @return void
+	 */
+	public function deleteWorld(World $world, World $origin_world): void {
+		$db = new ODB();
+		$origin_world_initial_scenario = $origin_world->getInitialScenario();
+		$origin_world_initial_scenario_id = null;
+		if (!is_null($origin_world_initial_scenario)) {
+			$origin_world_initial_scenario_id = $origin_world_initial_scenario->get('id');
+		}
+
+		foreach ($world->getScenarios() as $scenario) {
+			// Todos los que estuviesen en un escenario del mundo a borrar, los mando al escenario inicial
+			$sql = "UPDATE `game` SET `id_scenario` = ? WHERE `id_scenario` = ?";
+			$db->query($sql, [$origin_world_initial_scenario_id, $scenario->get('id')]);
+			// Borro el escenario
+			$scenario->deleteFull();
+		}
+
+		// Borro todos los mundos desbloqueados
+		$sql = "DELETE FROM `world_unlocked` WHERE `id_world` = ?";
+		$db->query($sql, [$world->get('id')]);
+
+		// Borro el mundo
+		$world->delete();
+	}
 }
