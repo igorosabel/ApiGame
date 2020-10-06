@@ -139,8 +139,10 @@ function saveWorld() {
 		worldDetailWordThree.focus();
 	}
 
-	updateWorld();
-	postAjax('/admin/save-world', loadedWorld, saveWorldSuccess);
+	if (validate) {
+		updateWorld();
+		postAjax('/admin/save-world', loadedWorld, saveWorldSuccess);
+	}
 }
 
 function saveWorldSuccess(result) {
@@ -173,10 +175,10 @@ function editWorld(ev) {
 function deleteWorld(ev) {
 	const worldId = parseInt(ev.target.dataset.id);
 	const ind = worldList.findIndex(x => x.id==worldId);
-	
+
 	const conf = confirm('¿Estás seguro de querer borrar el mundo "'+urldecode(worldList[ind].name)+'"?');
 	if (conf) {
-		postAjax('/admin/delete-world', {id:worldList[ind].id}, deleteWorldSuccess);
+		postAjax('/admin/delete-world', {id: worldList[ind].id}, deleteWorldSuccess);
 	}
 }
 

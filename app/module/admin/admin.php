@@ -192,7 +192,105 @@ class admin extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function scenarios(ORequest $req): void {}
+	public function scenarios(ORequest $req): void {
+		$id = $req->getParamInt('id_world');
+		$world = new World();
+		$world->find(['id'=>$id]);
+		$scenarios = $world->getScenarios();
+
+		$this->getTemplate()->addCss('admin');
+		$this->getTemplate()->add('worldId', $id);
+		$this->getTemplate()->addComponent('list', 'admin/scenarios', ['list' => $scenarios]);
+	}
+
+	/**
+	 * Función para obtener la lista de escenarios
+	 *
+	 * @url /admin/scenario-list
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function scenarioList(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$list = [];
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$list = $this->admin_service->getScenarios($id);
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/scenarios', ['list' => $list, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para guardar un escenario
+	 *
+	 * @url /admin/save-scenario
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveScenario(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$id_world = $req->getParamInt('id_world');
+		$name = $req->getParamString('name');
+		$friendly = $req->getParamBool('friendly');
+
+		if (is_null($name) || is_null($id_world) || is_null($friendly)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$scenario = new Scenario();
+			if (!is_null($id)) {
+				$scenario->find(['id'=>$id]);
+			}
+			$scenario->set('id_world', $id_world);
+			$scenario->set('name', $name);
+			$scenario->set('friendly', $friendly);
+
+			$scenario->save();
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para borrar un mundo
+	 *
+	 * @url /admin/delete-scenario
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function deleteScenario(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$scenario = new Scenario();
+			if ($scenario->find(['id'=>$id])) {
+				$origin_world = $this->web_service->getOriginWorld();
+				$this->admin_service->deleteScenario($scenario, $origin_world);
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
 
 	/**
 	 * Página para editar un escenario
