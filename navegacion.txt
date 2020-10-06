@@ -4,7 +4,7 @@ X Admin ( /admin/main )
 		listado (editar / borrar) -> va a Escenarios
 		añadir nuevo
 
-		Escenarios del mundo X ( /admin/world/:id_world/scenarios )
+		X Escenarios del mundo X ( /admin/world/:id_world/scenarios )
 			listado -> va a Editar Escenario
 			añadir nuevo
 
