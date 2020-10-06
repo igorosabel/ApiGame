@@ -411,6 +411,44 @@
 	}
 }
 
+/* Backgrounds */
+.backgrounds-header {
+	padding: 50px 16px 0 16px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 16px;
+
+	& > div {
+		flex: 1;
+
+		& > select {
+			display: inline-block;
+		    padding: 8px;
+		    background-color: #000;
+		    color: #fff;
+		    border: 1px solid #000;
+		    font-family: "GraphicPixel",Helvetica,sans-serif;
+			cursor: pointer;
+			transition: all .3s ease-in-out;
+
+			&:hover {
+				border: 1px solid #fff;
+			}
+		}
+	}
+
+	& > a {
+		color: #fff;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
 /* Common */
 .fab-button {
 	position: fixed;

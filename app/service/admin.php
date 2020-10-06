@@ -106,4 +106,24 @@ class adminService extends OService {
 		// Borro el escenario
 		$scenario->deleteFull();
 	}
+
+	/**
+	 * Función para obtener la lista completa de categorías de fondos
+	 *
+	 * @return array Lista de categorías de fondos
+	 */
+	public function getBackgroundCategories(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `background_category` ORDER BY `name`";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res=$db->next()) {
+			$background_category = new BackgroundCategory();
+			$background_category->update($res);
+			array_push($ret, $background_category);
+		}
+
+		return $ret;
+	}
 }

@@ -16,7 +16,7 @@ X Admin ( /admin/main )
 					objeto -> se elige de la lista pero se puede personalizar
 					personaje -> se elige de la lista
 
-	Todos los recursos ( /admin/resources )
+	X Todos los recursos ( /admin/resources )
 
 		Fondos ( /admin/resources/backgrounds )
 			listado completo (editar / borrar)

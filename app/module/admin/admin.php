@@ -325,7 +325,11 @@ class admin extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function backgrounds(ORequest $req): void {}
+	public function backgrounds(ORequest $req): void {
+		$background_categories = $this->admin_service->getBackgroundCategories();
+		$this->getTemplate()->addCss('admin');
+		$this->getTemplate()->addComponent('background_categories', 'admin/background_category_select', ['list' => $background_categories]);
+	}
 
 	/**
 	 * Página con el listado de categorías de fondos

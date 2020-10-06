@@ -1,1 +1,19 @@
-¡La nueva acción <strong>backgrounds</strong> funciona!
+<header>
+	<a href="/admin/resources" class="header-left">&lt; Recursos</a>
+	Fondos
+	<a class="header-right" href="/admin/logout">Salir</a>
+</header>
+
+<div class="backgrounds-header">
+	<div>
+		<select id="backgrounds-filter-category">
+			<option value="0">Elige una categoría</option>
+			{{background_categories}}
+		</select>
+	</div>
+	<a href="/admin/resources/backgrounds/categories">Categorías de fondos</a>
+</div>
+
+<script>
+	let backgroundList = [];
+</script>
