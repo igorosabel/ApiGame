@@ -312,7 +312,9 @@ class admin extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function resources(ORequest $req): void {}
+	public function resources(ORequest $req): void {
+		$this->getTemplate()->addCss('admin');
+	}
 
 	/**
 	 * Página con el listado de fondos
