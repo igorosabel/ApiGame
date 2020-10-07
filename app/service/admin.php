@@ -126,4 +126,115 @@ class adminService extends OService {
 
 		return $ret;
 	}
+
+	/**
+	 * Función para obtener la lista completa de tags
+	 *
+	 * @return array Lista de tags
+	 */
+	public function getTags(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `tag` ORDER BY `name`";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res=$db->next()) {
+			$tag = new Tag();
+			$tag->update($res);
+			array_push($ret, $tag);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Función para obtener la lista completa de recursos
+	 *
+	 * @return array Lista de recursos
+	 */
+	public function getAssets(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `asset` ORDER BY `name`";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res=$db->next()) {
+			$asset = new Asset();
+			$asset->update($res);
+			array_push($ret, $asset);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Función para obtener la extensión de un archivo a partir de una cadena de texto en Base64
+	 *
+	 * @param string $url Archivo en formato Base64
+	 *
+	 * @return string Extensión del tipo de archivo
+	 */
+	public function getFileExt(string $url): string {
+		$info = explode(';', $url);
+		$file_data = explode('/', $info[0]);
+
+		return $file_data[1];
+	}
+
+	/**
+	 * Función para guardar un archivo pasado como Base64
+	 *
+	 * @param Asset $asset Recurso al que pertenece la imagen
+	 *
+	 * @param string $url Archivo en formato Base64
+	 *
+	 * @return void
+	 */
+	public function saveAssetImage(Asset $asset, string $url): void {
+		$route = $this->getConfig()->getDir('assets').$asset->get('id').'.'.$asset->get('ext');
+		$this->getLog()->debug($url);
+		OTools::base64ToFile($url, $route);
+	}
+
+	/**
+	 * Función para actualizar las tags de un asset
+	 *
+	 * @param Asset $asset Recurso al que actualizar las tags
+	 *
+	 * @param string $tags Lista de tags separadas por comas
+	 *
+	 * @return void
+	 */
+	public function updateAssetTags(Asset $asset, string $tags): void {
+		$db = new ODB();
+		$tag_list = explode(',', $tags);
+		$asset_tag_list = [];
+
+		// Busco o creo las tags introducidas
+		foreach ($tag_list as $str_tag) {
+			$str_tag = trim($str_tag);
+			$tag = new Tag();
+			if (!$tag->find(['name'=>$str_tag])) {
+				$tag->set('name', $str_tag);
+				$tag->save();
+			}
+			array_push($asset_tag_list, $tag);
+		}
+
+		// Borro todas las relaciones entre tags y asset
+		$sql = "DELETE FROM `asset_tag` WHERE `id_asset` = ?";
+		$db->query($sql, [$asset->get('id')]);
+
+		// Creo las relaciones de las tags actuales
+		foreach ($asset_tag_list as $tag) {
+			$asset_tag = new AssetTag();
+			$asset_tag->set('id_asset', $asset->get('id'));
+			$asset_tag->set('id_tag', $tag->get('id'));
+			$asset_tag->save();
+		}
+
+		// Borro tags que ya no se usan
+		$sql = "DELETE FROM `tag` WHERE `id` NOT IN (SELECT DISTINCT(`id_tag`) FROM `asset_tag`)";
+		$db->query($sql);
+	}
 }

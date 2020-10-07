@@ -1,1 +1,73 @@
-¡La nueva acción <strong>assets</strong> funciona!
+<header>
+	<a href="/admin/resources" class="header-left">&lt; Recursos</a>
+	Recursos
+	<a class="header-right" href="/admin/logout">Salir</a>
+</header>
+
+<div class="assets-header">
+	<select id="assets-filter-tag">
+		<option value="0">Elige una tag</option>
+		{{tags}}
+	</select>
+	<select id="assets-filter-world">
+		<option value="0">Elige un mundo</option>
+		{{worlds}}
+	</select>
+</div>
+
+<div class="asset-list" id="list"></div>
+
+<a href="#" class="fab-button" id="add-btn">+</a>
+
+<div class="asset-detail" id="asset">
+	<div class="box">
+		<div class="header">
+			<span id="asset-header"></span>
+			<a href="#" id="asset-close">X</a>
+		</div>
+		<div class="row">
+			<input type="text" name="asset-name" id="asset-name" value="" placeholder="Nombre del recurso">
+		</div>
+		<div class="row">
+			<label for="asset-world">Mundo</label>
+			<select id="asset-world">
+				<option value="null">Ninguno</option>
+				{{worlds}}
+			</select>
+		</div>
+		<div class="row row-image">
+			<div class="asset-preview" id="asset-image"></div>
+			<button id="asset-file-go">Elegir archivo</button>
+			<button class="btn-hide" id="asset-file-go-loading" disabled="disabled">Cargando...</button>
+			<input type="file" id="asset-file" value="">
+		</div>
+		<div class="row">
+			<input type="text" name="asset-tags" id="asset-tags" value="" placeholder="Tags del recurso">
+		</div>
+		<div class="footer">
+			<button id="asset-go">Continuar</button>
+			<button class="btn-hide" id="asset-go-loading" disabled="disabled">Guardando...</button>
+		</div>
+	</div>
+</div>
+
+<script type="text/x-template" id="asset-list-item">
+	<div class="asset-item">
+		<img src="{{url}}" alt="{{name}}">
+		<div class="asset-info">
+			<span>{{name}}</span>
+			<img src="/img/edit.svg" alt="Editar" title="Editar" class="asset-edit" data-id="{{id}}">
+			<img src="/img/delete.svg" alt="Borrar" title="Borrar" class="asset-delete" data-id="{{id}}">
+		</div>
+	</div>
+</script>
+<script type="text/x-template" id="asset-list-empty">
+	<div class="asset-message">
+		{{mesg}}
+	</div>
+</script>
+
+<script>
+	let assetList = [ {{list}} ];
+</script>
+<script src="/js/admin/assets.js"></script>

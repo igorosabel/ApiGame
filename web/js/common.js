@@ -15,22 +15,38 @@ function getAjax(url, success) {
 /*
  * Función para hacer llamadas AJAX usando POST
  */
-function postAjax(url, data, success) {
+async function postAjax(url, data, success) {
+	const options = {
+	    method: 'POST',
+	    body: JSON.stringify(data),
+	    headers: {
+	        'Content-Type': 'application/json'
+	    }
+	}
+
+	const response = await fetch(url, options);
+	const result = await response.json();
+	success && success(result);
+
+	/*fetch(url, options)
+	    .then(res => res.json())
+	    .then(res => success(res))
+	    .catch(err => console.error(err));*/
+	/*
 	let params = '';
 	if (typeof data === 'string') {
 		params = data;
 	}
 	else {
-		const newParams = [];
+		params = new FormData();
 		for (let i in data) {
 			if (!Array.isArray(data[i])) {
-				newParams.push(i+'='+data[i]);
+				params.append(i, data[i]);
 			}
 			else {
-				newParams.push(i + '=' + JSON.stringify(data[i]));
+				params.append(i, JSON.stringify(data[i]));
 			}
 		}
-		params = newParams.join('&');
 	}
 
 	const xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
@@ -41,7 +57,7 @@ function postAjax(url, data, success) {
 	xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.send(params);
-	return xhr;
+	return xhr;*/
 }
 
 /*

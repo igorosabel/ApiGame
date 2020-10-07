@@ -384,7 +384,108 @@ class admin extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function assets(ORequest $req): void {}
+	public function assets(ORequest $req): void {
+		$tags   = $this->admin_service->getTags();
+		$worlds = $this->admin_service->getWorlds();
+		$assets = $this->admin_service->getAssets();
+
+		$this->getTemplate()->addCss('admin');
+		$this->getTemplate()->addComponent('tags',   'admin/tags_select',   ['list' => $tags]);
+		$this->getTemplate()->addComponent('worlds', 'admin/worlds_select', ['list' => $worlds]);
+		$this->getTemplate()->addComponent('list',   'admin/assets',        ['list' => $assets]);
+	}
+
+	/**
+	 * Función para guardar un recurso
+	 *
+	 * @url /admin/save-asset
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveAsset(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$id_world = $req->getParamInt('id_world');
+		$name = $req->getParamString('name');
+		$url = $req->getParamString('url');
+		$tags = $req->getParamString('tags');
+$this->getLog()->debug('POST');
+$this->getLog()->debug(var_export($_POST, true));
+$this->getLog()->debug('REQ PARAMS');
+$this->getLog()->debug(var_export($req->getParams(), true));
+$this->getLog()->debug('ID');
+$this->getLog()->debug(var_export($id, true));
+$this->getLog()->debug('ID WORLD');
+$this->getLog()->debug(var_export($id_world, true));
+$this->getLog()->debug('NAME');
+$this->getLog()->debug(var_export($name, true));
+$this->getLog()->debug('URL');
+$this->getLog()->debug(var_export($url, true));
+$this->getLog()->debug('TAGS');
+$this->getLog()->debug(var_export($tags, true));
+		if (is_null($name)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$ext = null;
+			$asset = new Asset();
+			if (!is_null($id)) {
+				$asset->find(['id'=>$id]);
+				$ext = $asset->get('ext');
+			}
+			if (!is_null($url)) {
+				$ext = $this->admin_service->getFileExt($url);
+			}
+			$asset->set('id_world', $id_world);
+			$asset->set('name', $name);
+			$asset->set('ext', $ext);
+			$asset->save();
+
+			if (!is_null($url)) {
+				$this->admin_service->saveAssetImage($asset, $url);
+			}
+
+			if (!is_null($tags) && $tags!='') {
+				$this->admin_service->updateAssetTags($asset, $tags);
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para obtener la lista de recursos
+	 *
+	 * @url /admin/asset-list
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function assetList(ORequest $req): void {
+		$status = 'ok';
+		$assets = $this->admin_service->getAssets();
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/assets', ['list' => $assets, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para obtener la lista de tags
+	 *
+	 * @url /admin/tag-list
+	 * @type json
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function tagList(ORequest $req): void {
+		$status = 'ok';
+		$tags   = $this->admin_service->getTags();
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/tags', ['list' => $tags, 'extra' => 'nourlencode']);
+	}
 
 	/**
 	 * Página con el listado de usuarios
