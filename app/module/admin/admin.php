@@ -9,35 +9,19 @@ class admin extends OModule {
 	}
 
 	/**
-	 * Pantalla para iniciar sesión en el admin
-	 *
-	 * @url /admin
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function index(ORequest $req): void {
-		$errormsg = 'hide';
-		if (!is_null($this->getSession()->getParam('error-msg'))) {
-			$errormsg = 'show';
-			$this->getSession()->removeParam('error-msg');
-		}
-		$this->getTemplate()->addCss('admin');
-		$this->getTemplate()->add('errormsg', $errormsg);
-	}
-
-	/**
 	 * Función para iniciar sesión en el admin
 	 *
 	 * @url /admin/login
-	 * @type html
+	 * @type json
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
 	public function login(ORequest $req): void {
 		$status = 'ok';
-		$name = $req->getParamString('login-name');
-		$pass = $req->getParamString('login-password');
+		$id = -1;
+		$name = $req->getParamString('name');
+		$pass = $req->getParamString('pass');
+		$token = '';
 
 		if (is_null($name) || is_null($pass)) {
 			$status = 'error';
@@ -47,58 +31,20 @@ class admin extends OModule {
 			if ($name!='admin' || $pass!=$this->getConfig()->getExtra('admin_pass')) {
 				$status = 'error';
 			}
+			else {
+				$tk = new OToken($this->getConfig()->getExtra('secret'));
+				$tk->addParam('id',   $id);
+				$tk->addParam('name', $name);
+				$tk->addParam('admin', true);
+				$tk->addParam('exp', mktime() + (24 * 60 * 60));
+				$token = $tk->getToken();
+			}
 		}
 
-		if ($status=='ok') {
-			$this->getSession()->addParam('admin_login', true);
-			header('location: /admin/main');
-		}
-		else {
-			$this->getSession()->addParam('error-msg', true);
-			header('location: /admin');
-		}
-		exit;
-	}
-
-	/**
-	 * Pantalla principal del admin
-	 *
-	 * @url /admin/main
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function main(ORequest $req): void {
-		$this->getTemplate()->addCss('admin');
-	}
-
-	/**
-	 * Función para cerrar sesión del admin
-	 *
-	 * @url /admin/logout
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function logout(ORequest $req): void {
-		$this->getSession()->removeParam('admin_login');
-		header('location: /admin');
-		exit;
-	}
-
-	/**
-	 * Página con el listado de mundos
-	 *
-	 * @url /admin/worlds
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function worlds(ORequest $req): void {
-		$this->getTemplate()->addCss('admin');
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('id', $id);
+		$this->getTemplate()->add('name', $name);
+		$this->getTemplate()->add('token', $token);
 	}
 
 	/**
@@ -127,9 +73,9 @@ class admin extends OModule {
 		$id = $req->getParamInt('id');
 		$name = $req->getParamString('name');
 		$description = $req->getParamString('description');
-		$word_one = $req->getParamString('word_one');
-		$word_two = $req->getParamString('word_two');
-		$word_three = $req->getParamString('word_three');
+		$word_one = $req->getParamString('wordOne');
+		$word_two = $req->getParamString('wordTwo');
+		$word_three = $req->getParamString('wordThree');
 		$friendly = $req->getParamBool('friendly');
 
 		if (is_null($name) || is_null($word_one) || is_null($word_two) || is_null($word_three) || is_null($friendly)) {
@@ -184,26 +130,6 @@ class admin extends OModule {
 	}
 
 	/**
-	 * Página con el listado de escenarios de un mundo
-	 *
-	 * @url /admin/world/:id_world/scenarios
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function scenarios(ORequest $req): void {
-		$id = $req->getParamInt('id_world');
-		$world = new World();
-		$world->find(['id'=>$id]);
-		$scenarios = $world->getScenarios();
-
-		$this->getTemplate()->addCss('admin');
-		$this->getTemplate()->add('worldId', $id);
-		$this->getTemplate()->addComponent('list', 'admin/scenarios', ['list' => $scenarios]);
-	}
-
-	/**
 	 * Función para obtener la lista de escenarios
 	 *
 	 * @url /admin/scenario-list
@@ -239,7 +165,7 @@ class admin extends OModule {
 	public function saveScenario(ORequest $req): void {
 		$status = 'ok';
 		$id = $req->getParamInt('id');
-		$id_world = $req->getParamInt('id_world');
+		$id_world = $req->getParamInt('idWorld');
 		$name = $req->getParamString('name');
 		$friendly = $req->getParamBool('friendly');
 
@@ -293,30 +219,6 @@ class admin extends OModule {
 	}
 
 	/**
-	 * Página para editar un escenario
-	 *
-	 * @url /admin/world/:id_world/scenario/:id_scenario
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function editScenario(ORequest $req): void {}
-
-	/**
-	 * Página principal de recursos
-	 *
-	 * @url /admin/resources
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function resources(ORequest $req): void {
-		$this->getTemplate()->addCss('admin');
-	}
-
-	/**
 	 * Página con el listado de fondos
 	 *
 	 * @url /admin/resources/backgrounds
@@ -332,67 +234,19 @@ class admin extends OModule {
 	}
 
 	/**
-	 * Página con el listado de categorías de fondos
+	 * Función para obtener la lista de recursos
 	 *
-	 * @url /admin/resources/backgrounds/categories
-	 * @filter adminFilter
-	 * @type html
+	 * @url /admin/asset-list
+	 * @type json
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function backgroundCategories(ORequest $req): void {}
-
-	/**
-	 * Página con el listado de personajes
-	 *
-	 * @url /admin/resources/characters
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function characters(ORequest $req): void {}
-
-	/**
-	 * Página con el listado de objetos de escenario
-	 *
-	 * @url /admin/resources/scenario-objects
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function scenarioObjects(ORequest $req): void {}
-
-	/**
-	 * Página con el listado de items
-	 *
-	 * @url /admin/resources/items
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function items(ORequest $req): void {}
-
-	/**
-	 * Página con el listado de recursos
-	 *
-	 * @url /admin/resources/assets
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function assets(ORequest $req): void {
-		$tags   = $this->admin_service->getTags();
-		$worlds = $this->admin_service->getWorlds();
+	public function assetList(ORequest $req): void {
+		$status = 'ok';
 		$assets = $this->admin_service->getAssets();
 
-		$this->getTemplate()->addCss('admin');
-		$this->getTemplate()->addComponent('tags',   'admin/tags_select',   ['list' => $tags]);
-		$this->getTemplate()->addComponent('worlds', 'admin/worlds_select', ['list' => $worlds]);
-		$this->getTemplate()->addComponent('list',   'admin/assets',        ['list' => $assets]);
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/assets', ['list' => $assets, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -409,21 +263,8 @@ class admin extends OModule {
 		$id_world = $req->getParamInt('id_world');
 		$name = $req->getParamString('name');
 		$url = $req->getParamString('url');
-		$tags = $req->getParamString('tags');
-$this->getLog()->debug('POST');
-$this->getLog()->debug(var_export($_POST, true));
-$this->getLog()->debug('REQ PARAMS');
-$this->getLog()->debug(var_export($req->getParams(), true));
-$this->getLog()->debug('ID');
-$this->getLog()->debug(var_export($id, true));
-$this->getLog()->debug('ID WORLD');
-$this->getLog()->debug(var_export($id_world, true));
-$this->getLog()->debug('NAME');
-$this->getLog()->debug(var_export($name, true));
-$this->getLog()->debug('URL');
-$this->getLog()->debug(var_export($url, true));
-$this->getLog()->debug('TAGS');
-$this->getLog()->debug(var_export($tags, true));
+		$tags = $req->getParamString('tagList');
+
 		if (is_null($name)) {
 			$status = 'error';
 		}
@@ -450,25 +291,40 @@ $this->getLog()->debug(var_export($tags, true));
 			if (!is_null($tags) && $tags!='') {
 				$this->admin_service->updateAssetTags($asset, $tags);
 			}
+			else {
+				$this->admin_service->cleanAssetTags($asset);
+				$this->admin_service->cleanUnnusedTags();
+			}
 		}
 
 		$this->getTemplate()->add('status', $status);
 	}
 
 	/**
-	 * Función para obtener la lista de recursos
+	 * Función para borrar un recurso
 	 *
-	 * @url /admin/asset-list
+	 * @url /admin/delete-asset
 	 * @type json
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function assetList(ORequest $req): void {
+	public function deleteAsset(ORequest $req): void {
 		$status = 'ok';
-		$assets = $this->admin_service->getAssets();
+		$id = $req->getParamInt('id');
+		$message = '';
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$return = $this->admin_service->deleteAsset($id);
+			$status = $return['status'];
+			$message = $return['message'];
+		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/assets', ['list' => $assets, 'extra' => 'nourlencode']);
+		$this->getTemplate()->add('message', $message);
 	}
 
 	/**
@@ -486,26 +342,4 @@ $this->getLog()->debug(var_export($tags, true));
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/tags', ['list' => $tags, 'extra' => 'nourlencode']);
 	}
-
-	/**
-	 * Página con el listado de usuarios
-	 *
-	 * @url /admin/users
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function users(ORequest $req): void {}
-
-	/**
-	 * Página con el listado de partidas y detalle de un jugador
-	 *
-	 * @url /admin/user/:id_user/games
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function userGames(ORequest $req): void {}
 }

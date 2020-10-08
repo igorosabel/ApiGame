@@ -7,12 +7,13 @@
 		"charset": "utf8mb4",
 		"collate": "utf8mb4_unicode_ci"
 	},
-	"base_url": "https://game.osumi.es",
+	"base_url": "https://apigame.osumi.es",
 	"admin_email": "inigo.gorosabel@gmail.com",
 	"default_title": "Game",
 	"lang": "es",
 	"log_level": "ALL",
 	"extra": {
+		"secret": "228729f1961691fc5f25fdc8dd733ff3b75d8577",
 		"width": 24,
 		"height": 18,
 		"admin_pass": "patata",

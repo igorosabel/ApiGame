@@ -51,7 +51,8 @@ class Asset extends OModel {
 	 * @return string URL del recurso
 	 */
 	public function getUrl(): string {
-		return '/assets/'.$this->get('id').'.'.$this->get('ext');
+		global $core;
+		return $core->config->getUrl('base').'/assets/'.$this->get('id').'.'.$this->get('ext');
 	}
 
 	private ?array $tags = null;
@@ -109,7 +110,21 @@ class Asset extends OModel {
 		foreach ($list as $tag) {
 			array_push($tags, $tag->get('name'));
 		}
-		
+
 		return implode(', ', $tags);
+	}
+
+	/**
+	 * Función para borrar un recurso junto a su imagen
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		global $core;
+		$route = $core->config->getDir('assets').$this->get('id').'.'.$this->get('ext');
+		if (file_exists($route)) {
+			unlink($route);
+		}
+		$this->delete();
 	}
 }

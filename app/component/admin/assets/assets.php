@@ -1,7 +1,7 @@
 <?php foreach ($values['list'] as $i => $asset): ?>
 	{
 		"id": <?php echo $asset->get('id') ?>,
-		"id_world": <?php echo (!is_null($asset->get('id_world')) ? $asset->get('id_world') : 'null') ?>,
+		"idWorld": <?php echo (!is_null($asset->get('id_world')) ? $asset->get('id_world') : 'null') ?>,
 		"name": "<?php echo urlencode($asset->get('name')) ?>",
 		"url": "<?php echo urlencode($asset->getUrl()) ?>",
 		"tags": [

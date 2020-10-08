@@ -49,4 +49,38 @@ class CharacterFrame extends OModel {
 
 		parent::load($table_name, $model);
 	}
+	
+	private ?Character $character = null;
+
+	/**
+	 * Obtiene el personaje del frame
+	 *
+	 * @return Character Personaje del frame
+	 */
+	public function getCharacter(): Character {
+		if (is_null($this->character)) {
+			$this->loadCharacter();
+		}
+		return $this->character;
+	}
+
+	/**
+	 * Guarda el personaje del frame
+	 *
+	 * @param Character $character Personaje del frame
+	 */
+	public function setCharacter(Character $character): void {
+		$this->character = $character;
+	}
+
+	/**
+	 * Carga el personaje del frame
+	 *
+	 * @return void
+	 */
+	public function loadCharacter(): void {
+		$character = new Character();
+		$character->find(['id' => $this->get('id_character')]);
+		$this->setCharacter($character);
+	}
 }

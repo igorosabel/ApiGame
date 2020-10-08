@@ -1,7 +1,7 @@
 <?php foreach ($values['list'] as $i => $sce): ?>
 {
 	"id": <?php echo $sce->get('id') ?>,
-	"id_world": <?php echo $sce->get('id_world') ?>,
+	"idWorld": <?php echo $sce->get('id_world') ?>,
 	"name": "<?php echo urlencode($sce->get('name')) ?>",
 	"start_x": <?php echo (!is_null($sce->get('start_x'))) ? $sce->get('start_x') : 'null' ?>,
 	"start_y": <?php echo (!is_null($sce->get('start_y'))) ? $sce->get('start_y') : 'null' ?>,

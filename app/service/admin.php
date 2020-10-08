@@ -222,8 +222,7 @@ class adminService extends OService {
 		}
 
 		// Borro todas las relaciones entre tags y asset
-		$sql = "DELETE FROM `asset_tag` WHERE `id_asset` = ?";
-		$db->query($sql, [$asset->get('id')]);
+		$this->cleanAssetTags($asset);
 
 		// Creo las relaciones de las tags actuales
 		foreach ($asset_tag_list as $tag) {
@@ -234,7 +233,112 @@ class adminService extends OService {
 		}
 
 		// Borro tags que ya no se usan
+		$this->cleanUnnusedTags();
+	}
+
+	/**
+	 * Función para borrar la relación entre un recurso y sus tags
+	 *
+	 * @return void
+	 */
+	public function cleanAssetTags(Asset $asset): void {
+		$db = new ODB();
+		$sql = "DELETE FROM `asset_tag` WHERE `id_asset` = ?";
+		$db->query($sql, [$asset->get('id')]);
+	}
+
+	/**
+	 * Función para borrar tags que ya no se usan
+	 *
+	 * @return void
+	 */
+	public function cleanUnnusedTags(): void {
+		$db = new ODB();
 		$sql = "DELETE FROM `tag` WHERE `id` NOT IN (SELECT DISTINCT(`id_tag`) FROM `asset_tag`)";
 		$db->query($sql);
+	}
+
+	/**
+	 * Función para borrar un asset, antes de borrarlo comprueba si está en uso y no lo borra oara avisar
+	 *
+	 * @param int $id Id del asset a borrar
+	 *
+	 * @return array Estado de la operación y mensaje en caso de error
+	 */
+	public function deleteAsset(int $id): array {
+		$ret = ['status' => 'ok', 'message' => ''];
+		$asset = new Asset();
+		$asset->find(['id' => $id]);
+
+		$db = new ODB();
+		$messages = [];
+
+		// Backgrounds
+		$sql = "SELECT * FROM `background` WHERE `id_asset` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$background = new Background();
+			$background->update($res);
+			array_push($messages, 'Fondo '.$background->get('name').' ('.$background->get('id').')');
+		}
+
+		// Character
+		$sql = "SELECT * FROM `character` WHERE `id_asset_up` = ? OR `id_asset_down` = ? OR `id_asset_left` = ? OR `id_asset_right` = ?";
+		$db->query($sql, [$id, $id, $id, $id]);
+		while ($res = $db->next()) {
+			$character = new Character();
+			$character->update($res);
+			array_push($messages, 'Personaje '.$character->get('name').' ('.$character->get('id').')');
+		}
+
+		// Character frame
+		$sql = "SELECT * FROM `character_frame` WHERE `id_asset` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$character_frame = new CharacterFrame();
+			$character_frame->update($res);
+			$character = $character_frame->getCharacter();
+			array_push($messages, 'Personaje '.$character->get('name').' ('.$character->get('id').') - Frame '.$character_frame->get('id'));
+		}
+
+		// Item
+		$sql = "SELECT * FROM `item` WHERE `id_asset` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$item = new Item();
+			$item->update($res);
+			array_push($messages, 'Item '.$item->get('name').' ('.$item->get('id').')');
+		}
+
+		// Scenario object
+		$sql = "SELECT * FROM `scenario_object` WHERE `id_asset` = ? OR `id_asset_active` = ?";
+		$db->query($sql, [$id, $id]);
+		while ($res = $db->next()) {
+			$scenario_object = new ScenarioObject();
+			$scenario_object->update($res);
+			array_push($messages, 'Objeto de escenario '.$scenario_object->get('name').' ('.$scenario_object->get('id').')');
+		}
+
+		// Scenario object frame
+		$sql = "SELECT * FROM `scenario_object_frame` WHERE `id_asset` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$scenario_object_frame = new ScenarioObjectFrame();
+			$scenario_object_frame->update($res);
+			$scenario_object = $scenario_object_frame->getScenarioObject();
+			array_push($messages, 'Objeto de escenario '.$scenario_object->get('name').' ('.$scenario_object->get('id').') - Frame '.$scenario_object_frame->get('id'));
+		}
+		
+		if (count($messages)>0) {
+			$ret['status'] = 'in_use';
+			$ret['messages'] = implode(', ', $messages);
+		}
+		else {
+			$this->cleanAssetTags($asset);
+			$this->cleanUnnusedTags();
+			$asset->deleteFull();
+		}
+
+		return $ret;
 	}
 }
