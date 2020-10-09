@@ -16,13 +16,6 @@ class BackgroundCategory extends OModel {
 				'size' => 50,
 				'comment' => 'Nombre de la categoría'
 			],
-			'slug' => [
-				'type'    => OCore::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Slug del nombre de la categoría'
-			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
 				'comment' => 'Fecha de creación del registro'

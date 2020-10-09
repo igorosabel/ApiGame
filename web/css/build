@@ -1,4 +1,3 @@
-sass /var/www/vhosts/osumi.es/game.osumi.es/web/css/admin.scss /var/www/vhosts/osumi.es/game.osumi.es/web/css/admin.css --style=compressed --no-source-map
 sass /var/www/vhosts/osumi.es/game.osumi.es/web/css/common.scss /var/www/vhosts/osumi.es/game.osumi.es/web/css/common.css --style=compressed --no-source-map
 sass /var/www/vhosts/osumi.es/game.osumi.es/web/css/game.scss /var/www/vhosts/osumi.es/game.osumi.es/web/css/game.css --style=compressed --no-source-map
 sass /var/www/vhosts/osumi.es/game.osumi.es/web/css/home.scss /var/www/vhosts/osumi.es/game.osumi.es/web/css/home.css --style=compressed --no-source-map
