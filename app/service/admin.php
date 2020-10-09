@@ -128,6 +128,26 @@ class adminService extends OService {
 	}
 
 	/**
+	 * Función para obtener la lista completa de fondos
+	 *
+	 * @return array Lista de fondos
+	 */
+	public function getBackgrounds(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `background` ORDER BY `name`";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res=$db->next()) {
+			$background = new Background();
+			$background->update($res);
+			array_push($ret, $background);
+		}
+
+		return $ret;
+	}
+
+	/**
 	 * Función para obtener la lista completa de tags
 	 *
 	 * @return array Lista de tags
@@ -328,7 +348,7 @@ class adminService extends OService {
 			$scenario_object = $scenario_object_frame->getScenarioObject();
 			array_push($messages, 'Objeto de escenario '.$scenario_object->get('name').' ('.$scenario_object->get('id').') - Frame '.$scenario_object_frame->get('id'));
 		}
-		
+
 		if (count($messages)>0) {
 			$ret['status'] = 'in_use';
 			$ret['messages'] = implode(', ', $messages);
@@ -340,5 +360,27 @@ class adminService extends OService {
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Función que comprueba si una categoría de fondo está en uso y sino la borra
+	 *
+	 * @param BackgroundCategory $background_category Categoría de fondo a borrar
+	 *
+	 * @return string Estado de la operación
+	 */
+	public function deleteBackgroundCategory(BackgroundCategory $background_category): string {
+		$db = new ODB();
+		$sql = "SELECT COUNT(*) AS `num` FROM `background` WHERE `id_background_category` = ?";
+		$db->query($sql, [$background_category->get('id')]);
+		$res = $db->next();
+
+		if ($res['num']>0) {
+			return 'in-use';
+		}
+		else {
+			$background_category->delete();
+			return 'ok';
+		}
 	}
 }

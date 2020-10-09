@@ -1,4 +1,8 @@
 <?php declare(strict_types=1);
+/**
+ * @type json
+ * @prefix /admin
+*/
 class admin extends OModule {
 	private ?adminService $admin_service = null;
 	private ?webService $web_service = null;
@@ -11,8 +15,7 @@ class admin extends OModule {
 	/**
 	 * Función para iniciar sesión en el admin
 	 *
-	 * @url /admin/login
-	 * @type json
+	 * @url /login
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -50,8 +53,8 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de mundos
 	 *
-	 * @url /admin/world-list
-	 * @type json
+	 * @url /world-list
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -63,8 +66,8 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un mundo
 	 *
-	 * @url /admin/save-world
-	 * @type json
+	 * @url /save-world
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -102,8 +105,8 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un mundo
 	 *
-	 * @url /admin/delete-world
-	 * @type json
+	 * @url /delete-world
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -132,8 +135,8 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de escenarios
 	 *
-	 * @url /admin/scenario-list
-	 * @type json
+	 * @url /scenario-list
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -157,8 +160,8 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un escenario
 	 *
-	 * @url /admin/save-scenario
-	 * @type json
+	 * @url /save-scenario
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -191,8 +194,8 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un mundo
 	 *
-	 * @url /admin/delete-scenario
-	 * @type json
+	 * @url /delete-scenario
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -219,25 +222,10 @@ class admin extends OModule {
 	}
 
 	/**
-	 * Página con el listado de fondos
-	 *
-	 * @url /admin/resources/backgrounds
-	 * @filter adminFilter
-	 * @type html
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function backgrounds(ORequest $req): void {
-		$background_categories = $this->admin_service->getBackgroundCategories();
-		$this->getTemplate()->addCss('admin');
-		$this->getTemplate()->addComponent('background_categories', 'admin/background_category_select', ['list' => $background_categories]);
-	}
-
-	/**
 	 * Función para obtener la lista de recursos
 	 *
-	 * @url /admin/asset-list
-	 * @type json
+	 * @url /asset-list
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -252,8 +240,8 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un recurso
 	 *
-	 * @url /admin/save-asset
-	 * @type json
+	 * @url /save-asset
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -303,8 +291,8 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un recurso
 	 *
-	 * @url /admin/delete-asset
-	 * @type json
+	 * @url /delete-asset
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -330,8 +318,8 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de tags
 	 *
-	 * @url /admin/tag-list
-	 * @type json
+	 * @url /tag-list
+	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -341,5 +329,95 @@ class admin extends OModule {
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/tags', ['list' => $tags, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para obtener la lista de categorías de fondos
+	 *
+	 * @url /background-category-list
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function backgroundCategoryList(ORequest $req): void {
+		$status = 'ok';
+		$background_categories = $this->admin_service->getBackgroundCategories();
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/background_categories', ['list' => $background_categories, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para guardar una categoría de fondo
+	 *
+	 * @url /save-background-category
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveBackgroundCategory(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$name = $req->getParamString('name');
+
+		if (is_null($name)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$background_category = new BackgroundCategory();
+			if (!is_null($id)) {
+				$background_category->find(['id'=>$id]);
+			}
+			$background_category->set('name', $name);
+			$background_category->save();
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para borrar una categoría de fondo
+	 *
+	 * @url /delete-background-category
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function deleteBackgroundCategory(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$background_category = new BackgroundCategory();
+			if ($background_category->find(['id'=>$id])) {
+				$status = $this->admin_service->deleteBackgroundCategory($background_category);
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para obtener la lista de fondos
+	 *
+	 * @url /background-list
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function backgroundList(ORequest $req): void {
+		$status = 'ok';
+		$backgrounds = $this->admin_service->getBackgrounds();
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/backgrounds', ['list' => $backgrounds, 'extra' => 'nourlencode']);
 	}
 }

@@ -12,9 +12,11 @@ function adminFilter(array $params, array $headers): array {
 	global $core;
 	$ret = ['status'=>'error', 'id'=>null];
 
-	if ($core->session->getParam('admin_login')===true) {
-        $ret['status'] = 'ok';
-    }
+	$tk = new OToken($core->config->getExtra('secret'));
+	if ($tk->checkToken($headers['Authorization']) && $tk->getParam('admin')===true){
+		$ret['status'] = 'ok';
+		$ret['id'] = $tk->getParam('id');
+	}
 
 	return $ret;
 }
