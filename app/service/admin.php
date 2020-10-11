@@ -383,4 +383,26 @@ class adminService extends OService {
 			return 'ok';
 		}
 	}
+	
+	/**
+	 * Función que comprueba si un fondo está en uso y sino lo borra
+	 *
+	 * @param Background $background Fondo a borrar
+	 *
+	 * @return string Estado de la operación
+	 */
+	public function deleteBackground(Background $background): string {
+		$db = new ODB();
+		$sql = "SELECT COUNT(*) AS `num` FROM `scenario_data` WHERE `id_background` = ?";
+		$db->query($sql, [$background->get('id')]);
+		$res = $db->next();
+
+		if ($res['num']>0) {
+			return 'in-use';
+		}
+		else {
+			$background->delete();
+			return 'ok';
+		}
+	}
 }

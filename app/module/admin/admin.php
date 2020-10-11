@@ -420,4 +420,68 @@ class admin extends OModule {
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/backgrounds', ['list' => $backgrounds, 'extra' => 'nourlencode']);
 	}
+	
+	/**
+	 * Función para guardar un fondo
+	 *
+	 * @url /save-background
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveBackground(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$id_background_category = $req->getParamInt('idBackgroundCategory');
+		$id_asset = $req->getParamInt('idAsset');
+		$name = $req->getParamString('name');
+		$crossable = $req->getParamBool('crossable');
+
+		if (is_null($name)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$background = new Background();
+			if (!is_null($id)) {
+				$background->find(['id'=>$id]);
+			}
+			$background->set('id_background_category', $id_background_category);
+			$background->set('id_asset', $id_asset);
+			$background->set('name', $name);
+			$background->set('crossable', $crossable);
+			$background->save();
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para borrar un fondo
+	 *
+	 * @url /delete-background
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function deleteBackground(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$background = new Background();
+			if ($background->find(['id'=>$id])) {
+				$status = $this->admin_service->deleteBackground($background);
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
 }
