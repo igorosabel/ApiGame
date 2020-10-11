@@ -484,4 +484,40 @@ class admin extends OModule {
 
 		$this->getTemplate()->add('status', $status);
 	}
+
+	/**
+	 * Función para obtener la lista de items
+	 *
+	 * @url /item-list
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function itemList(ORequest $req): void {
+		$status = 'ok';
+		$items = $this->admin_service->getItems();
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/items', ['list' => $items, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para guardar un item
+	 *
+	 * @url /save-item
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveItem(ORequest $req): void {}
+
+	/**
+	 * Función para borrar un item
+	 *
+	 * @url /delete-item
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function deleteItem(ORequest $req): void {}
 }

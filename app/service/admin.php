@@ -405,4 +405,24 @@ class adminService extends OService {
 			return 'ok';
 		}
 	}
+
+	/**
+	 * Función para obtener la lista completa de items
+	 *
+	 * @return array Lista de items
+	 */
+	public function getItems(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `item` ORDER BY `name`";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res=$db->next()) {
+			$item = new Item();
+			$item->update($res);
+			array_push($ret, $item);
+		}
+
+		return $ret;
+	}
 }
