@@ -87,6 +87,12 @@ class Character extends OModel {
 				'default' => null,
 				'comment' => 'Porcentaje de veces que otorga premio al morir'
 			],
+			'respawn' => [
+				'type'    => OCore::NUM,
+				'nullable' => false,
+				'default' => null,
+				'comment' => 'Tiempo para que vuelva a aparecer el personaje en caso de ser un enemigo'
+			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
 				'comment' => 'Fecha de creación del registro'
