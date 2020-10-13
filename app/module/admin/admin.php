@@ -521,11 +521,7 @@ class admin extends OModule {
 		$defense = $req->getParamInt('defense');
 		$speed = $req->getParamInt('speed');
 		$wearable = $req->getParamInt('wearable');
-/*echo "=================================================================================\n";
-var_dump($req->getParam('type'));
-var_dump($req->getParamInt('type'));
-var_dump($req->getParams());
-echo "=================================================================================\n";*/
+
 		if (is_null($name) || is_null($id_asset) || is_null($type)) {
 			$status = 'error';
 		}

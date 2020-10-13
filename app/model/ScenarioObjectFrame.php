@@ -43,7 +43,7 @@ class ScenarioObjectFrame extends OModel {
 
 		parent::load($table_name, $model);
 	}
-	
+
 	private ?ScenarioObject $scenario_object = null;
 
 	/**
