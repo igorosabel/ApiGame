@@ -350,7 +350,7 @@ class adminService extends OService {
 		}
 
 		if (count($messages)>0) {
-			$ret['status'] = 'in_use';
+			$ret['status'] = 'in-use';
 			$ret['messages'] = implode(', ', $messages);
 		}
 		else {
@@ -383,7 +383,7 @@ class adminService extends OService {
 			return 'ok';
 		}
 	}
-	
+
 	/**
 	 * Función que comprueba si un fondo está en uso y sino lo borra
 	 *
@@ -421,6 +421,120 @@ class adminService extends OService {
 			$item = new Item();
 			$item->update($res);
 			array_push($ret, $item);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Función para actualizar la lista de frames de un item
+	 *
+	 * @param Item $item Item al que actualizar la lista de frames
+	 *
+	 * @param array $frames Lista de frames
+	 *
+	 * @return void
+	 */
+	public function updateItemFrames(Item $item, array $frames): void {
+		$updated_list = [];
+		foreach ($frames as $frame) {
+			$item_frame = new ItemFrame();
+			if (!is_null($frame['id'])) {
+				$item_frame->find(['id' => $frame['id']]);
+			}
+			$item_frame->set('id_item', $item->get('id'));
+			$item_frame->set('id_asset', $frame['idAsset']);
+			$item_frame->set('order', $frame['order']);
+			$item_frame->save();
+
+			array_push($updated_list, $item_frame->get('id'));
+		}
+
+		$frame_list = $item->getFrames();
+		foreach ($frame_list as $item_frame) {
+			if (!in_array($item_frame->get('id'), $updated_list)) {
+				$item_frame->delete();
+			}
+		}
+	}
+
+	/**
+	 * Función para borrar un item, antes de borrarlo comprueba si está en uso y no lo borra oara avisar
+	 *
+	 * @param int $id Id del item a borrar
+	 *
+	 * @return array Estado de la operación y mensaje en caso de error
+	 */
+	public function deleteItem(int $id): array {
+		$ret = ['status' => 'ok', 'message' => ''];
+		$item = new Item();
+		$item->find(['id' => $id]);
+
+		$db = new ODB();
+		$messages = [];
+
+		// Inventory
+		$sql = "SELECT * FROM `inventory` WHERE `id_item` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$inventory = new Inventory();
+			$inventory->update($res);
+			array_push($messages, 'Inventario '.$inventory->get('id'));
+		}
+
+		// Character
+		$sql = "SELECT * FROM `character` WHERE `drop_id_item` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$character = new Character();
+			$character->update($res);
+			array_push($messages, 'Personaje '.$character->get('name').' lo suelta');
+		}
+
+		// Scenario object drop
+		$sql = "SELECT * FROM `scenario_object_drop` WHERE `id_item` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$scenario_object_drop = new ScenarioObjectDrop();
+			$scenario_object_drop->update($res);
+			array_push($messages, 'Objeto de escenario '.$scenario_object_drop->getScenarioObject()->get('name').' lo suelta');
+		}
+
+		// Equipment
+		$sql = "SELECT * FROM `equipment` WHERE `head` = ? OR `necklace` = ? OR `body` = ? OR `boots` = ? OR `weapon` = ?";
+		$db->query($sql, [$id, $id, $id, $id, $id]);
+		while ($res = $db->next()) {
+			$equipment = new Equipment();
+			$equipment->update($res);
+			array_push($messages, 'Partida '.$equipment->get('id'));
+		}
+
+		if (count($messages)>0) {
+			$ret['status'] = 'in-use';
+			$ret['messages'] = implode(', ', $messages);
+		}
+		else {
+			$asset->delete();
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Función para obtener el listado de personajes
+	 *
+	 * @return array Listado de Personajes
+	 */
+	public function getCharacters(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `character` ORDER BY `name`";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res = $db->next()) {
+			$character = new Character();
+			$character->update($res);
+			array_push($ret, $character);
 		}
 
 		return $ret;

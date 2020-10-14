@@ -420,7 +420,7 @@ class admin extends OModule {
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/backgrounds', ['list' => $backgrounds, 'extra' => 'nourlencode']);
 	}
-	
+
 	/**
 	 * Función para guardar un fondo
 	 *
@@ -521,6 +521,7 @@ class admin extends OModule {
 		$defense = $req->getParamInt('defense');
 		$speed = $req->getParamInt('speed');
 		$wearable = $req->getParamInt('wearable');
+		$frames = $req->getParam('frames');
 
 		if (is_null($name) || is_null($id_asset) || is_null($type)) {
 			$status = 'error';
@@ -541,6 +542,10 @@ class admin extends OModule {
 			$item->set('speed',    $speed);
 			$item->set('wearable', $wearable);
 			$item->save();
+
+			if (count($frames)>0) {
+				$this->admin_service->updateItemFrames($item, $frames);
+			}
 		}
 
 		$this->getTemplate()->add('status', $status);
@@ -554,5 +559,38 @@ class admin extends OModule {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function deleteItem(ORequest $req): void {}
+	public function deleteItem(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$message = '';
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$return = $this->admin_service->deleteItem($id);
+			$status = $return['status'];
+			$message = $return['message'];
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('message', $message);
+	}
+
+	/**
+	 * Función para obtener la lista de personajes
+	 *
+	 * @url /character-list
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function characterList(ORequest $req): void {
+		$status = 'ok';
+		$items = $this->admin_service->getCharacters();
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/characters', ['list' => $items, 'extra' => 'nourlencode']);
+	}
 }

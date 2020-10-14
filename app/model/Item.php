@@ -83,9 +83,9 @@ class Item extends OModel {
 	private ?Asset $asset = null;
 
 	/**
-	 * Obtiene el recurso usado para el fondo
+	 * Obtiene el recurso usado para el item
 	 *
-	 * @return Asset Recurso usado para el fondo
+	 * @return Asset Recurso usado para el item
 	 */
 	public function getAsset(): Asset {
 		if (is_null($this->asset)) {
@@ -95,9 +95,9 @@ class Item extends OModel {
 	}
 
 	/**
-	 * Guarda el recurso usado para el fondo
+	 * Guarda el recurso usado para el item
 	 *
-	 * @param Asset $asset Recurso usado para el fondo
+	 * @param Asset $asset Recurso usado para el item
 	 *
 	 * @return void
 	 */
@@ -106,7 +106,7 @@ class Item extends OModel {
 	}
 
 	/**
-	 * Carga el recurso usado para el fondo
+	 * Carga el recurso usado para el item
 	 *
 	 * @return void
 	 */
@@ -114,5 +114,47 @@ class Item extends OModel {
 		$asset = new Asset();
 		$asset->find(['id' => $this->get('id_asset')]);
 		$this->setAsset($asset);
+	}
+
+	private ?array $frames = null;
+
+	/**
+	 * Función para obtener los frames del item
+	 *
+	 * @return array Lista de frames del item
+	 */
+	public function getFrames(): array {
+		if (is_null($this->frames)) {
+			$this->loadFrames();
+		}
+		return $this->frames;
+	}
+
+	/**
+	 * Guarda los frames del item
+	 *
+	 * @param array $frames Lista de frames del item
+	 *
+	 * @return void
+	 */
+	public function setFrames(array $frames): void {
+		$this->frames = $frames;
+	}
+
+	/**
+	 * Carga la lista de frames del item
+	 *
+	 * @return void
+	 */
+	public function loadFrames(): void {
+		$sql = "SELECT * FROM `item_frame` WHERE `id_item` = ? ORDER BY `order`";
+		$this->db->query($sql, [$this->get('id')]);
+		$list = [];
+		while ($res=$this->db->next()) {
+			$item_frame = new ItemFrame();
+			$item_frame->update($res);
+			array_push($list, $item_frame);
+		}
+		$this->setFrames($list);
 	}
 }

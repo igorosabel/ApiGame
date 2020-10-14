@@ -77,4 +77,40 @@ class ItemFrame extends OModel {
 		$item->find(['id' => $this->get('id_item')]);
 		$this->setItem($item);
 	}
+
+	private ?Asset $asset = null;
+
+	/**
+	 * Obtiene el recurso usado para el frame del item
+	 *
+	 * @return Asset Recurso usado para el frame del item
+	 */
+	public function getAsset(): Asset {
+		if (is_null($this->asset)) {
+			$this->loadAsset();
+		}
+		return $this->asset;
+	}
+
+	/**
+	 * Guarda el recurso usado para el frame del item
+	 *
+	 * @param Asset $asset Recurso usado para el frame del item
+	 *
+	 * @return void
+	 */
+	public function setAsset(Asset $asset): void {
+		$this->asset = $asset;
+	}
+
+	/**
+	 * Carga el recurso usado para el frame del item
+	 *
+	 * @return void
+	 */
+	public function loadAsset(): void {
+		$asset = new Asset();
+		$asset->find(['id' => $this->get('id_asset')]);
+		$this->setAsset($asset);
+	}
 }
