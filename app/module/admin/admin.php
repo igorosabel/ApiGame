@@ -593,4 +593,101 @@ class admin extends OModule {
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/characters', ['list' => $items, 'extra' => 'nourlencode']);
 	}
+
+	/**
+	 * Función para guardar un personaje
+	 *
+	 * @url /save-character
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveCharacter(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$type = $req->getParamInt('type');
+		$id_asset_up = $req->getParamInt('idAssetUp');
+		$id_asset_down = $req->getParamInt('idAssetDown');
+		$id_asset_left = $req->getParamInt('idAssetLeft');
+		$id_asset_right = $req->getParamInt('idAssetRight');
+		$name = $req->getParamString('name');
+		$health = $req->getParamInt('health');
+		$attack = $req->getParamInt('attack');
+		$defense = $req->getParamInt('defense');
+		$speed = $req->getParamInt('speed');
+		$drop_id_item = $req->getParamInt('dropIdItem');
+		$drop_chance = $req->getParamInt('dropChance');
+		$respawn = $req->getParamInt('respawn');
+		$framesUp = $req->getParam('framesUp');
+		$framesDown = $req->getParam('framesDown');
+		$framesLeft = $req->getParam('framesLeft');
+		$framesRight = $req->getParam('framesRight');
+
+		if (is_null($name) || is_null($type)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$character = new Character();
+			if (!is_null($id)) {
+				$character->find(['id' => $id]);
+			}
+			$character->set('type',     $type);
+			$character->set('id_asset_up', $id_asset_up);
+			$character->set('id_asset_down', $id_asset_down);
+			$character->set('id_asset_left', $id_asset_left);
+			$character->set('id_asset_right', $id_asset_right);
+			$character->set('name',     $name);
+			$character->set('health',   $health);
+			$character->set('attack',   $attack);
+			$character->set('defense',  $defense);
+			$character->set('speed',    $speed);
+			$character->set('drop_id_item', $drop_id_item);
+			$character->set('drop_chance', $drop_chance);
+			$character->set('respawn', $respawn);
+			$character->save();
+
+			if (count($framesUp)>0) {
+				$this->admin_service->updateCharacterFrames($character, $framesUp, 'up');
+			}
+			if (count($framesDown)>0) {
+				$this->admin_service->updateCharacterFrames($character, $framesDown, 'down');
+			}
+			if (count($framesLeft)>0) {
+				$this->admin_service->updateCharacterFrames($character, $framesLeft, 'left');
+			}
+			if (count($framesRight)>0) {
+				$this->admin_service->updateCharacterFrames($character, $framesRight, 'right');
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para borrar un personaje
+	 *
+	 * @url /delete-character
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function deleteCharacter(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$message = '';
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$return = $this->admin_service->deleteCharacter($id);
+			$status = $return['status'];
+			$message = $return['message'];
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('message', $message);
+	}
 }

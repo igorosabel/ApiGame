@@ -69,4 +69,40 @@ class ScenarioData extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	private ?Scenario $scenario = null;
+
+	/**
+	 * Obtiene el escenario al que pertenecen los datos
+	 *
+	 * @return Scenario Escenario al que pertenecen los datos
+	 */
+	public function getScenario(): Scenario {
+		if (is_null($this->scenario)) {
+			$this->loadScenario();
+		}
+		return $this->scenario;
+	}
+
+	/**
+	 * Guarda el escenario al que pertenecen los datos
+	 *
+	 * @param Scenario $scenario Escenario al que pertenecen los datos
+	 *
+	 * @return void
+	 */
+	public function setScenario(Scenario $scenario): void {
+		$this->scenario = $scenario;
+	}
+
+	/**
+	 * Carga el escenario al que pertenecen los datos
+	 *
+	 * @return void
+	 */
+	public function loadScenario(): void {
+		$scenario = new Scenario();
+		$scenario->find(['id' => $this->get('id_scenario')]);
+		$this->setScenario($scenario);
+	}
 }

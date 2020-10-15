@@ -24,10 +24,11 @@ class CharacterFrame extends OModel {
 				'comment' => 'Id del recurso usado como frame'
 			],
 			'orientation' => [
-				'type'    => OCore::NUM,
+				'type'    => OCore::TEXT,
 				'nullable' => false,
 				'default' => null,
-				'comment' => 'Orientación de la imagen del frame 1 arriba 2 derecha 3 abajo 4 izquierda'
+				'size' => 5,
+				'comment' => 'Orientación de la imagen del frame up / down / left / right'
 			],
 			'order' => [
 				'type'    => OCore::NUM,

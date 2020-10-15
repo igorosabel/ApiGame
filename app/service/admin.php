@@ -514,7 +514,7 @@ class adminService extends OService {
 			$ret['messages'] = implode(', ', $messages);
 		}
 		else {
-			$asset->delete();
+			$item->delete();
 		}
 
 		return $ret;
@@ -535,6 +535,76 @@ class adminService extends OService {
 			$character = new Character();
 			$character->update($res);
 			array_push($ret, $character);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Función para actualizar la lista de frames de un personaje
+	 *
+	 * @param Character $character Personaje al que actualizar la lista de frames
+	 *
+	 * @param array $frames Lista de frames
+	 *
+	 * @param string $sent Orientación de los frames
+	 *
+	 * @return void
+	 */
+	public function updateCharacterFrames(Character $character, array $frames, string $sent): void {
+		$updated_list = [];
+		foreach ($frames as $frame) {
+			$character_frame = new CharacterFrame();
+			if (!is_null($frame['id'])) {
+				$character_frame->find(['id' => $frame['id']]);
+			}
+			$character_frame->set('id_character', $character->get('id'));
+			$character_frame->set('id_asset', $frame['idAsset']);
+			$character_frame->set('orientation', $sent);
+			$character_frame->set('order', $frame['order']);
+			$character_frame->save();
+
+			array_push($updated_list, $character_frame->get('id'));
+		}
+
+		$frame_list = $character->getFrames($sent);
+		foreach ($frame_list as $character_frame) {
+			if (!in_array($character_frame->get('id'), $updated_list)) {
+				$character_frame->delete();
+			}
+		}
+	}
+
+	/**
+	 * Función para borrar un personaje, antes de borrarlo comprueba si está en uso y no lo borra oara avisar
+	 *
+	 * @param int $id Id del personaje a borrar
+	 *
+	 * @return array Estado de la operación y mensaje en caso de error
+	 */
+	public function deleteCharacter(int $id): array {
+		$ret = ['status' => 'ok', 'message' => ''];
+		$character = new Character();
+		$character->find(['id' => $id]);
+
+		$db = new ODB();
+		$messages = [];
+
+		// Scenario Data
+		$sql = "SELECT * FROM `scenario_data` WHERE `id_character` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$scenario_data = new ScenarioData();
+			$scenario_data->update($res);
+			array_push($messages, 'Escenario '.$scenario_data->getScenario()->get('name');
+		}
+
+		if (count($messages)>0) {
+			$ret['status'] = 'in-use';
+			$ret['messages'] = implode(', ', $messages);
+		}
+		else {
+			$character->delete();
 		}
 
 		return $ret;
