@@ -690,4 +690,20 @@ class admin extends OModule {
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('message', $message);
 	}
+
+	/**
+	 * Función para obtener la lista de objetos de escenario
+	 *
+	 * @url /scenario-object-list
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function scenarioObjectList(ORequest $req): void {
+		$status = 'ok';
+		$items = $this->admin_service->getScenarioObjects();
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/scenario_objects', ['list' => $items, 'extra' => 'nourlencode']);
+	}
 }

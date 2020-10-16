@@ -596,7 +596,7 @@ class adminService extends OService {
 		while ($res = $db->next()) {
 			$scenario_data = new ScenarioData();
 			$scenario_data->update($res);
-			array_push($messages, 'Escenario '.$scenario_data->getScenario()->get('name');
+			array_push($messages, 'Escenario '.$scenario_data->getScenario()->get('name'));
 		}
 
 		if (count($messages)>0) {
@@ -605,6 +605,26 @@ class adminService extends OService {
 		}
 		else {
 			$character->delete();
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Función para obtener el listado de objetos de escenario
+	 *
+	 * @return array Listado de Objetos de escenario
+	 */
+	public function getScenarioObjects(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `scenario_object` ORDER BY `name`";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res = $db->next()) {
+			$scenario_object = new ScenarioObject();
+			$scenario_object->update($res);
+			array_push($ret, $scenario_object);
 		}
 
 		return $ret;

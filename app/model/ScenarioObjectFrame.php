@@ -79,4 +79,40 @@ class ScenarioObjectFrame extends OModel {
 		$scenario_object->find(['id' => $this->get('id_scenario_object')]);
 		$this->setScenarioObject($scenario_object);
 	}
+
+	private ?Asset $asset = null;
+
+	/**
+	 * Obtiene el recurso usado para el frame del objeto de escenario
+	 *
+	 * @return Asset Recurso usado para el frame del objeto de escenario
+	 */
+	public function getAsset(): Asset {
+		if (is_null($this->asset)) {
+			$this->loadAsset();
+		}
+		return $this->asset;
+	}
+
+	/**
+	 * Guarda el recurso usado para el frame del objeto de escenario
+	 *
+	 * @param Asset $asset Recurso usado para el frame del objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function setAsset(Asset $asset): void {
+		$this->asset = $asset;
+	}
+
+	/**
+	 * Carga el recurso usado para el frame del objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function loadAsset(): void {
+		$asset = new Asset();
+		$asset->find(['id' => $this->get('id_asset')]);
+		$this->setAsset($asset);
+	}
 }

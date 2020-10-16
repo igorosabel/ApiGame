@@ -95,4 +95,164 @@ class ScenarioObject extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	private ?Asset $asset = null;
+
+	/**
+	 * Obtiene el recurso usado para el objeto de escenario
+	 *
+	 * @return Asset Recurso usado para el objeto de escenario
+	 */
+	public function getAsset(): Asset {
+		if (is_null($this->asset)) {
+			$this->loadAsset();
+		}
+		return $this->asset;
+	}
+
+	/**
+	 * Guarda el recurso usado para el objeto de escenario
+	 *
+	 * @param Asset $asset Recurso usado para el objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function setAsset(Asset $asset): void {
+		$this->asset = $asset;
+	}
+
+	/**
+	 * Carga el recurso usado para el objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function loadAsset(): void {
+		$asset = new Asset();
+		$asset->find(['id' => $this->get('id_asset')]);
+		$this->setAsset($asset);
+	}
+
+	private ?Asset $asset_active = null;
+
+	/**
+	 * Obtiene el recurso usado para el objeto de escenario una vez activado
+	 *
+	 * @return Asset Recurso usado para el objeto de escenario una vez activado
+	 */
+	public function getAssetActive(): Asset {
+		if (is_null($this->asset_active)) {
+			$this->loadAssetActive();
+		}
+		return $this->asset_active;
+	}
+
+	/**
+	 * Guarda el recurso usado para el objeto de escenario una vez activado
+	 *
+	 * @param Asset $asset Recurso usado para el objeto de escenario una vez activado
+	 *
+	 * @return void
+	 */
+	public function setAssetActive(Asset $asset_active): void {
+		$this->asset_active = $asset_active;
+	}
+
+	/**
+	 * Carga el recurso usado para el objeto de escenario una vez activado
+	 *
+	 * @return void
+	 */
+	public function loadAssetActive(): void {
+		$asset_active = new Asset();
+		$asset_active->find(['id' => $this->get('id_asset_active')]);
+		$this->setAssetActive($asset_active);
+	}
+
+	private ?array $drops = null;
+
+	/**
+	 * Obtiene la lista de items que suelta el objeto de escenario
+	 *
+	 * @return array Lista de items que suelta el objeto de escenario
+	 */
+	public function getDrops(): array {
+		if (is_null($this->drops)) {
+			$this->loadDrops();
+		}
+		return $this->drops;
+	}
+
+	/**
+	 * Guarda la lista de items que suelta el objeto de escenario
+	 *
+	 * @param array $drops Lista de items que suelta el objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function setDrops(array $drops): void {
+		$this->drops = $drops;
+	}
+
+	/**
+	 * Carga la lista de items que suelta el objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function loadDrops(): void {
+		$sql = "SELECT * FROM `scenario_object_drop` WHERE `id_scenario_object` = ?";
+		$this->db->query($sql, [$this->get('id')]);
+		$drops = [];
+
+		while ($res = $this->db->next()) {
+			$scenario_object_drop = new ScenarioObjectDrop();
+			$scenario_object_drop->update($res);
+			array_push($drops, $scenario_object_drop);
+		}
+
+		$this->setDrops($drops);
+	}
+
+	private ?array $frames = null;
+
+	/**
+	 * Obtiene la lista de frames que componen la animación del objeto de escenario
+	 *
+	 * @return array Lista de frames que componen la animación del objeto de escenario
+	 */
+	public function getFrames(): array {
+		if (is_null($this->frames)) {
+			$this->loadFrames();
+		}
+		return $this->frames;
+	}
+
+	/**
+	 * Guarda la lista de frames que componen la animación del objeto de escenario
+	 *
+	 * @param array $frames Lista de frames que componen la animación del objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function setFrames(array $frames): void {
+		$this->drops = $frames;
+	}
+
+	/**
+	 * Carga la lista de frames que componen la animación del objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function loadFrames(): void {
+		$sql = "SELECT * FROM `scenario_object_frame` WHERE `id_scenario_object` = ? ORDER BY `order`";
+		$this->db->query($sql, [$this->get('id')]);
+		$frames = [];
+
+		while ($res = $this->db->next()) {
+			$scenario_object_frame = new ScenarioObjectFrame();
+			$scenario_object_frame->update($res);
+			array_push($frames, $scenario_object_frames);
+		}
+
+		$this->setFrames($frames);
+	}
 }

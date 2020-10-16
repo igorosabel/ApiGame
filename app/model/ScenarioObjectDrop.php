@@ -43,4 +43,40 @@ class ScenarioObjectDrop extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	private ?Item $item = null;
+
+	/**
+	 * Obtiene el item soltado por el objeto de escenario
+	 *
+	 * @return Item Item soltado por el objeto de escenario
+	 */
+	public function getItem(): Item {
+		if (is_null($this->item)) {
+			$this->loadItem();
+		}
+		return $this->item;
+	}
+
+	/**
+	 * Guarda el item soltado por el objeto de escenario
+	 *
+	 * @param Item $item Item soltado por el objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function setItem(Item $item): void {
+		$this->item = $item;
+	}
+
+	/**
+	 * Carga el item soltado por el objeto de escenario
+	 *
+	 * @return void
+	 */
+	public function loadItem(): void {
+		$item = new Item();
+		$item->find(['id' => $this->get('id_item')]);
+		$this->setItem($item);
+	}
 }
