@@ -234,7 +234,7 @@ class ScenarioObject extends OModel {
 	 * @return void
 	 */
 	public function setFrames(array $frames): void {
-		$this->drops = $frames;
+		$this->frames = $frames;
 	}
 
 	/**
@@ -250,7 +250,7 @@ class ScenarioObject extends OModel {
 		while ($res = $this->db->next()) {
 			$scenario_object_frame = new ScenarioObjectFrame();
 			$scenario_object_frame->update($res);
-			array_push($frames, $scenario_object_frames);
+			array_push($frames, $scenario_object_frame);
 		}
 
 		$this->setFrames($frames);

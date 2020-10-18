@@ -543,9 +543,7 @@ class admin extends OModule {
 			$item->set('wearable', $wearable);
 			$item->save();
 
-			if (count($frames)>0) {
-				$this->admin_service->updateItemFrames($item, $frames);
-			}
+			$this->admin_service->updateItemFrames($item, $frames);
 		}
 
 		$this->getTemplate()->add('status', $status);
@@ -647,18 +645,10 @@ class admin extends OModule {
 			$character->set('respawn', $respawn);
 			$character->save();
 
-			if (count($framesUp)>0) {
-				$this->admin_service->updateCharacterFrames($character, $framesUp, 'up');
-			}
-			if (count($framesDown)>0) {
-				$this->admin_service->updateCharacterFrames($character, $framesDown, 'down');
-			}
-			if (count($framesLeft)>0) {
-				$this->admin_service->updateCharacterFrames($character, $framesLeft, 'left');
-			}
-			if (count($framesRight)>0) {
-				$this->admin_service->updateCharacterFrames($character, $framesRight, 'right');
-			}
+			$this->admin_service->updateCharacterFrames($character, $framesUp, 'up');
+			$this->admin_service->updateCharacterFrames($character, $framesDown, 'down');
+			$this->admin_service->updateCharacterFrames($character, $framesLeft, 'left');
+			$this->admin_service->updateCharacterFrames($character, $framesRight, 'right');
 		}
 
 		$this->getTemplate()->add('status', $status);
@@ -705,5 +695,90 @@ class admin extends OModule {
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/scenario_objects', ['list' => $items, 'extra' => 'nourlencode']);
+	}
+	
+	/**
+	 * Función para guardar un objeto de escenario
+	 *
+	 * @url /save-scenario-object
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveScenarioObject(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$name = $req->getParamString('name');
+		$id_asset = $req->getParamInt('idAsset');
+		$width = $req->getParamInt('width');
+		$height = $req->getParamInt('height');
+		$crossable = $req->getParamBool('crossable');
+		$activable = $req->getParamBool('activable');
+		$id_asset_active = $req->getParamInt('idAssetActive');
+		$active_time = $req->getParamInt('activeTime');
+		$active_trigger = $req->getParamInt('activeTrigger');
+		$active_trigger_custom = $req->getParamString('activeTriggerCustom');
+		$pickable = $req->getParamBool('pickable');
+		$grabbable = $req->getParamBool('grabbable');
+		$breakable = $req->getParamBool('crossable');
+		$drops = $req->getParam('drops');
+		$frames = $req->getParam('frames');
+		
+		if (is_null($name) || is_null($id_asset) || is_null($width) || is_null($height)) {
+			$status = 'error';
+		}
+		
+		if ($status=='ok') {
+			$scenario_object = new ScenarioObject();
+			if (!is_null($id)) {
+				$scenario_object->find(['id' => $id]);
+			}
+			$scenario_object->set('name', $name);
+			$scenario_object->set('id_asset', $id_asset);
+			$scenario_object->set('width', $width);
+			$scenario_object->set('height', $height);
+			$scenario_object->set('crossable', $crossable);
+			$scenario_object->set('activable', $activable);
+			$scenario_object->set('id_asset_active', $id_asset_active);
+			$scenario_object->set('active_time', $active_time);
+			$scenario_object->set('active_trigger', $active_trigger);
+			$scenario_object->set('active_trigger_custom', $active_trigger_custom);
+			$scenario_object->set('pickable', $pickable);
+			$scenario_object->set('grabbable', $grabbable);
+			$scenario_object->set('breakable', $breakable);
+			$scenario_object->save();
+
+			$this->admin_service->updateScenarioObjectFrames($scenario_object, $frames);
+			$this->admin_service->updateScenarioObjectDrops($scenario_object, $drops);
+		}
+		
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para borrar un objeto de escenario
+	 *
+	 * @url /delete-scenario-object
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function deleteScenarioObject(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$message = '';
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$return = $this->admin_service->deleteScenarioObject($id);
+			$status = $return['status'];
+			$message = $return['message'];
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('message', $message);
 	}
 }

@@ -629,4 +629,103 @@ class adminService extends OService {
 
 		return $ret;
 	}
+
+	/**
+	 * Función para actualizar la lista de frames de un objeto de escenario
+	 *
+	 * @param ScenarioObject $scenario_object Objeto de escenario al que actualizar la lista de frames
+	 *
+	 * @param array $frames Lista de frames
+	 *
+	 * @return void
+	 */
+	public function updateScenarioObjectFrames(ScenarioObject $scenario_object, array $frames): void {
+		$updated_list = [];
+		foreach ($frames as $frame) {
+			$scenario_object_frame = new ScenarioObjectFrame();
+			if (!is_null($frame['id'])) {
+				$scenario_object_frame->find(['id' => $frame['id']]);
+			}
+			$scenario_object_frame->set('id_scenario_object', $scenario_object->get('id'));
+			$scenario_object_frame->set('id_asset', $frame['idAsset']);
+			$scenario_object_frame->set('order', $frame['order']);
+			$scenario_object_frame->save();
+
+			array_push($updated_list, $scenario_object_frame->get('id'));
+		}
+
+		$frame_list = $scenario_object->getFrames();
+		foreach ($frame_list as $scenario_object_frame) {
+			if (!in_array($scenario_object_frame->get('id'), $updated_list)) {
+				$scenario_object_frame->delete();
+			}
+		}
+	}
+
+	/**
+	 * Función para actualizar la lista de drops de un objeto de escenario
+	 *
+	 * @param ScenarioObject $scenario_object Objeto de escenario al que actualizar la lista de drops
+	 *
+	 * @param array $drops Lista de drops
+	 *
+	 * @return void
+	 */
+	public function updateScenarioObjectDrops(ScenarioObject $scenario_object, array $drops): void {
+		$updated_list = [];
+		foreach ($drops as $drop) {
+			$scenario_object_drop = new ScenarioObjectDrop();
+			if (!is_null($drop['id'])) {
+				$scenario_object_drop->find(['id' => $drop['id']]);
+			}
+			$scenario_object_drop->set('id_scenario_object', $scenario_object->get('id'));
+			$scenario_object_drop->set('id_item', $drop['idItem']);
+			$scenario_object_drop->set('num', $drop['num']);
+			$scenario_object_drop->save();
+
+			array_push($updated_list, $scenario_object_drop->get('id'));
+		}
+
+		$drop_list = $scenario_object->getDrops();
+		foreach ($drop_list as $scenario_object_drop) {
+			if (!in_array($scenario_object_drop->get('id'), $updated_list)) {
+				$scenario_object_drop->delete();
+			}
+		}
+	}
+
+	/**
+	 * Función para borrar un objeto de escenario, antes de borrarlo comprueba si está en uso y no lo borra oara avisar
+	 *
+	 * @param int $id Id del objeto de escenario a borrar
+	 *
+	 * @return array Estado de la operación y mensaje en caso de error
+	 */
+	public function deleteScenarioObject(int $id): array {
+		$ret = ['status' => 'ok', 'message' => ''];
+		$scenario_object = new ScenarioObject();
+		$scenario_object->find(['id' => $id]);
+
+		$db = new ODB();
+		$messages = [];
+
+		// Scenario Data
+		$sql = "SELECT * FROM `scenario_data` WHERE `id_scenario_object` = ?";
+		$db->query($sql, [$id]);
+		while ($res = $db->next()) {
+			$scenario_data = new ScenarioData();
+			$scenario_data->update($res);
+			array_push($messages, 'Escenario '.$scenario_data->getScenario()->get('name'));
+		}
+
+		if (count($messages)>0) {
+			$ret['status'] = 'in-use';
+			$ret['messages'] = implode(', ', $messages);
+		}
+		else {
+			$character->delete();
+		}
+
+		return $ret;
+	}
 }
