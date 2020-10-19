@@ -105,4 +105,112 @@ class ScenarioData extends OModel {
 		$scenario->find(['id' => $this->get('id_scenario')]);
 		$this->setScenario($scenario);
 	}
+
+	private ?Background $background = null;
+
+	/**
+	 * Obtiene el fondo de la casilla, si lo tiene
+	 *
+	 * @return Background Elemento de fondo de la casilla
+	 */
+	public function getBackground(): ?Background {
+		if (is_null($this->background) && !is_null($this->get('id_background'))) {
+			$this->loadBackground();
+		}
+		return $this->background;
+	}
+
+	/**
+	 * Guarda el elemento de fondo de la casilla
+	 *
+	 * @param Background $background Elemento de fondo de la casilla
+	 *
+	 * @return void
+	 */
+	public function setBackground(Background $background): void {
+		$this->background = $background;
+	}
+
+	/**
+	 * Carga el elemento de fondo de la casilla
+	 *
+	 * @return void
+	 */
+	public function loadBackground(): void {
+		$background = new Background();
+		$background->find(['id' => $this->get('id_background')]);
+		$this->setBackground($background);
+	}
+
+	private ?ScenarioObject $scenario_object = null;
+
+	/**
+	 * Obtiene el objeto de la casilla, si lo tiene
+	 *
+	 * @return ScenarioObject Objeto de la casilla
+	 */
+	public function getScenarioObject(): ?ScenarioObject {
+		if (is_null($this->scenario_object) && !is_null($this->get('id_scenario_object'))) {
+			$this->loadScenarioObject();
+		}
+		return $this->scenario_object;
+	}
+
+	/**
+	 * Guarda el objeto de la casilla
+	 *
+	 * @param ScenarioObject $scenario_object Objeto de la casilla
+	 *
+	 * @return void
+	 */
+	public function setScenarioObject(ScenarioObject $scenario_object): void {
+		$this->scenario_object = $scenario_object;
+	}
+
+	/**
+	 * Carga el objeto de la casilla
+	 *
+	 * @return void
+	 */
+	public function loadScenarioObject(): void {
+		$scenario_object = new ScenarioObject();
+		$scenario_object->find(['id' => $this->get('id_scenario_object')]);
+		$this->setScenarioObject($scenario_object);
+	}
+
+	private ?Character $character = null;
+
+	/**
+	 * Obtiene el personaje de la casilla, si lo tiene
+	 *
+	 * @return Character Personaje de la casilla
+	 */
+	public function getCharacter(): ?Character {
+		if (is_null($this->character) && !is_null($this->get('id_character'))) {
+			$this->loadCharacter();
+		}
+		return $this->character;
+	}
+
+	/**
+	 * Guarda el personaje de la casilla
+	 *
+	 * @param Character $character Personaje de la casilla
+	 *
+	 * @return void
+	 */
+	public function setCharacter(Character $character): void {
+		$this->character = $character;
+	}
+
+	/**
+	 * Carga el personaje de la casilla
+	 *
+	 * @return void
+	 */
+	public function loadCharacter(): void {
+		$character = new Character();
+		$character->find(['id' => $this->get('id_character')]);
+		$this->setCharacter($character);
+	}
 }

@@ -222,6 +222,33 @@ class admin extends OModule {
 	}
 
 	/**
+	 * Función para obtener el detalle de un escenario
+	 *
+	 * @url /get-scenario
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function getScenario(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$data = [];
+		$connection = [];
+
+		$scenario = new Scenario();
+		if ($scenario->find(['id' => $id])) {
+			$data = $scenario->getData();
+			$connection = $scenario->getConnections();
+		}
+		else {
+			$status = 'error';
+		}
+
+		$this->getTemplate()->add('status', $status);
+		
+	}
+
+	/**
 	 * Función para obtener la lista de recursos
 	 *
 	 * @url /asset-list
@@ -696,7 +723,7 @@ class admin extends OModule {
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/scenario_objects', ['list' => $items, 'extra' => 'nourlencode']);
 	}
-	
+
 	/**
 	 * Función para guardar un objeto de escenario
 	 *
@@ -723,11 +750,11 @@ class admin extends OModule {
 		$breakable = $req->getParamBool('crossable');
 		$drops = $req->getParam('drops');
 		$frames = $req->getParam('frames');
-		
+
 		if (is_null($name) || is_null($id_asset) || is_null($width) || is_null($height)) {
 			$status = 'error';
 		}
-		
+
 		if ($status=='ok') {
 			$scenario_object = new ScenarioObject();
 			if (!is_null($id)) {
@@ -751,7 +778,7 @@ class admin extends OModule {
 			$this->admin_service->updateScenarioObjectFrames($scenario_object, $frames);
 			$this->admin_service->updateScenarioObjectDrops($scenario_object, $drops);
 		}
-		
+
 		$this->getTemplate()->add('status', $status);
 	}
 

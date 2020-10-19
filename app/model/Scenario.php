@@ -60,6 +60,99 @@ class Scenario extends OModel {
 		parent::load($table_name, $model);
 	}
 
+	private ?array $data = null;
+
+	/**
+	 * Obtiene los datos de un escenario
+	 *
+	 * @return array Lista con los datos de un escenario
+	 */
+	public function getData(): array {
+		if (is_null($this->data)) {
+			$this->loadData();
+		}
+		return $this->data;
+	}
+
+	/**
+	 * Guarda los datos de un escenario
+	 *
+	 * @param array $data Lista con los datos de un escenario
+	 *
+	 * @return void
+	 */
+	public function setData(array $data): void {
+		$this->data = $data;
+	}
+
+	/**
+	 * Carga los datos de un escenario
+	 *
+	 * @return void
+	 */
+	public function loadData(): void {
+		$sql = "SELECT * FROM `scenario_data` WHERE `id_scenario` = ?";
+		$this->db->query($sql, [$this->get('id')]);
+		$data = [];
+
+		while ($res = $this->db->next()) {
+			$scenario_data = new ScenarioData();
+			$scenario_data->update($res);
+			array_push($data, $scenario_data);
+		}
+
+		$this->setData($data);
+	}
+
+	private ?array $connections = null;
+
+	/**
+	 * Obtiene la lista de escenarios a los que se conecta un escenario
+	 *
+	 * @return array Lista de escenarios a los que se conecta
+	 */
+	public function getConnections(): array {
+		if (is_null($this->connections)) {
+			$this->loadConnections();
+		}
+		return $this->connections;
+	}
+
+	/**
+	 * Guarda la lista de escenarios a los que se conecta un escenario
+	 *
+	 * @param array $connections Lista de escenarios a los que se conecta
+	 *
+	 * @return void
+	 */
+	public function setConnections(array $connections): void {
+		$this->connections = $connections;
+	}
+
+	/**
+	 * Carga la lista de escenarios a los que se conecta un escenario
+	 *
+	 * @return void
+	 */
+	public function loadConnections(): void {
+		$sql = "SELECT * FROM `connections` WHERE `id_from` = ?";
+		$this->db->query($sql, [$this->get('id')]);
+		$connections = [];
+
+		while ($res = $this->db->next()) {
+			$connection = new Connection();
+			$connection->update($res);
+			array_push($connections, $connection);
+		}
+
+		$this->setConnections($connections);
+	}
+
+	/**
+	 * Borra un escenario con todos sus datos y conexiones
+	 *
+	 * @return void
+	 */
 	public function deleteFull(): void {
 		$sql = "DELETE FROM `connection` WHERE `id_from` = ? OR `id_to` = ?";
 		$this->db->query($sql, [$this->get('id'), $this->get('id')]);

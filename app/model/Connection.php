@@ -17,11 +17,12 @@ class Connection extends OModel {
 				'ref' => 'scenario.id',
 				'comment' => 'Id del escenario con el que conecta'
 			],
-			'direction' => [
-				'type'    => OCore::NUM,
+			'orientation' => [
+				'type'    => OCore::TEXT,
 				'nullable' => false,
 				'default' => null,
-				'comment' => 'Sentido de la conexión 1 arriba 2 derecha 3 abajo 4 izquierda'
+				'size' => 5,
+				'comment' => 'Sentido de la conexión up / down / left / right'
 			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
@@ -36,5 +37,77 @@ class Connection extends OModel {
 		];
 
 		parent::load($table_name, $model);
+	}
+
+	private ?Scenario $from = null;
+
+	/**
+	 * Obtiene el escenario desde el que conecta
+	 *
+	 * @return Scenario Escenario desde el que conecta
+	 */
+	public function getFrom(): Scenario {
+		if (is_null($this->from)) {
+			$this->loadFrom();
+		}
+		return $this->from;
+	}
+
+	/**
+	 * Guarda el escenario desde el que conecta
+	 *
+	 * @param Scenario $from Escenario desde el que conecta
+	 *
+	 * @return void
+	 */
+	public function setFrom(Scenario $from): void {
+		$this->from = $from;
+	}
+
+	/**
+	 * Carga el escenario desde el que conecta
+	 *
+	 * @return void
+	 */
+	public function loadFrom(): void {
+		$from = new Scenario();
+		$from->find(['id' => $this->get('id_from')]);
+		$this->setFrom($from);
+	}
+
+	private ?Scenario $to = null;
+
+	/**
+	 * Obtiene el escenario al que conecta
+	 *
+	 * @return Scenario Escenario al que conecta
+	 */
+	public function getTo(): Scenario {
+		if (is_null($this->to)) {
+			$this->loadTo();
+		}
+		return $this->to;
+	}
+
+	/**
+	 * Guarda el escenario al que conecta
+	 *
+	 * @param Scenario $to Escenario al que conecta
+	 *
+	 * @return void
+	 */
+	public function setTo(Scenario $to): void {
+		$this->to = $to;
+	}
+
+	/**
+	 * Carga el escenario al que conecta
+	 *
+	 * @return void
+	 */
+	public function loadTo(): void {
+		$to = new Scenario();
+		$to->find(['id' => $this->get('id_to')]);
+		$this->setTo($to);
 	}
 }
