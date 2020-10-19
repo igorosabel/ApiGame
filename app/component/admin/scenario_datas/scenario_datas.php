@@ -1,7 +1,6 @@
 <?php foreach ($values['list'] as $i => $scenario_data): ?>
 	{
 		"id": <?php echo $scenario_data->get('id') ?>,
-		"type": <?php echo $scenario_data->get('type') ?>,
 		"x": <?php echo $scenario_data->get('x') ?>,
 		"y": <?php echo $scenario_data->get('y') ?>,
 		"idBackground": <?php echo (!is_null($scenario_data->get('id_background'))) ? $scenario_data->get('id_background') : 'null' ?>,

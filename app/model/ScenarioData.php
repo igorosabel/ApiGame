@@ -16,12 +16,6 @@ class ScenarioData extends OModel {
 				'ref' => 'scenario.id',
 				'comment' => 'Id del escenario al que pertenece el dato'
 			],
-			'type' => [
-				'type'    => OCore::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Tipo de dato 0 fondo 1 objeto 2 personaje'
-			],
 			'x' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
