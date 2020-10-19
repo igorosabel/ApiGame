@@ -154,7 +154,11 @@ class admin extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/scenarios', ['list' => $list, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'admin/scenarios', [
+			'route' => $this->getConfig()->getDir('app_component').'admin/scenario/scenario.php',
+			'list' => $list,
+			'extra' => 'nourlencode'
+		]);
 	}
 
 	/**
@@ -245,7 +249,9 @@ class admin extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		
+		$this->getTemplate()->addComponent('scenario',   'admin/scenario',       ['sce' => $scenario,    'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('data',       'admin/scenario_datas', ['list' => $data,       'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('connection', 'admin/connections',    ['list' => $connection, 'extra' => 'nourlencode']);
 	}
 
 	/**

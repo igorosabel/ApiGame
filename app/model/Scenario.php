@@ -135,7 +135,7 @@ class Scenario extends OModel {
 	 * @return void
 	 */
 	public function loadConnections(): void {
-		$sql = "SELECT * FROM `connections` WHERE `id_from` = ?";
+		$sql = "SELECT * FROM `connection` WHERE `id_from` = ?";
 		$this->db->query($sql, [$this->get('id')]);
 		$connections = [];
 

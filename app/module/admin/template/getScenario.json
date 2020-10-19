@@ -1,0 +1,10 @@
+{
+	"status": "{{status}}",
+	"scenario": {{scenario}},
+	"data": [
+{{data}}
+	],
+	"connection": [
+{{connection}}
+	]
+}
