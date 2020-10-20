@@ -370,18 +370,19 @@ class adminService extends OService {
 	 * @return string Estado de la operación
 	 */
 	public function deleteBackgroundCategory(BackgroundCategory $background_category): string {
-		$db = new ODB();
-		$sql = "SELECT COUNT(*) AS `num` FROM `background` WHERE `id_background_category` = ?";
-		$db->query($sql, [$background_category->get('id')]);
-		$res = $db->next();
+		$ret = ['status' => 'ok', 'message' => ''];
+		$messages = [];
 
-		if ($res['num']>0) {
-			return 'in-use';
+		$background_list = $background_category->getBackgrounds();
+		if (count($background_list)>0) {
+			$ret['status'] = 'in-use';
+			foreach ($background_list as $background) {
+				array_push($messages, 'Fondo '.$background->get('name').' ('.$background->get('id').')');
+			}
+			$ret['messages'] = implode(', ', $messages);
 		}
-		else {
-			$background_category->delete();
-			return 'ok';
-		}
+
+		return $ret;
 	}
 
 	/**
@@ -392,18 +393,24 @@ class adminService extends OService {
 	 * @return string Estado de la operación
 	 */
 	public function deleteBackground(Background $background): string {
+		$ret = ['status' => 'ok', 'message' => ''];
+		$messages = [];
 		$db = new ODB();
-		$sql = "SELECT COUNT(*) AS `num` FROM `scenario_data` WHERE `id_background` = ?";
+		$sql = "SELECT * FROM `scenario_data` WHERE `id_background` = ?";
 		$db->query($sql, [$background->get('id')]);
-		$res = $db->next();
 
-		if ($res['num']>0) {
-			return 'in-use';
+		while ($res = $db->next()) {
+			$scenario_data = new ScenarioData();
+			$scenario_data->update($res);
+			array_push($messages, 'Escenario '.$scenario_data->getScenario()->get('name').' ('.$scenario_data->getScenario()->get('id').')');
 		}
-		else {
-			$background->delete();
-			return 'ok';
+
+		if (count($messages)>0) {
+			$ret['status'] = 'in-use';
+			$ret['messages'] = implode(', ', $messages);
 		}
+
+		return $ret;
 	}
 
 	/**

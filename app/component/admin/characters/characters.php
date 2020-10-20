@@ -2,6 +2,8 @@
 	{
 		"id": <?php echo $character->get('id') ?>,
 		"name": "<?php echo urlencode($character->get('name')) ?>",
+		"width": <?php echo $character->get('width') ?>,
+		"height": <?php echo $character->get('height') ?>,
 		"idAssetUp": <?php     echo !is_null($character->get('id_asset_up'))    ? $character->get('id_asset_up')    : 'null' ?>,
 		"assetUpUrl": <?php    echo !is_null($character->getAsset('up'))        ? '"'.urlencode($character->getAsset('up')->getUrl()).'"'    : 'null' ?>,
 		"idAssetDown": <?php   echo !is_null($character->get('id_asset_down'))  ? $character->get('id_asset_down')  : 'null' ?>,

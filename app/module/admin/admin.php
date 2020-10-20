@@ -255,6 +255,48 @@ class admin extends OModule {
 	}
 
 	/**
+	 * Función para guardar el detalle de un escenario
+	 *
+	 * @url /save-scenario-data
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveScenarioData(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+		$id_scenario = $req->getParamInt('idScenario');
+		$x = $req->getParamInt('x');
+		$y = $req->getParamInt('y');
+		$id_background = $req->getParamInt('idBackground');
+		$id_scenario_object = $req->getParamInt('idScenarioObject');
+		$id_character = $req->getParamInt('idCharacter');
+
+		if (is_null($id_scenario) || is_null($x) || is_null($y)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$scenario_data = new ScenarioData();
+			if (!is_null($id)) {
+				$scenario_data->find(['id' => $id]);
+			}
+			$scenario_data->set('id_scenario', $id_scenario);
+			$scenario_data->set('x', $x);
+			$scenario_data->set('y', $y);
+			$scenario_data->set('id_background', $id_background);
+			$scenario_data->set('id_scenario_object', $id_scenario_object);
+			$scenario_data->set('id_character', $id_character);
+			$scenario_data->save();
+
+			$id = $scenario_data->get('id');
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('id', $id);
+	}
+
+	/**
 	 * Función para obtener la lista de recursos
 	 *
 	 * @url /asset-list
@@ -420,6 +462,7 @@ class admin extends OModule {
 	public function deleteBackgroundCategory(ORequest $req): void {
 		$status = 'ok';
 		$id = $req->getParamInt('id');
+		$message = '';
 
 		if (is_null($id)) {
 			$status = 'error';
@@ -428,7 +471,9 @@ class admin extends OModule {
 		if ($status=='ok') {
 			$background_category = new BackgroundCategory();
 			if ($background_category->find(['id'=>$id])) {
-				$status = $this->admin_service->deleteBackgroundCategory($background_category);
+				$return = $this->admin_service->deleteBackgroundCategory($background_category);
+				$status = $return['status'];
+				$message = $return['message'];
 			}
 			else {
 				$status = 'error';
@@ -436,6 +481,7 @@ class admin extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('message', $message);
 	}
 
 	/**
@@ -642,6 +688,8 @@ class admin extends OModule {
 		$id_asset_left = $req->getParamInt('idAssetLeft');
 		$id_asset_right = $req->getParamInt('idAssetRight');
 		$name = $req->getParamString('name');
+		$width = $req->getParamInt('width');
+		$height = $req->getParamInt('height');
 		$health = $req->getParamInt('health');
 		$attack = $req->getParamInt('attack');
 		$defense = $req->getParamInt('defense');
@@ -654,7 +702,7 @@ class admin extends OModule {
 		$framesLeft = $req->getParam('framesLeft');
 		$framesRight = $req->getParam('framesRight');
 
-		if (is_null($name) || is_null($type)) {
+		if (is_null($name) || is_null($type) || is_null($width) || is_null($height)) {
 			$status = 'error';
 		}
 
@@ -669,6 +717,8 @@ class admin extends OModule {
 			$character->set('id_asset_left', $id_asset_left);
 			$character->set('id_asset_right', $id_asset_right);
 			$character->set('name',     $name);
+			$character->set('width',     $width);
+			$character->set('height',     $height);
 			$character->set('health',   $health);
 			$character->set('attack',   $attack);
 			$character->set('defense',  $defense);

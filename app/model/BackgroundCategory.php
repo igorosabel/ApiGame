@@ -30,4 +30,48 @@ class BackgroundCategory extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	private ?array $backgrounds = null;
+
+	/**
+	 * Obtiene la lista de fondos de una categoría
+	 *
+	 * @return array Lista de fondos de una categoría
+	 */
+	public function getBackgrounds(): array {
+		if (is_null($this->backgrounds)) {
+			$this->loadBackgrounds();
+		}
+		return $this->backgrounds;
+	}
+
+	/**
+	 * Guarda la lista de fondos de una categoría
+	 *
+	 * @param array $backgrounds Lista de fondos de una categoría
+	 *
+	 * @return void
+	 */
+	public function setBackgrounds(array $backgrounds): void {
+		$this->backgrounds = $backgrounds;
+	}
+
+	/**
+	 * Carga la lista de fondos de una categoría
+	 *
+	 * @return void
+	 */
+	public function loadBackgrounds(): void {
+		$sql = "SELECT * FROM `background` WHERE `id_background_category` = ? ORDER BY `name`";
+		$this->db->query($sql, [$this->get('id')]);
+		$backgrounds = [];
+
+		while ($res = $this->db->next()) {
+			$background = new Background();
+			$background->update($res);
+			array_push($backgrounds, $background);
+		}
+
+		$this->setBackgrounds($backgrounds);
+	}
 }

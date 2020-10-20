@@ -16,6 +16,18 @@ class Character extends OModel {
 				'size' => 50,
 				'comment' => 'Nombre del tipo de personaje'
 			],
+			'width' => [
+				'type'    => OCore::NUM,
+				'nullable' => false,
+				'default' => null,
+				'comment' => 'Anchura del personaje en casillas'
+			],
+			'height' => [
+				'type'    => OCore::NUM,
+				'nullable' => false,
+				'default' => null,
+				'comment' => 'Altura del personaje en casillas'
+			],
 			'id_asset_up' => [
 				'type'    => OCore::NUM,
 				'nullable' => true,
