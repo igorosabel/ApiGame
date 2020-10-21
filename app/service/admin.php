@@ -735,4 +735,38 @@ class adminService extends OService {
 
 		return $ret;
 	}
+
+	/**
+	 * Crea o actualiza una conexión de un escenario a otro
+	 *
+	 * @param int $id_from Desde qué escenario se conecta
+	 *
+	 * @param int $id_to Escenario al que conecta
+	 *
+	 * @param string $orientation Desde qué lado del escenario se conecta
+	 */
+	public function updateConnection(int $id_from, int $id_to, string $orientation): void {
+		$this->deleteConnection($id_from, $id_to, $orientation);
+
+		$connection = new Connection();
+		$connection->set('id_from', $id_from);
+		$connection->set('id_to', $id_to);
+		$connection->set('orientation', $orientation);
+		$connection->save();
+	}
+
+	/**
+	 * Borra una conexión de un escenario a otro
+	 *
+	 * @param int $id_from Desde qué escenario se conecta
+	 *
+	 * @param int $id_to Escenario al que conecta
+	 *
+	 * @param string $orientation Desde qué lado del escenario se conecta
+	 */
+	public function deleteConnection(int $id_from, int $id_to, string $orientation): void {
+		$db = new ODB();
+		$sql = "DELETE FROM `connection` WHERE `id_from` = ? AND `id_to` = ? AND `orientation` = ?";
+		$db->query($sql, [$id_from, $id_to, $orientation]);
+	}
 }

@@ -297,6 +297,56 @@ class admin extends OModule {
 	}
 
 	/**
+	 * Función para guardar una conexión de un escenario a otro
+	 *
+	 * @url /save-connection
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function saveConnection(ORequest $req): void {
+		$status = 'ok';
+		$id_from = $req->getParamInt('from');
+		$id_to = $req->getParamInt('to');
+		$orientation = $req->getParamString('orientation');
+
+		if (is_null($id_from) || is_null($id_to) || is_null($orientation)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$this->admin_service->updateConnection($id_from, $id_to, $orientation);
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para borrar una conexión de un escenario a otro
+	 *
+	 * @url /delete-connection
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function deleteConnection(ORequest $req): void {
+		$status = 'ok';
+		$id_from = $req->getParamInt('from');
+		$id_to = $req->getParamInt('to');
+		$orientation = $req->getParamString('orientation');
+
+		if (is_null($id_from) || is_null($id_to) || is_null($orientation)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$this->admin_service->deleteConnection($id_from, $id_to, $orientation);
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
 	 * Función para obtener la lista de recursos
 	 *
 	 * @url /asset-list
