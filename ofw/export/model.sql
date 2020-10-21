@@ -1,35 +1,11 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 
-CREATE TABLE `tag` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada tag',
-  `name` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Texto de la tag',
-  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
-  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
 CREATE TABLE `character_frame` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único de cada frame del tipo de personaje',
   `id_character` INT(11) NOT NULL COMMENT 'Id del tipo de personaje al que pertenece el frame',
   `id_asset` INT(11) NOT NULL COMMENT 'Id del recurso usado como frame',
-  `orientation` INT(11) NOT NULL COMMENT 'Orientación de la imagen del frame 1 arriba 2 derecha 3 abajo 4 izquierda',
+  `orientation` VARCHAR(5) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Orientación de la imagen del frame up / down / left / right',
   `order` INT(11) NOT NULL COMMENT 'Orden del frame en la animación',
-  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
-  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-CREATE TABLE `scenario_data` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada dato',
-  `id_scenario` INT(11) NOT NULL COMMENT 'Id del escenario al que pertenece el dato',
-  `type` INT(11) NOT NULL COMMENT 'Tipo de dato 0 fondo 1 objeto 2 personaje',
-  `x` INT(11) NOT NULL COMMENT 'Coordenada X del dato en el escenario',
-  `y` INT(11) NOT NULL COMMENT 'Coordenada Y del dato en el escenario',
-  `id_background` INT(11) NOT NULL COMMENT 'Id del fondo del escenario',
-  `id_scenario_object` INT(11) NOT NULL COMMENT 'Id del objeto relacionado que va en el escenario',
-  `id_character` INT(11) NOT NULL COMMENT 'Id del personaje que va en el escenario',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   PRIMARY KEY (`id`)
@@ -47,12 +23,12 @@ CREATE TABLE `item_frame` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `world_unlocked` (
-  `id_game` INT(11) NOT NULL COMMENT 'Id de la partida',
-  `id_world` INT(11) NOT NULL COMMENT 'Id del mundo desbloqueado',
+CREATE TABLE `tag` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada tag',
+  `name` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Texto de la tag',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id_game`,`id_world`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -68,14 +44,14 @@ CREATE TABLE `background` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `equipment` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada equipamiento',
-  `id_game` INT(11) NOT NULL COMMENT 'Id de la partida a la que pertenece el equipamiento',
-  `head` INT(11) NOT NULL COMMENT 'Id del item que va en la cabeza',
-  `necklace` INT(11) NOT NULL COMMENT 'Id del item que va al cuello',
-  `body` INT(11) NOT NULL COMMENT 'Id del item que viste',
-  `boots` INT(11) NOT NULL COMMENT 'Id del item usado como botas',
-  `weapon` INT(11) NOT NULL COMMENT 'Id del item que usa como arma',
+CREATE TABLE `scenario_data` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada dato',
+  `id_scenario` INT(11) NOT NULL COMMENT 'Id del escenario al que pertenece el dato',
+  `x` INT(11) NOT NULL COMMENT 'Coordenada X del dato en el escenario',
+  `y` INT(11) NOT NULL COMMENT 'Coordenada Y del dato en el escenario',
+  `id_background` INT(11) NOT NULL COMMENT 'Id del fondo del escenario',
+  `id_scenario_object` INT(11) NOT NULL COMMENT 'Id del objeto relacionado que va en el escenario',
+  `id_character` INT(11) NOT NULL COMMENT 'Id del personaje que va en el escenario',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   PRIMARY KEY (`id`)
@@ -93,9 +69,45 @@ CREATE TABLE `scenario_object_frame` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE `world_unlocked` (
+  `id_game` INT(11) NOT NULL COMMENT 'Id de la partida',
+  `id_world` INT(11) NOT NULL COMMENT 'Id del mundo desbloqueado',
+  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  PRIMARY KEY (`id_game`,`id_world`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE `equipment` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada equipamiento',
+  `id_game` INT(11) NOT NULL COMMENT 'Id de la partida a la que pertenece el equipamiento',
+  `head` INT(11) NOT NULL COMMENT 'Id del item que va en la cabeza',
+  `necklace` INT(11) NOT NULL COMMENT 'Id del item que va al cuello',
+  `body` INT(11) NOT NULL COMMENT 'Id del item que viste',
+  `boots` INT(11) NOT NULL COMMENT 'Id del item usado como botas',
+  `weapon` INT(11) NOT NULL COMMENT 'Id del item que usa como arma',
+  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE `narrative` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada narrativa',
+  `id_character` INT(11) NOT NULL COMMENT 'Id del personaje',
+  `dialog` TEXT COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Texto del dialogo',
+  `order` INT(11) NOT NULL COMMENT 'Orden del dialogo en la narrativa',
+  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 CREATE TABLE `character` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único de cada tipo de personaje',
   `name` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre del tipo de personaje',
+  `width` INT(11) NOT NULL COMMENT 'Anchura del personaje en casillas',
+  `height` INT(11) NOT NULL COMMENT 'Altura del personaje en casillas',
   `id_asset_up` INT(11) NOT NULL COMMENT 'Imagen del personaje al mirar hacia arriba',
   `id_asset_down` INT(11) NOT NULL COMMENT 'Imagen del personaje al mirar hacia abajo',
   `id_asset_left` INT(11) NOT NULL COMMENT 'Imagen del personaje al mirar hacia la izquierda',
@@ -134,7 +146,7 @@ CREATE TABLE `item` (
 CREATE TABLE `connection` (
   `id_from` INT(11) NOT NULL COMMENT 'Id de un escenario',
   `id_to` INT(11) NOT NULL COMMENT 'Id del escenario con el que conecta',
-  `direction` INT(11) NOT NULL COMMENT 'Sentido de la conexión 1 arriba 2 derecha 3 abajo 4 izquierda',
+  `orientation` VARCHAR(5) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Sentido de la conexión up / down / left / right',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   PRIMARY KEY (`id_from`,`id_to`)
@@ -278,6 +290,20 @@ ALTER TABLE `character_frame`
   ADD CONSTRAINT `fk_character_frame_asset` FOREIGN KEY (`id_asset`) REFERENCES `asset` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
+ALTER TABLE `item_frame`
+  ADD KEY `fk_item_frame_item_idx` (`id_item`),
+  ADD KEY `fk_item_frame_asset_idx` (`id_asset`),
+  ADD CONSTRAINT `fk_item_frame_item` FOREIGN KEY (`id_item`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_item_frame_asset` FOREIGN KEY (`id_asset`) REFERENCES `asset` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+ALTER TABLE `background`
+  ADD KEY `fk_background_background_category_idx` (`id_background_category`),
+  ADD KEY `fk_background_asset_idx` (`id_asset`),
+  ADD CONSTRAINT `fk_background_background_category` FOREIGN KEY (`id_background_category`) REFERENCES `background_category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_background_asset` FOREIGN KEY (`id_asset`) REFERENCES `asset` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
 ALTER TABLE `scenario_data`
   ADD KEY `fk_scenario_data_scenario_idx` (`id_scenario`),
   ADD KEY `fk_scenario_data_background_idx` (`id_background`),
@@ -289,11 +315,11 @@ ALTER TABLE `scenario_data`
   ADD CONSTRAINT `fk_scenario_data_character` FOREIGN KEY (`id_character`) REFERENCES `character` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
-ALTER TABLE `item_frame`
-  ADD KEY `fk_item_frame_item_idx` (`id_item`),
-  ADD KEY `fk_item_frame_asset_idx` (`id_asset`),
-  ADD CONSTRAINT `fk_item_frame_item` FOREIGN KEY (`id_item`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_item_frame_asset` FOREIGN KEY (`id_asset`) REFERENCES `asset` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `scenario_object_frame`
+  ADD KEY `fk_scenario_object_frame_scenario_object_idx` (`id_scenario_object`),
+  ADD KEY `fk_scenario_object_frame_asset_idx` (`id_asset`),
+  ADD CONSTRAINT `fk_scenario_object_frame_scenario_object` FOREIGN KEY (`id_scenario_object`) REFERENCES `scenario_object` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_scenario_object_frame_asset` FOREIGN KEY (`id_asset`) REFERENCES `asset` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `world_unlocked`
@@ -301,13 +327,6 @@ ALTER TABLE `world_unlocked`
   ADD KEY `fk_world_unlocked_world_idx` (`id_world`),
   ADD CONSTRAINT `fk_world_unlocked_game` FOREIGN KEY (`id_game`) REFERENCES `game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_world_unlocked_world` FOREIGN KEY (`id_world`) REFERENCES `world` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-
-ALTER TABLE `background`
-  ADD KEY `fk_background_background_category_idx` (`id_background_category`),
-  ADD KEY `fk_background_asset_idx` (`id_asset`),
-  ADD CONSTRAINT `fk_background_background_category` FOREIGN KEY (`id_background_category`) REFERENCES `background_category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_background_asset` FOREIGN KEY (`id_asset`) REFERENCES `asset` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `equipment`
@@ -325,11 +344,9 @@ ALTER TABLE `equipment`
   ADD CONSTRAINT `fk_equipment_item` FOREIGN KEY (`weapon`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
-ALTER TABLE `scenario_object_frame`
-  ADD KEY `fk_scenario_object_frame_scenario_object_idx` (`id_scenario_object`),
-  ADD KEY `fk_scenario_object_frame_asset_idx` (`id_asset`),
-  ADD CONSTRAINT `fk_scenario_object_frame_scenario_object` FOREIGN KEY (`id_scenario_object`) REFERENCES `scenario_object` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_scenario_object_frame_asset` FOREIGN KEY (`id_asset`) REFERENCES `asset` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `narrative`
+  ADD KEY `fk_narrative_character_idx` (`id_character`),
+  ADD CONSTRAINT `fk_narrative_character` FOREIGN KEY (`id_character`) REFERENCES `character` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `character`
