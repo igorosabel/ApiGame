@@ -733,6 +733,7 @@ class admin extends OModule {
 		$status = 'ok';
 		$id = $req->getParamInt('id');
 		$type = $req->getParamInt('type');
+		$fixed_position = $req->getParamBool('fixedPosition');
 		$id_asset_up = $req->getParamInt('idAssetUp');
 		$id_asset_down = $req->getParamInt('idAssetDown');
 		$id_asset_left = $req->getParamInt('idAssetLeft');
@@ -751,6 +752,7 @@ class admin extends OModule {
 		$framesDown = $req->getParam('framesDown');
 		$framesLeft = $req->getParam('framesLeft');
 		$framesRight = $req->getParam('framesRight');
+		$narratives = $req->getParam('narratives');
 
 		if (is_null($name) || is_null($type) || is_null($width) || is_null($height)) {
 			$status = 'error';
@@ -762,6 +764,7 @@ class admin extends OModule {
 				$character->find(['id' => $id]);
 			}
 			$character->set('type',     $type);
+			$character->set('fixed_position', $fixed_position);
 			$character->set('id_asset_up', $id_asset_up);
 			$character->set('id_asset_down', $id_asset_down);
 			$character->set('id_asset_left', $id_asset_left);
@@ -782,6 +785,7 @@ class admin extends OModule {
 			$this->admin_service->updateCharacterFrames($character, $framesDown, 'down');
 			$this->admin_service->updateCharacterFrames($character, $framesLeft, 'left');
 			$this->admin_service->updateCharacterFrames($character, $framesRight, 'right');
+			$this->admin_service->updateCharacterNarratives($character, $narratives);
 		}
 
 		$this->getTemplate()->add('status', $status);

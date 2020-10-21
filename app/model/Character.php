@@ -28,6 +28,12 @@ class Character extends OModel {
 				'default' => null,
 				'comment' => 'Altura del personaje en casillas'
 			],
+			'fixed_position' => [
+				'type' => OCore::BOOL,
+				'nullable' => false,
+				'default' => false,
+				'comment' => 'Indica si el personaje se queda quieto o no'
+			],
 			'id_asset_up' => [
 				'type'    => OCore::NUM,
 				'nullable' => true,

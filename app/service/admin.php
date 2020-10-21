@@ -583,6 +583,32 @@ class adminService extends OService {
 	}
 
 	/**
+	 * Función para actualizar las narrativas de un personaje
+	 */
+	public function updateCharacterNarratives(Character $character, array $narratives): void {
+		$updated_list = [];
+		foreach ($narratives as $narrative) {
+			$character_narrative = new Narrative();
+			if (!is_null($narrative['id'])) {
+				$character_narrative->find(['id' => $narrative['id']]);
+			}
+			$character_narrative->set('id_character', $character->get('id'));
+			$character_narrative->set('dialog', $narrative['dialog']);
+			$character_narrative->set('order', $narrative['order']);
+			$character_narrative->save();
+
+			array_push($updated_list, $character_narrative->get('id'));
+		}
+
+		$narrative_list = $character->getNarratives();
+		foreach ($narrative_list as $character_narrative) {
+			if (!in_array($character_narrative->get('id'), $updated_list)) {
+				$character_narrative->delete();
+			}
+		}
+	}
+
+	/**
 	 * Función para borrar un personaje, antes de borrarlo comprueba si está en uso y no lo borra oara avisar
 	 *
 	 * @param int $id Id del personaje a borrar
