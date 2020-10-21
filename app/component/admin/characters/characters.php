@@ -64,6 +64,15 @@
 				"order": <?php echo $character_frame->get('order') ?>
 			}<?php if ($j<count($character->getFrames('right'))-1): ?>,<?php endif ?>
 <?php endforeach ?>
+		],
+		"narratives": [
+<?php foreach ($character->getNarratives() as $j => $narrative): ?>
+			{
+				"id": <?php echo $narrative->get('id') ?>,
+				"dialog": "<?php echo urlencode($narrative->get('dialog')) ?>",
+				"order": <?php echo $narrative->get('order') ?>
+			}<?php if ($j<count($character->getNarratives())-1): ?>,<?php endif ?>
+<?php endforeach ?>
 		]
 	}<?php if ($i<count($values['list'])-1): ?>,<?php endif ?>
 <?php endforeach ?>

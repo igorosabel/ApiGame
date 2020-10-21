@@ -257,4 +257,31 @@ class Character extends OModel {
 		}
 		$this->setFrames($list);
 	}
+
+	private ?array $narratives = null;
+
+	public function getNarratives(): array {
+		if (is_null($this->narratives)) {
+			$this->loadNarratives();
+		}
+		return $this->narratives;
+	}
+
+	public function setNarratives(array $narratives): void {
+		$this->narratives = $narratives;
+	}
+
+	public function loadNarratives(): void {
+		$sql = "SELECT * FROM `narrative` WHERE `id_character` = ? ORDER BY `order`";
+		$this->db->query($sql, [$this->get('id')]);
+		$narratives = [];
+
+		while ($res = $this->db->next()) {
+			$narrative = new Narrative();
+			$narrative->update($res);
+			array_push($narratives, $narrative);
+		}
+
+		$this->setNarratives($narratives);
+	}
 }
