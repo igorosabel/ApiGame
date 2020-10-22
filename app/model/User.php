@@ -23,6 +23,12 @@ class User extends OModel {
 				'size' => 100,
 				'comment' => 'Contraseña del usuario'
 			],
+			'admin' => [
+				'type' => OCore::BOOL,
+				'nullable' => false,
+				'default' => false,
+				'comment' => 'Indica si el usuario es administrador'
+			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
 				'comment' => 'Fecha de creación del registro'
@@ -36,5 +42,14 @@ class User extends OModel {
 		];
 
 		parent::load($table_name, $model);
+	}
+
+	public function login(string $email, string $pass): bool {
+		if ($this->find(['email' => $email])) {
+			return password_verify($pass, $this->get('pass'));
+		}
+		else {
+			return false;
+		}
 	}
 }

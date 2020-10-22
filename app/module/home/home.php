@@ -1,4 +1,7 @@
 <?php declare(strict_types=1);
+/**
+ * @type html
+*/
 class home extends OModule {
 	public ?webService $web_service = null;
 
@@ -10,7 +13,6 @@ class home extends OModule {
 	 * Pantalla de inicio
 	 *
 	 * @url /
-	 * @type html
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
@@ -23,8 +25,7 @@ class home extends OModule {
 	 * Nueva acción playerSelect
 	 *
 	 * @url /player-select
-	 * @filter sessionFilter
-	 * @type html
+	 * @filter playerFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */

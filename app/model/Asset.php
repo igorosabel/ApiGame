@@ -55,6 +55,16 @@ class Asset extends OModel {
 		return $core->config->getUrl('base').'/assets/'.$this->get('id').'.'.$this->get('ext');
 	}
 
+	/**
+	 * Función para obtener la ruta física al archivo del recurso
+	 *
+	 * @return string Ruta al archivo
+	 */
+	public function getFile(): string {
+		global $core;
+		return $core->config->getDir('assets').$this->get('id').'.'.$this->get('ext');
+	}
+
 	private ?array $tags = null;
 
 	/**
@@ -120,8 +130,7 @@ class Asset extends OModel {
 	 * @return void
 	 */
 	public function deleteFull(): void {
-		global $core;
-		$route = $core->config->getDir('assets').$this->get('id').'.'.$this->get('ext');
+		$route = $this->getFile();
 		if (file_exists($route)) {
 			unlink($route);
 		}

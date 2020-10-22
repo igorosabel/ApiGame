@@ -45,4 +45,26 @@ class webService extends OService {
 			$this->getConfig()->getExtra('origin_word_three')
 		);
 	}
+
+	/**
+	 * Función para obtener la lista de partidas de un jugador
+	 *
+	 * @param int $id_user Id del jugador
+	 *
+	 * @return array Lista de partidas
+	 */
+	public function getGames(int $id_user): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `game` WHERE `id_user` = ?";
+		$db->query($sql, [$id_user]);
+		$games = [];
+
+		while ($res = $db->next()) {
+			$game = new Game();
+			$game->update($res);
+			array_push($games, $game);
+		}
+
+		return $games;
+	}
 }

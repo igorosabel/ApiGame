@@ -11,77 +11,44 @@ class api extends OModule {
 	}
 
 	/**
-	 * Función para añadir un nuevo escenario
-	 *
-	 * @url /new-scenario
-	 * @filter adminFilter
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 * @return void
-	 */
-	public function newScenario(ORequest $req): void {
-	    $status = 'ok';
-	    $name   = $req->getParamString('name');
-	    $id     = 0;
-
-	    if (is_null($name)) {
-	      $status = 'error';
-	    }
-
-	    if ($status=='ok') {
-	      $name = urldecode($name);
-	      $scn = new Scenario();
-	      $scn->set('name', $name);
-
-	      // Creo escenario vacío
-	      $data = [];
-	      for ($i=0; $i < $this->getConfig()->getExtra('height'); $i++) {
-	        $row = [];
-	        for ($j=0; $j < $this->getConfig()->getExtra('width'); $j++) {
-	          array_push($row, new stdClass);
-	        }
-	        array_push($data, $row);
-	      }
-
-	      $scn->set('data', json_encode($data));
-	      $scn->save();
-
-	      $id = $scn->get('id');
-	    }
-	    $this->getTemplate()->add('status', $status);
-	    $this->getTemplate()->add('id',     $id);
-	    $this->getTemplate()->add('name',   $name);
-	}
-
-	/**
-	 * Nueva acción login
+	 * Función para iniciar sesión en el juego
 	 *
 	 * @url /login
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
 	public function login(ORequest $req): void {
-	    $status = 'ok';
-	    $email  = $req->getParamString('email');
-	    $pass   = $req->getParamString('pass');
+		$status = 'ok';
+		$id     = -1;
+		$email  = $req->getParamString('email');
+		$pass   = $req->getParamString('pass');
+		$token  = '';
 
-	    if (is_null($email) || is_null($pass)) {
-	      $status = 'error';
-	    }
+		if (is_null($email) || is_null($pass)) {
+			$status = 'error';
+		}
 
-	    if ($status=='ok') {
-	      $email = urldecode($email);
-	      $pass  = urldecode($pass);
-	      $u = new User();
-	      if ($u->login($email, $pass)) {
-	        $this->getSession()->addParam('logged', true);
-	        $this->getSession()->addParam('id',     $u->get('id'));
-	      }
-	      else {
-	        $status = 'error';
-	      }
-	    }
+		if ($status=='ok') {
+			$user = new User();
+			if ($user->login($email, $pass)) {
+				$id = $user->get('id');
 
-	    $this->getTemplate()->add('status', $status);
+				$tk = new OToken($this->getConfig()->getExtra('secret'));
+				$tk->addParam('id',    $id);
+				$tk->addParam('email', $email);
+				$tk->addParam('admin', $user->get('admin'));
+				$tk->addParam('exp',   mktime() + (24 * 60 * 60));
+				$token = $tk->getToken();
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('id', $id);
+		$this->getTemplate()->add('name', $name);
+		$this->getTemplate()->add('token', $token);
 	}
 
 	/**
@@ -93,41 +60,74 @@ class api extends OModule {
 	 */
 	public function register(ORequest $req): void {
 		$status = 'ok';
+		$id     = -1;
 		$email  = $req->getParamString('email');
 		$pass   = $req->getParamString('pass');
+		$token  = '';
 
 		if (is_null($email) || is_null($pass)) {
-		  $status = 'error';
+			$status = 'error';
 		}
 
 		if ($status=='ok') {
-		  $u = new User();
-		  $email = urldecode($email);
-		  $pass  = urldecode($pass);
+			$user = new User();
 
-		  if ($u->find(['email'=>$email])) {
-			$status = 'error';
-		  }
-		  else {
-			$u->set('email', $email);
-			$u->set('pass',  sha1('gam_'.$pass.'_gam'));
-			$u->save();
-
-			for ($i=0; $i<3; $i++) {
-			  $game = new Game();
-			  $game->set('id_user', $u->get('id'));
-			  $game->set('name', null);
-			  $game->set('id_scenario', null);
-			  $game->set('position_x', null);
-			  $game->set('position_y', null);
-			  $game->save();
+			if ($user->find(['email'=>$email])) {
+				$status = 'in-use';
 			}
+			else {
+				$user->set('email', $email);
+				$user->set('pass',  password_hash($pass, PASSWORD_BCRYPT));
+				$user->set('admin', false);
+				$user->save();
 
-			$this->getSession()->addParam('logged', true);
-			$this->getSession()->addParam('id',     $u->get('id'));
-		  }
+				$id = $user->get('id');
+
+				for ($i=0; $i<3; $i++) {
+					$game = new Game();
+					$game->set('id_user', $user->get('id'));
+					$game->set('name', null);
+					$game->set('id_scenario', null);
+					$game->set('position_x', null);
+					$game->set('position_y', null);
+					$game->set('money', $this->getConfig()->getExtra('start_money'));
+					$game->set('health', $this->getConfig()->getExtra('start_health'));
+					$game->set('max_health', $this->getConfig()->getExtra('start_health'));
+					$game->set('attack', $this->getConfig()->getExtra('start_attack'));
+					$game->set('defense', $this->getConfig()->getExtra('start_defense'));
+					$game->set('speed', $this->getConfig()->getExtra('start_speed'));
+					$game->save();
+				}
+
+				$tk = new OToken($this->getConfig()->getExtra('secret'));
+				$tk->addParam('id',    $id);
+				$tk->addParam('email', $email);
+				$tk->addParam('admin', false);
+				$tk->addParam('exp',   mktime() + (24 * 60 * 60));
+				$token = $tk->getToken();
+			}
 		}
 
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('id', $id);
+		$this->getTemplate()->add('name', $name);
+		$this->getTemplate()->add('token', $token);
+	}
+
+	/**
+	 * Función para obtener la lista de partidas de un usuario
+	 *
+	 * @url /get-games
+	 * @filter gameFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function getGames(ORequest $req): void {
+		$status = 'ok';
+		$filter = $req->getFilter('gameFilter');
+		$games = $this->web_service->getGames($filter['id']);
+
+	    $this->getTemplate()->addComponent('list', 'game/games', ['list' => $games, 'extra' => 'nourlencode']);
 		$this->getTemplate()->add('status', $status);
 	}
 

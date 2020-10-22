@@ -21,26 +21,29 @@ class admin extends OModule {
 	 */
 	public function login(ORequest $req): void {
 		$status = 'ok';
-		$id = -1;
-		$name = $req->getParamString('name');
-		$pass = $req->getParamString('pass');
-		$token = '';
+		$id     = -1;
+		$email  = $req->getParamString('email');
+		$pass   = $req->getParamString('pass');
+		$token  = '';
 
-		if (is_null($name) || is_null($pass)) {
+		if (is_null($email) || is_null($pass)) {
 			$status = 'error';
 		}
 
 		if ($status=='ok') {
-			if ($name!='admin' || $pass!=$this->getConfig()->getExtra('admin_pass')) {
-				$status = 'error';
+			$user = new User();
+			if ($user->login($email, $pass) && $user->get('admin')) {
+				$id = $user->get('id');
+
+				$tk = new OToken($this->getConfig()->getExtra('secret'));
+				$tk->addParam('id',    $id);
+				$tk->addParam('email', $email);
+				$tk->addParam('admin', true);
+				$tk->addParam('exp',   mktime() + (24 * 60 * 60));
+				$token = $tk->getToken();
 			}
 			else {
-				$tk = new OToken($this->getConfig()->getExtra('secret'));
-				$tk->addParam('id',   $id);
-				$tk->addParam('name', $name);
-				$tk->addParam('admin', true);
-				$tk->addParam('exp', mktime() + (24 * 60 * 60));
-				$token = $tk->getToken();
+				$status = 'error';
 			}
 		}
 
