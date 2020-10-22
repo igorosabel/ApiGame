@@ -347,6 +347,52 @@ class admin extends OModule {
 	}
 
 	/**
+	 * Función para borrar una conexión de un escenario a otro
+	 *
+	 * @url /select-world-start
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function selectWorldStart(ORequest $req): void {
+		$status = 'ok';
+		$id_scenario = $req->getParamInt('idScenario');
+		$x = $req->getParamInt('x');
+		$y = $req->getParamInt('y');
+		$check = $req->getParamBool('check');
+		$message = '';
+
+		if (is_null($id_scenario) || is_null($x) || is_null($y) || is_null($check)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$scenario = new Scenario();
+			if ($scenario->find(['id' => $id_scenario])) {
+				if ($check) {
+					$result = $this->admin_service->checkWorldStart($scenario);
+					//var_dump($result);
+					$status = $result['status'];
+					$message = $result['message'];
+				}
+				if ($status=='ok') {
+					$this->admin_service->clearWorldStart($scenario);
+					$scenario->set('start_x', $x);
+					$scenario->set('start_y', $y);
+					$scenario->set('initial', true);
+					$scenario->save();
+				}
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('message', $message);
+	}
+
+	/**
 	 * Función para obtener la lista de recursos
 	 *
 	 * @url /asset-list

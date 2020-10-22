@@ -795,4 +795,41 @@ class adminService extends OService {
 		$sql = "DELETE FROM `connection` WHERE `id_from` = ? AND `id_to` = ? AND `orientation` = ?";
 		$db->query($sql, [$id_from, $id_to, $orientation]);
 	}
+
+	/**
+	 * Función que comprueba si un mundo ya tiene un escenario inicial
+	 *
+	 * @param Scenario $scenario Escenario en el que se está intentando poner un punto de inicio
+	 *
+	 * @return array Estado de la operación y escenario inicial del mundo en caso de ya existir
+	 */
+	public function checkWorldStart(Scenario $scenario): array {
+		$ret = ['status' => 'ok', 'message' => ''];
+		$db = new ODB();
+		$sql = "SELECT * FROM `scenario` WHERE `id_world` = ? AND `id` != ? AND `initial` = 1";
+		$db->query($sql, [$scenario->get('id_world'), $scenario->get('id')]);
+
+		if ($res = $db->next()) {
+			$scenario_check = new Scenario();
+			$scenario_check->update($res);
+
+			$ret['status'] = 'in-use';
+			$ret['message'] = $scenario_check->get('name');
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Función para borrar el punto inicial de un mundo
+	 *
+	 * @param Scenario $scenario Escenario en el que se está intentando poner un punto de inicio
+	 *
+	 * @return void
+	 */
+	public function clearWorldStart(Scenario $scenario): void {
+		$db = new ODB();
+		$sql = "UPDATE `scenario` SET `initial` = 0, `start_x` = NULL, `start_y` = NULL WHERE `id_world` = ?";
+		$db->query($sql, [$scenario->get('id_world')]);
+	}
 }
