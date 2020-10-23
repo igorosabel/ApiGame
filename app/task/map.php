@@ -4,6 +4,26 @@ class mapTask extends OTask {
 		return "map: Nueva tarea map";
 	}
 
+	private function getResource(string $file, string $ext) {
+		switch ($ext) {
+			case 'jpg': {
+				return imagecreatefromjpeg($file);
+			}
+			break;
+			case 'jpeg': {
+				return imagecreatefromjpeg($file);
+			}
+			break;
+			case 'png': {
+				return imagecreatefrompng($file);
+			}
+			break;
+			case 'gif': {
+				return imagecreatefromgif($file);
+			}
+		}
+	}
+
 	public function run(array $options=[]): void {
 		if (count($options)==0) {
 			echo "\n  ERROR: Debes indicar el id del escenario del que crear el mapa.\n\n";
@@ -22,32 +42,33 @@ class mapTask extends OTask {
 		if (file_exists($map_file)) {
 			unlink($map_file);
 		}
-		$outputImage = imagecreatetruecolor(800, 600);
+		$outputImage = imagecreatetruecolor(800, 592);
 		$data = $scenario->getData();
-		
+
 		$new_width = 32;
-		$new_height = 36;
-		
+		$new_height = 37;
+
 		foreach ($data as $scenario_data) {
-			echo "X: ".$scenario_data->get('x')." - Y: ".$scenario_data->get('y')."\n";
 			$this->getLog()->debug("X: ".$scenario_data->get('x')." - Y: ".$scenario_data->get('y'));
 			$bg_file = $scenario_data->getBackground()->getAsset()->getFile();
+			$bg_file_ext = $scenario_data->getBackground()->getAsset()->get('ext');
 			list($width, $height) = getimagesize($bg_file);
-			$bg = imagecreatefrompng($bg_file);
-			
-			echo "  WIDTH: ".$width."\n";
-			$this->getLog()->debug("  WIDTH: ".$width);
-			echo "  HEIGHT: ".$height."\n";
-			$this->getLog()->debug("  HEIGHT: ".$height);
-			echo "  POS X: ".($scenario_data->get('x') * $new_width)."\n";
-			$this->getLog()->debug("  POS X: ".($scenario_data->get('x') * $new_width));
-			echo "  POS Y: ".($scenario_data->get('y') * $new_height)."\n\n";
-			$this->getLog()->debug("  POS Y: ".($scenario_data->get('y') * $new_height));
-			
-			imagecopyresized($outputImage, $bg, ($scenario_data->get('y') * $new_height), ($scenario_data->get('x') * $new_width), 0, 0, $new_width, $new_height, $width, $height);
+			$bg = $this->getResource($bg_file, $bg_file_ext);
+
+			imagecopyresized($outputImage, $bg, ($scenario_data->get('y') * $new_width), ($scenario_data->get('x') * $new_height), 0, 0, $new_width, $new_height, $width, $height);
+
+			if (!is_null($scenario_data->getScenarioObject())) {
+				$so_file = $scenario_data->getScenarioObject()->getAsset()->getFile();
+				$so_file_ext = $scenario_data->getScenarioObject()->getAsset()->get('ext');
+				list($width, $height) = getimagesize($so_file);
+				$so = $this->getResource($so_file, $so_file_ext);
+
+				imagecopyresized($outputImage, $so, ($scenario_data->get('y') * $new_width), ($scenario_data->get('x') * $new_height), 0, 0, $new_width, $new_height, $width, $height);
+			}
 		}
-		
+
 		imagepng($outputImage, $map_file);
 		imagedestroy($outputImage);
+		echo "  \nNueva imagen \"".$map_file."\" creada.\n\n";
 	}
 }
