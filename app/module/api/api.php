@@ -135,37 +135,40 @@ class api extends OModule {
 	 * Función para crear una nueva partida
 	 *
 	 * @url /new-game
-	 * @filter sessionFilter
+	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
 	public function newGame(ORequest $req): void {
-		$status = 'ok';
-		$id     = $req->getParamInt('id');
-		$name   = $req->getParamString('name');
+		$status  = 'ok';
+		$id_game = $req->getParamInt('idGame');
+		$name    = $req->getParamString('name');
+		$id_scenario = 'null';
 
-		if (is_null($id) || is_null($name)) {
-		  $status = 'error';
+		if (is_null($id_game) || is_null($name)) {
+			$status = 'error';
 		}
 
 		if ($status=='ok') {
-		  $name = urldecode($name);
-		  $game = new Game();
-		  if ($game->find(['id'=>$id])) {
-			$scn = $this->web_service->getStartScenario();
+			$game = new Game();
+			if ($game->find(['id' => $id_game])) {
+				$world = $this->web_service->getOriginWorld();
+				$scenario = $world->getInitialScenario();
+				$id_scenario = $scenario->get('id');
 
-			$game->set('name', $name);
-			$game->set('id_scenario', $scn->get('id'));
-			$game->set('position_x', $scn->get('start_x'));
-			$game->set('position_y', $scn->get('start_y'));
-			$game->save();
-		  }
-		  else {
-			$status = 'error';
-		  }
+				$game->set('name', $name);
+				$game->set('id_scenario', $scenario->get('id'));
+				$game->set('position_x', $scenario->get('start_x'));
+				$game->set('position_y', $scenario->get('start_y'));
+				$game->save();
+			}
+			else {
+				$status = 'error';
+			}
 		}
 
 		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('id', $id_scenario);
 	}
 
 	/**
