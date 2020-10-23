@@ -161,6 +161,11 @@ class api extends OModule {
 				$game->set('position_x', $scenario->get('start_x'));
 				$game->set('position_y', $scenario->get('start_y'));
 				$game->save();
+
+				$world_unlocked = new WorldUnlocked();
+				$world_unlocked->set('id_game', $game->get('id'));
+				$world_unlocked->set('id_world', $world->get('id'));
+				$world_unlocked->save();
 			}
 			else {
 				$status = 'error';
