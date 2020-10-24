@@ -59,6 +59,42 @@ class Scenario extends OModel {
 
 		parent::load($table_name, $model);
 	}
+	
+	private $world = null;
+
+	/**
+	 * Obtiene el mundo del escenario
+	 *
+	 * @return World Mundo del escenario
+	 */
+	public function getWorld(): World {
+		if (is_null($this->world)) {
+			$this->loadWorld();
+		}
+		return $this->world;
+	}
+
+	/**
+	 * Guarda el mundo del escenario
+	 *
+	 * @param World $world Mundo del escenario
+	 *
+	 * @return void
+	 */
+	public function setWorld(World $world): void {
+		$this->world = $world;
+	}
+
+	/**
+	 * Carga el mundo del escenario
+	 *
+	 * @return void
+	 */
+	public function loadWorld(): void {
+		$world = new World();
+		$world->find(['id' => $this->get('id_world')]);
+		$this->setWorld($world);
+	}
 
 	private ?array $data = null;
 
@@ -146,6 +182,14 @@ class Scenario extends OModel {
 		}
 
 		$this->setConnections($connections);
+	}
+
+	/**
+	 * Obtiene la URL del mapa generado del escenario
+	 */
+	public function getMapUrl(): string {
+		global $core;
+		return $core->config->getUrl('base').'/maps/'.$this->get('id_world').'-'.$this->get('id').'.png';
 	}
 
 	/**

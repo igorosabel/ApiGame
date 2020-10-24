@@ -396,6 +396,29 @@ class admin extends OModule {
 	}
 
 	/**
+	 * Función para generar el mapa de un escenario
+	 *
+	 * @url /generate-map
+	 * @filter adminFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function generateMap(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+		
+		if ($status=='ok') {
+			OTools::runTask('map', [$id, 'true']);
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
 	 * Función para obtener la lista de recursos
 	 *
 	 * @url /asset-list

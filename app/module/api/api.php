@@ -175,6 +175,71 @@ class api extends OModule {
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('id', $id_scenario);
 	}
+	
+	/**
+	 * Función para obtener los datos de una partida
+	 *
+	 * @url /get-play-data
+	 * @filter gameFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function getPlayData(ORequest $req): void {
+		$status  = 'ok';
+		$id_game = $req->getParamInt('id');
+		$id_world = 'null';
+		$world_name = '';
+		$world_description = '';
+		$id_scenario = 'null';
+		$scenario_name = '';
+		$map_url = '';
+		$scenario_objects = [];
+		$characters = [];
+
+		if (is_null($id_game)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$game = new Game();
+			if ($game->find(['id' => $id_game])) {
+				$scenario = $game->getScenario();
+				$world = $scenario->getWorld();
+
+				$id_world = $world->get('id');
+				$world_name = $world->get('name');
+				$world_description = $world->get('description');
+				$id_scenario = $scenario->get('id');
+				$scenario_name = $scenario->get('name');
+				$map_url = $scenario->getMapUrl();
+
+				$data = $scenario->getData();
+				foreach ($data as $scenario_data) {
+					$scenario_object = $scenario_data->getScenarioObject();
+					if (!is_null($scenario_object) && $scenario_object->get('crossable')===false) {
+						array_push($scenario_objects, $scenario_object);
+					}
+					$character = $scenario_data->getCharacter();
+					if (!is_null($character)) {
+						array_push($characters, $character);
+					}
+				}
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status',            $status);
+		$this->getTemplate()->add('id_world',          $id_world);
+		$this->getTemplate()->add('world_name',        $world_name);
+		$this->getTemplate()->add('world_description', $world_description);
+		$this->getTemplate()->add('id_scenario',       $id_scenario);
+		$this->getTemplate()->add('scenario_name',     $scenario_name);
+		$this->getTemplate()->add('map_url',           $map_url);
+		$this->getTemplate()->addComponent('scenario_objects', 'admin/scenario_objects', ['list' => $scenario_objects, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('characters',       'admin/characters',       ['list' => $characters,       'extra' => 'nourlencode']);
+	}
 
 	/**
 	 * Función para guardar un escenario editado

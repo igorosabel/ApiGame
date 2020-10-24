@@ -92,4 +92,40 @@ class Game extends OModel {
 
 		parent::load($table_name, $model);
 	}
+	
+	private $scenario = null;
+
+	/**
+	 * Obtiene el escenario que se está jugando
+	 *
+	 * @return Scenario Escenario que se está jugando
+	 */
+	public function getScenario(): Scenario {
+		if (is_null($this->scenario)) {
+			$this->loadScenario();
+		}
+		return $this->scenario;
+	}
+
+	/**
+	 * Guarda el escenario que se está jugando
+	 *
+	 * @param Scenario $scenario Escenario que se está jugando
+	 *
+	 * @return void
+	 */
+	public function setScenario(Scenario $scenario): void {
+		$this->scenario = $scenario;
+	}
+
+	/**
+	 * Carga el escenario que se está jugando
+	 *
+	 * @return void
+	 */
+	public function loadScenario(): void {
+		$scenario = new Scenario();
+		$scenario->find(['id' => $this->get('id_scenario')]);
+		$this->setScenario($scenario);
+	}
 }
