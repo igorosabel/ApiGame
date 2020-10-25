@@ -224,9 +224,12 @@ class api extends OModule {
 						array_push($characters, $character);
 					}
 				}
+
+				$this->getTemplate()->addComponent('game', 'game/game', ['game' => $game, 'extra' => 'nourlencode']);
 			}
 			else {
 				$status = 'error';
+				$this->getTemplate()->add('game', 'null');
 			}
 		}
 

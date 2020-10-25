@@ -6,6 +6,7 @@
 	"idScenario": {{id_scenario}},
 	"scenarioName": "{{scenario_name}}",
 	"mapBackground": "{{map_url}}",
+	"game": {{game}},
 	"scenarioObjects": [
 {{scenario_objects}}
 	],

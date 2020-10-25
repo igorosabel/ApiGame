@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
-class Inventory extends OModel {
+class InventoryItem extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
 	 */	function __construct() {
-		$table_name  = 'inventory';
+		$table_name  = 'inventory_item';
 		$model = [
 			'id' => [
 				'type'    => OCore::PK,
@@ -48,5 +48,41 @@ class Inventory extends OModel {
 		];
 
 		parent::load($table_name, $model);
+	}
+	
+	private ?Item $item = null;
+
+	/**
+	 * Obtiene el item del inventario
+	 *
+	 * @return Item Item del inventario
+	 */
+	public function getItem(): Item {
+		if (is_null($this->item)) {
+			$this->loadItem();
+		}
+		return $this->item;
+	}
+
+	/**
+	 * Guarda el item del inventario
+	 *
+	 * @param Asset $item Item del inventario
+	 *
+	 * @return void
+	 */
+	public function setItem(Item $item): void {
+		$this->item = $item;
+	}
+
+	/**
+	 * Carga el item del inventario
+	 *
+	 * @return void
+	 */
+	public function loadItem(): void {
+		$item = new Item();
+		$item->find(['id' => $this->get('id_item')]);
+		$this->setItem($item);
 	}
 }

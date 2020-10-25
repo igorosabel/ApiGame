@@ -157,11 +157,7 @@ class admin extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/scenarios', [
-			'route' => $this->getConfig()->getDir('app_component').'admin/scenario/scenario.php',
-			'list' => $list,
-			'extra' => 'nourlencode'
-		]);
+		$this->getTemplate()->addComponent('list', 'admin/scenarios', ['list' => $list, 'extra' => 'nourlencode']);
 	}
 
 	/**

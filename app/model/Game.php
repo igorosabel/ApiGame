@@ -128,4 +128,48 @@ class Game extends OModel {
 		$scenario->find(['id' => $this->get('id_scenario')]);
 		$this->setScenario($scenario);
 	}
+	
+	private ?array $inventory = null;
+
+	/**
+	 * Obtiene el listado de items que componen el inventario del jugador
+	 *
+	 * @return array Listado de items que componen el inventario del jugador
+	 */
+	public function getInventory(): array {
+		if (is_null($this->inventory)) {
+			$this->loadInventory();
+		}
+		return $this->inventory;
+	}
+
+	/**
+	 * Guarda el listado de items que componen el inventario del jugador
+	 *
+	 * @param array $inventory Listado de items que componen el inventario del jugador
+	 *
+	 * @return void
+	 */
+	public function setInventory(array $inventory): void {
+		$this->inventory = $inventory;
+	}
+
+	/**
+	 * Carga el listado de items que componen el inventario del jugador
+	 *
+	 * @return void
+	 */
+	public function loadInventory(): void {
+		$sql = "SELECT * FROM `inventory_item` WHERE `id_game` = ? ORDER BY `order`";
+		$this->db->query($sql, [$this->get('id')]);
+		$inventory = [];
+		
+		while ($res = $this->db->next()) {
+			$inventory_item = new InventoryItem();
+			$inventory_item->update($res);
+			array_push($inventory, $inventory_item);
+		}
+		
+		$this->setInventory($inventory);
+	}
 }
