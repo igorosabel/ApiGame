@@ -66,18 +66,17 @@ class mapTask extends OTask {
 
 		// Background
 		foreach ($data as $scenario_data) {
-			$this->getLog()->debug("X: ".$scenario_data->get('x')." - Y: ".$scenario_data->get('y'));
 			$bg_file = $scenario_data->getBackground()->getAsset()->getFile();
 			$bg_file_ext = $scenario_data->getBackground()->getAsset()->get('ext');
 			list($width, $height) = getimagesize($bg_file);
 			$bg = $this->getResource($bg_file, $bg_file_ext);
 
-			imagecopyresized($outputImage, $bg, ($scenario_data->get('y') * $this->tile_size), ($scenario_data->get('x') * $this->tile_size), 0, 0, $this->tile_size, $this->tile_size, $width, $height);
+			imagecopyresized($outputImage, $bg, ($scenario_data->get('x') * $this->tile_size), ($scenario_data->get('y') * $this->tile_size), 0, 0, $this->tile_size, $this->tile_size, $width, $height);
 		}
 
 		// Scenario objects
 		foreach ($data as $scenario_data) {
-			if (!is_null($scenario_data->getScenarioObject())) {
+			if (!is_null($scenario_data->getScenarioObject()) && $scenario_data->getScenarioObject()->get('crossable')) {
 				$so_file = $scenario_data->getScenarioObject()->getAsset()->getFile();
 				$so_file_ext = $scenario_data->getScenarioObject()->getAsset()->get('ext');
 				list($width, $height) = getimagesize($so_file);
@@ -89,7 +88,7 @@ class mapTask extends OTask {
 					$scenario_data->getScenarioObject()->get('height')
 				);
 
-				imagecopyresized($outputImage, $so, $so_position['x'], $so_position['y'], 0, 0, $so_position['width'], $so_position['height'], $width, $height);
+				imagecopyresized($outputImage, $so, $so_position['y'], $so_position['x'], 0, 0, $so_position['width'], $so_position['height'], $width, $height);
 			}
 		}
 

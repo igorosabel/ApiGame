@@ -7,6 +7,12 @@
 	"scenarioName": "{{scenario_name}}",
 	"mapBackground": "{{map_url}}",
 	"game": {{game}},
+	"blockers": [
+{{blockers}}
+	],
+	"scenarioDatas": [
+{{scenario_datas}}
+	],
 	"scenarioObjects": [
 {{scenario_objects}}
 	],

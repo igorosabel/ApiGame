@@ -5,11 +5,11 @@
 */
 class admin extends OModule {
 	private ?adminService $admin_service = null;
-	private ?webService $web_service = null;
+	private ?webService   $web_service   = null;
 
 	function __construct() {
 		$this->admin_service = new adminService();
-		$this->web_service = new webService();
+		$this->web_service   = new webService();
 	}
 
 	/**
@@ -48,9 +48,9 @@ class admin extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->add('id', $id);
-		$this->getTemplate()->add('name', $name);
-		$this->getTemplate()->add('token', $token);
+		$this->getTemplate()->add('id',     $id);
+		$this->getTemplate()->add('name',   $name);
+		$this->getTemplate()->add('token',  $token);
 	}
 
 	/**
@@ -75,14 +75,14 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveWorld(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
-		$name = $req->getParamString('name');
+		$status      = 'ok';
+		$id          = $req->getParamInt('id');
+		$name        = $req->getParamString('name');
 		$description = $req->getParamString('description');
-		$word_one = $req->getParamString('wordOne');
-		$word_two = $req->getParamString('wordTwo');
-		$word_three = $req->getParamString('wordThree');
-		$friendly = $req->getParamBool('friendly');
+		$word_one    = $req->getParamString('wordOne');
+		$word_two    = $req->getParamString('wordTwo');
+		$word_three  = $req->getParamString('wordThree');
+		$friendly    = $req->getParamBool('friendly');
 
 		if (is_null($name) || is_null($word_one) || is_null($word_two) || is_null($word_three) || is_null($friendly)) {
 			$status = 'error';
@@ -91,14 +91,14 @@ class admin extends OModule {
 		if ($status=='ok') {
 			$world = new World();
 			if (!is_null($id)) {
-				$world->find(['id'=>$id]);
+				$world->find(['id' => $id]);
 			}
-			$world->set('name', $name);
+			$world->set('name',        $name);
 			$world->set('description', $description);
-			$world->set('word_one', $word_one);
-			$world->set('word_two', $word_two);
-			$world->set('word_three', $word_three);
-			$world->set('friendly', $friendly);
+			$world->set('word_one',    $word_one);
+			$world->set('word_two',    $word_two);
+			$world->set('word_three',  $word_three);
+			$world->set('friendly',    $friendly);
 			$world->save();
 		}
 
@@ -115,7 +115,7 @@ class admin extends OModule {
 	 */
 	public function deleteWorld(ORequest $req): void {
 		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$id     = $req->getParamInt('id');
 
 		if (is_null($id)) {
 			$status = 'error';
@@ -123,7 +123,7 @@ class admin extends OModule {
 
 		if ($status=='ok') {
 			$world = new World();
-			if ($world->find(['id'=>$id])) {
+			if ($world->find(['id' => $id])) {
 				$origin_world = $this->web_service->getOriginWorld();
 				$this->admin_service->deleteWorld($world, $origin_world);
 			}
@@ -145,8 +145,8 @@ class admin extends OModule {
 	 */
 	public function scenarioList(ORequest $req): void {
 		$status = 'ok';
-		$id = $req->getParamInt('id');
-		$list = [];
+		$id     = $req->getParamInt('id');
+		$list   = [];
 
 		if (is_null($id)) {
 			$status = 'error';
@@ -169,10 +169,10 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveScenario(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$status   = 'ok';
+		$id       = $req->getParamInt('id');
 		$id_world = $req->getParamInt('idWorld');
-		$name = $req->getParamString('name');
+		$name     = $req->getParamString('name');
 		$friendly = $req->getParamBool('friendly');
 
 		if (is_null($name) || is_null($id_world) || is_null($friendly)) {
@@ -182,10 +182,10 @@ class admin extends OModule {
 		if ($status=='ok') {
 			$scenario = new Scenario();
 			if (!is_null($id)) {
-				$scenario->find(['id'=>$id]);
+				$scenario->find(['id' => $id]);
 			}
 			$scenario->set('id_world', $id_world);
-			$scenario->set('name', $name);
+			$scenario->set('name',     $name);
 			$scenario->set('friendly', $friendly);
 
 			$scenario->save();
@@ -204,7 +204,7 @@ class admin extends OModule {
 	 */
 	public function deleteScenario(ORequest $req): void {
 		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$id     = $req->getParamInt('id');
 
 		if (is_null($id)) {
 			$status = 'error';
@@ -212,7 +212,7 @@ class admin extends OModule {
 
 		if ($status=='ok') {
 			$scenario = new Scenario();
-			if ($scenario->find(['id'=>$id])) {
+			if ($scenario->find(['id' => $id])) {
 				$origin_world = $this->web_service->getOriginWorld();
 				$this->admin_service->deleteScenario($scenario, $origin_world);
 			}
@@ -233,14 +233,14 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function getScenario(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
-		$data = [];
+		$status     = 'ok';
+		$id         = $req->getParamInt('id');
+		$data       = [];
 		$connection = [];
 
 		$scenario = new Scenario();
 		if ($scenario->find(['id' => $id])) {
-			$data = $scenario->getData();
+			$data       = $scenario->getData();
 			$connection = $scenario->getConnections();
 		}
 		else {
@@ -262,14 +262,14 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveScenarioData(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
-		$id_scenario = $req->getParamInt('idScenario');
-		$x = $req->getParamInt('x');
-		$y = $req->getParamInt('y');
-		$id_background = $req->getParamInt('idBackground');
+		$status             = 'ok';
+		$id                 = $req->getParamInt('id');
+		$id_scenario        = $req->getParamInt('idScenario');
+		$x                  = $req->getParamInt('x');
+		$y                  = $req->getParamInt('y');
+		$id_background      = $req->getParamInt('idBackground');
 		$id_scenario_object = $req->getParamInt('idScenarioObject');
-		$id_character = $req->getParamInt('idCharacter');
+		$id_character       = $req->getParamInt('idCharacter');
 
 		if (is_null($id_scenario) || is_null($x) || is_null($y)) {
 			$status = 'error';
@@ -280,19 +280,19 @@ class admin extends OModule {
 			if (!is_null($id)) {
 				$scenario_data->find(['id' => $id]);
 			}
-			$scenario_data->set('id_scenario', $id_scenario);
-			$scenario_data->set('x', $x);
-			$scenario_data->set('y', $y);
-			$scenario_data->set('id_background', $id_background);
+			$scenario_data->set('id_scenario',        $id_scenario);
+			$scenario_data->set('x',                  $x);
+			$scenario_data->set('y',                  $y);
+			$scenario_data->set('id_background',      $id_background);
 			$scenario_data->set('id_scenario_object', $id_scenario_object);
-			$scenario_data->set('id_character', $id_character);
+			$scenario_data->set('id_character',       $id_character);
 			$scenario_data->save();
 
 			$id = $scenario_data->get('id');
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->add('id', $id);
+		$this->getTemplate()->add('id',     $id);
 	}
 
 	/**
@@ -304,9 +304,9 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveConnection(ORequest $req): void {
-		$status = 'ok';
-		$id_from = $req->getParamInt('from');
-		$id_to = $req->getParamInt('to');
+		$status      = 'ok';
+		$id_from     = $req->getParamInt('from');
+		$id_to       = $req->getParamInt('to');
 		$orientation = $req->getParamString('orientation');
 
 		if (is_null($id_from) || is_null($id_to) || is_null($orientation)) {
@@ -329,9 +329,9 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function deleteConnection(ORequest $req): void {
-		$status = 'ok';
-		$id_from = $req->getParamInt('from');
-		$id_to = $req->getParamInt('to');
+		$status      = 'ok';
+		$id_from     = $req->getParamInt('from');
+		$id_to       = $req->getParamInt('to');
 		$orientation = $req->getParamString('orientation');
 
 		if (is_null($id_from) || is_null($id_to) || is_null($orientation)) {
@@ -354,12 +354,12 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function selectWorldStart(ORequest $req): void {
-		$status = 'ok';
+		$status      = 'ok';
 		$id_scenario = $req->getParamInt('idScenario');
-		$x = $req->getParamInt('x');
-		$y = $req->getParamInt('y');
-		$check = $req->getParamBool('check');
-		$message = '';
+		$x           = $req->getParamInt('x');
+		$y           = $req->getParamInt('y');
+		$check       = $req->getParamBool('check');
+		$message      = '';
 
 		if (is_null($id_scenario) || is_null($x) || is_null($y) || is_null($check)) {
 			$status = 'error';
@@ -369,9 +369,8 @@ class admin extends OModule {
 			$scenario = new Scenario();
 			if ($scenario->find(['id' => $id_scenario])) {
 				if ($check) {
-					$result = $this->admin_service->checkWorldStart($scenario);
-					//var_dump($result);
-					$status = $result['status'];
+					$result  = $this->admin_service->checkWorldStart($scenario);
+					$status  = $result['status'];
 					$message = $result['message'];
 				}
 				if ($status=='ok') {
@@ -387,7 +386,7 @@ class admin extends OModule {
 			}
 		}
 
-		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('message', $message);
 	}
 
@@ -401,7 +400,7 @@ class admin extends OModule {
 	 */
 	public function generateMap(ORequest $req): void {
 		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$id     = $req->getParamInt('id');
 
 		if (is_null($id)) {
 			$status = 'error';
@@ -439,12 +438,12 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveAsset(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$status   = 'ok';
+		$id       = $req->getParamInt('id');
 		$id_world = $req->getParamInt('id_world');
-		$name = $req->getParamString('name');
-		$url = $req->getParamString('url');
-		$tags = $req->getParamString('tagList');
+		$name     = $req->getParamString('name');
+		$url      = $req->getParamString('url');
+		$tags     = $req->getParamString('tagList');
 
 		if (is_null($name)) {
 			$status = 'error';
@@ -454,15 +453,15 @@ class admin extends OModule {
 			$ext = null;
 			$asset = new Asset();
 			if (!is_null($id)) {
-				$asset->find(['id'=>$id]);
+				$asset->find(['id' => $id]);
 				$ext = $asset->get('ext');
 			}
 			if (!is_null($url)) {
 				$ext = $this->admin_service->getFileExt($url);
 			}
 			$asset->set('id_world', $id_world);
-			$asset->set('name', $name);
-			$asset->set('ext', $ext);
+			$asset->set('name',     $name);
+			$asset->set('ext',      $ext);
 			$asset->save();
 
 			if (!is_null($url)) {
@@ -490,8 +489,8 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function deleteAsset(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$status  = 'ok';
+		$id      = $req->getParamInt('id');
 		$message = '';
 
 		if (is_null($id)) {
@@ -499,12 +498,12 @@ class admin extends OModule {
 		}
 
 		if ($status=='ok') {
-			$return = $this->admin_service->deleteAsset($id);
-			$status = $return['status'];
+			$return  = $this->admin_service->deleteAsset($id);
+			$status  = $return['status'];
 			$message = $return['message'];
 		}
 
-		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('message', $message);
 	}
 
@@ -533,7 +532,7 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function backgroundCategoryList(ORequest $req): void {
-		$status = 'ok';
+		$status                = 'ok';
 		$background_categories = $this->admin_service->getBackgroundCategories();
 
 		$this->getTemplate()->add('status', $status);
@@ -550,8 +549,8 @@ class admin extends OModule {
 	 */
 	public function saveBackgroundCategory(ORequest $req): void {
 		$status = 'ok';
-		$id = $req->getParamInt('id');
-		$name = $req->getParamString('name');
+		$id     = $req->getParamInt('id');
+		$name   = $req->getParamString('name');
 
 		if (is_null($name)) {
 			$status = 'error';
@@ -560,7 +559,7 @@ class admin extends OModule {
 		if ($status=='ok') {
 			$background_category = new BackgroundCategory();
 			if (!is_null($id)) {
-				$background_category->find(['id'=>$id]);
+				$background_category->find(['id' => $id]);
 			}
 			$background_category->set('name', $name);
 			$background_category->save();
@@ -578,8 +577,8 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function deleteBackgroundCategory(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$status  = 'ok';
+		$id      = $req->getParamInt('id');
 		$message = '';
 
 		if (is_null($id)) {
@@ -589,8 +588,8 @@ class admin extends OModule {
 		if ($status=='ok') {
 			$background_category = new BackgroundCategory();
 			if ($background_category->find(['id'=>$id])) {
-				$return = $this->admin_service->deleteBackgroundCategory($background_category);
-				$status = $return['status'];
+				$return  = $this->admin_service->deleteBackgroundCategory($background_category);
+				$status  = $return['status'];
 				$message = $return['message'];
 			}
 			else {
@@ -598,7 +597,7 @@ class admin extends OModule {
 			}
 		}
 
-		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('message', $message);
 	}
 
@@ -611,7 +610,7 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function backgroundList(ORequest $req): void {
-		$status = 'ok';
+		$status      = 'ok';
 		$backgrounds = $this->admin_service->getBackgrounds();
 
 		$this->getTemplate()->add('status', $status);
@@ -627,12 +626,12 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveBackground(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$status                 = 'ok';
+		$id                     = $req->getParamInt('id');
 		$id_background_category = $req->getParamInt('idBackgroundCategory');
-		$id_asset = $req->getParamInt('idAsset');
-		$name = $req->getParamString('name');
-		$crossable = $req->getParamBool('crossable');
+		$id_asset               = $req->getParamInt('idAsset');
+		$name                   = $req->getParamString('name');
+		$crossable              = $req->getParamBool('crossable');
 
 		if (is_null($name)) {
 			$status = 'error';
@@ -644,9 +643,9 @@ class admin extends OModule {
 				$background->find(['id'=>$id]);
 			}
 			$background->set('id_background_category', $id_background_category);
-			$background->set('id_asset', $id_asset);
-			$background->set('name', $name);
-			$background->set('crossable', $crossable);
+			$background->set('id_asset',               $id_asset);
+			$background->set('name',                   $name);
+			$background->set('crossable',              $crossable);
 			$background->save();
 		}
 
@@ -663,7 +662,7 @@ class admin extends OModule {
 	 */
 	public function deleteBackground(ORequest $req): void {
 		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$id     = $req->getParamInt('id');
 
 		if (is_null($id)) {
 			$status = 'error';
@@ -671,7 +670,7 @@ class admin extends OModule {
 
 		if ($status=='ok') {
 			$background = new Background();
-			if ($background->find(['id'=>$id])) {
+			if ($background->find(['id' => $id])) {
 				$status = $this->admin_service->deleteBackground($background);
 			}
 			else {
@@ -692,7 +691,7 @@ class admin extends OModule {
 	 */
 	public function itemList(ORequest $req): void {
 		$status = 'ok';
-		$items = $this->admin_service->getItems();
+		$items  = $this->admin_service->getItems();
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/items', ['list' => $items, 'extra' => 'nourlencode']);
@@ -707,18 +706,18 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveItem(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
-		$type = $req->getParamInt('type');
+		$status   = 'ok';
+		$id       = $req->getParamInt('id');
+		$type     = $req->getParamInt('type');
 		$id_asset = $req->getParamInt('idAsset');
-		$name = $req->getParamString('name');
-		$money = $req->getParamInt('money');
-		$health = $req->getParamInt('health');
-		$attack = $req->getParamInt('attack');
-		$defense = $req->getParamInt('defense');
-		$speed = $req->getParamInt('speed');
+		$name     = $req->getParamString('name');
+		$money    = $req->getParamInt('money');
+		$health   = $req->getParamInt('health');
+		$attack   = $req->getParamInt('attack');
+		$defense  = $req->getParamInt('defense');
+		$speed    = $req->getParamInt('speed');
 		$wearable = $req->getParamInt('wearable');
-		$frames = $req->getParam('frames');
+		$frames   = $req->getParam('frames');
 
 		if (is_null($name) || is_null($id_asset) || is_null($type)) {
 			$status = 'error';
@@ -755,8 +754,8 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function deleteItem(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$status  = 'ok';
+		$id      = $req->getParamInt('id');
 		$message = '';
 
 		if (is_null($id)) {
@@ -764,12 +763,12 @@ class admin extends OModule {
 		}
 
 		if ($status=='ok') {
-			$return = $this->admin_service->deleteItem($id);
-			$status = $return['status'];
+			$return  = $this->admin_service->deleteItem($id);
+			$status  = $return['status'];
 			$message = $return['message'];
 		}
 
-		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('message', $message);
 	}
 
@@ -783,7 +782,7 @@ class admin extends OModule {
 	 */
 	public function characterList(ORequest $req): void {
 		$status = 'ok';
-		$items = $this->admin_service->getCharacters();
+		$items  = $this->admin_service->getCharacters();
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/characters', ['list' => $items, 'extra' => 'nourlencode']);
@@ -798,29 +797,31 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveCharacter(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
-		$type = $req->getParamInt('type');
+		$status         = 'ok';
+		$id             = $req->getParamInt('id');
+		$type           = $req->getParamInt('type');
 		$fixed_position = $req->getParamBool('fixedPosition');
-		$id_asset_up = $req->getParamInt('idAssetUp');
-		$id_asset_down = $req->getParamInt('idAssetDown');
-		$id_asset_left = $req->getParamInt('idAssetLeft');
+		$id_asset_up    = $req->getParamInt('idAssetUp');
+		$id_asset_down  = $req->getParamInt('idAssetDown');
+		$id_asset_left  = $req->getParamInt('idAssetLeft');
 		$id_asset_right = $req->getParamInt('idAssetRight');
-		$name = $req->getParamString('name');
-		$width = $req->getParamInt('width');
-		$height = $req->getParamInt('height');
-		$health = $req->getParamInt('health');
-		$attack = $req->getParamInt('attack');
-		$defense = $req->getParamInt('defense');
-		$speed = $req->getParamInt('speed');
-		$drop_id_item = $req->getParamInt('dropIdItem');
-		$drop_chance = $req->getParamInt('dropChance');
-		$respawn = $req->getParamInt('respawn');
-		$framesUp = $req->getParam('framesUp');
-		$framesDown = $req->getParam('framesDown');
-		$framesLeft = $req->getParam('framesLeft');
-		$framesRight = $req->getParam('framesRight');
-		$narratives = $req->getParam('narratives');
+		$name           = $req->getParamString('name');
+		$width          = $req->getParamInt('width');
+		$block_width    = $req->getParamInt('blockWidth');
+		$height         = $req->getParamInt('height');
+		$block_height   = $req->getParamInt('blockHeight');
+		$health         = $req->getParamInt('health');
+		$attack         = $req->getParamInt('attack');
+		$defense        = $req->getParamInt('defense');
+		$speed          = $req->getParamInt('speed');
+		$drop_id_item   = $req->getParamInt('dropIdItem');
+		$drop_chance    = $req->getParamInt('dropChance');
+		$respawn        = $req->getParamInt('respawn');
+		$framesUp       = $req->getParam('framesUp');
+		$framesDown     = $req->getParam('framesDown');
+		$framesLeft     = $req->getParam('framesLeft');
+		$framesRight    = $req->getParam('framesRight');
+		$narratives     = $req->getParam('narratives');
 
 		if (is_null($name) || is_null($type) || is_null($width) || is_null($height)) {
 			$status = 'error';
@@ -831,27 +832,29 @@ class admin extends OModule {
 			if (!is_null($id)) {
 				$character->find(['id' => $id]);
 			}
-			$character->set('type',     $type);
+			$character->set('type',           $type);
 			$character->set('fixed_position', $fixed_position);
-			$character->set('id_asset_up', $id_asset_up);
-			$character->set('id_asset_down', $id_asset_down);
-			$character->set('id_asset_left', $id_asset_left);
+			$character->set('id_asset_up',    $id_asset_up);
+			$character->set('id_asset_down',  $id_asset_down);
+			$character->set('id_asset_left',  $id_asset_left);
 			$character->set('id_asset_right', $id_asset_right);
-			$character->set('name',     $name);
-			$character->set('width',     $width);
-			$character->set('height',     $height);
-			$character->set('health',   $health);
-			$character->set('attack',   $attack);
-			$character->set('defense',  $defense);
-			$character->set('speed',    $speed);
-			$character->set('drop_id_item', $drop_id_item);
-			$character->set('drop_chance', $drop_chance);
-			$character->set('respawn', $respawn);
+			$character->set('name',           $name);
+			$character->set('width',          $width);
+			$character->set('blockWidth',     $block_width);
+			$character->set('height',         $height);
+			$character->set('block_height',   $block_height);
+			$character->set('health',         $health);
+			$character->set('attack',         $attack);
+			$character->set('defense',        $defense);
+			$character->set('speed',          $speed);
+			$character->set('drop_id_item',   $drop_id_item);
+			$character->set('drop_chance',    $drop_chance);
+			$character->set('respawn',        $respawn);
 			$character->save();
 
-			$this->admin_service->updateCharacterFrames($character, $framesUp, 'up');
-			$this->admin_service->updateCharacterFrames($character, $framesDown, 'down');
-			$this->admin_service->updateCharacterFrames($character, $framesLeft, 'left');
+			$this->admin_service->updateCharacterFrames($character, $framesUp,    'up');
+			$this->admin_service->updateCharacterFrames($character, $framesDown,  'down');
+			$this->admin_service->updateCharacterFrames($character, $framesLeft,  'left');
 			$this->admin_service->updateCharacterFrames($character, $framesRight, 'right');
 			$this->admin_service->updateCharacterNarratives($character, $narratives);
 		}
@@ -868,8 +871,8 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function deleteCharacter(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$status  = 'ok';
+		$id      = $req->getParamInt('id');
 		$message = '';
 
 		if (is_null($id)) {
@@ -877,12 +880,12 @@ class admin extends OModule {
 		}
 
 		if ($status=='ok') {
-			$return = $this->admin_service->deleteCharacter($id);
-			$status = $return['status'];
+			$return  = $this->admin_service->deleteCharacter($id);
+			$status  = $return['status'];
 			$message = $return['message'];
 		}
 
-		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('message', $message);
 	}
 
@@ -896,7 +899,7 @@ class admin extends OModule {
 	 */
 	public function scenarioObjectList(ORequest $req): void {
 		$status = 'ok';
-		$items = $this->admin_service->getScenarioObjects();
+		$items  = $this->admin_service->getScenarioObjects();
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/scenario_objects', ['list' => $items, 'extra' => 'nourlencode']);
@@ -911,23 +914,25 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function saveScenarioObject(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
-		$name = $req->getParamString('name');
-		$id_asset = $req->getParamInt('idAsset');
-		$width = $req->getParamInt('width');
-		$height = $req->getParamInt('height');
-		$crossable = $req->getParamBool('crossable');
-		$activable = $req->getParamBool('activable');
-		$id_asset_active = $req->getParamInt('idAssetActive');
-		$active_time = $req->getParamInt('activeTime');
-		$active_trigger = $req->getParamInt('activeTrigger');
+		$status                = 'ok';
+		$id                    = $req->getParamInt('id');
+		$name                  = $req->getParamString('name');
+		$id_asset              = $req->getParamInt('idAsset');
+		$width                 = $req->getParamInt('width');
+		$block_width           = $req->getParamInt('blockWidth');
+		$height                = $req->getParamInt('height');
+		$block_height          = $req->getParamInt('blockHeight');
+		$crossable             = $req->getParamBool('crossable');
+		$activable             = $req->getParamBool('activable');
+		$id_asset_active       = $req->getParamInt('idAssetActive');
+		$active_time           = $req->getParamInt('activeTime');
+		$active_trigger        = $req->getParamInt('activeTrigger');
 		$active_trigger_custom = $req->getParamString('activeTriggerCustom');
-		$pickable = $req->getParamBool('pickable');
-		$grabbable = $req->getParamBool('grabbable');
-		$breakable = $req->getParamBool('crossable');
-		$drops = $req->getParam('drops');
-		$frames = $req->getParam('frames');
+		$pickable              = $req->getParamBool('pickable');
+		$grabbable             = $req->getParamBool('grabbable');
+		$breakable             = $req->getParamBool('crossable');
+		$drops                 = $req->getParam('drops');
+		$frames                = $req->getParam('frames');
 
 		if (is_null($name) || is_null($id_asset) || is_null($width) || is_null($height)) {
 			$status = 'error';
@@ -938,19 +943,21 @@ class admin extends OModule {
 			if (!is_null($id)) {
 				$scenario_object->find(['id' => $id]);
 			}
-			$scenario_object->set('name', $name);
-			$scenario_object->set('id_asset', $id_asset);
-			$scenario_object->set('width', $width);
-			$scenario_object->set('height', $height);
-			$scenario_object->set('crossable', $crossable);
-			$scenario_object->set('activable', $activable);
-			$scenario_object->set('id_asset_active', $id_asset_active);
-			$scenario_object->set('active_time', $active_time);
-			$scenario_object->set('active_trigger', $active_trigger);
+			$scenario_object->set('name',                  $name);
+			$scenario_object->set('id_asset',              $id_asset);
+			$scenario_object->set('width',                 $width);
+			$scenario_object->set('block_width',           $block_width);
+			$scenario_object->set('height',                $height);
+			$scenario_object->set('block_height',          $block_height);
+			$scenario_object->set('crossable',             $crossable);
+			$scenario_object->set('activable',             $activable);
+			$scenario_object->set('id_asset_active',       $id_asset_active);
+			$scenario_object->set('active_time',           $active_time);
+			$scenario_object->set('active_trigger',        $active_trigger);
 			$scenario_object->set('active_trigger_custom', $active_trigger_custom);
-			$scenario_object->set('pickable', $pickable);
-			$scenario_object->set('grabbable', $grabbable);
-			$scenario_object->set('breakable', $breakable);
+			$scenario_object->set('pickable',              $pickable);
+			$scenario_object->set('grabbable',             $grabbable);
+			$scenario_object->set('breakable',             $breakable);
 			$scenario_object->save();
 
 			$this->admin_service->updateScenarioObjectFrames($scenario_object, $frames);
@@ -969,8 +976,8 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function deleteScenarioObject(ORequest $req): void {
-		$status = 'ok';
-		$id = $req->getParamInt('id');
+		$status  = 'ok';
+		$id      = $req->getParamInt('id');
 		$message = '';
 
 		if (is_null($id)) {
@@ -978,12 +985,12 @@ class admin extends OModule {
 		}
 
 		if ($status=='ok') {
-			$return = $this->admin_service->deleteScenarioObject($id);
-			$status = $return['status'];
+			$return  = $this->admin_service->deleteScenarioObject($id);
+			$status  = $return['status'];
 			$message = $return['message'];
 		}
 
-		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('message', $message);
 	}
 }

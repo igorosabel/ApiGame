@@ -29,11 +29,23 @@ class ScenarioObject extends OModel {
 				'default' => null,
 				'comment' => 'Anchura del objeto en casillas'
 			],
+			'block_width' => [
+				'type'    => OCore::NUM,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Anchura del espacio que bloquea'
+			],
 			'height' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Altura del objeto en casillas'
+			],
+			'block_height' => [
+				'type'    => OCore::NUM,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Altura del espacio que bloquea'
 			],
 			'crossable' => [
 				'type'    => OCore::BOOL,
@@ -139,8 +151,8 @@ class ScenarioObject extends OModel {
 	 *
 	 * @return Asset Recurso usado para el objeto de escenario una vez activado
 	 */
-	public function getAssetActive(): Asset {
-		if (is_null($this->asset_active)) {
+	public function getAssetActive(): ?Asset {
+		if (is_null($this->asset_active) && !is_null($this->get('id_asset_active'))) {
 			$this->loadAssetActive();
 		}
 		return $this->asset_active;

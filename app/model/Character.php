@@ -22,11 +22,23 @@ class Character extends OModel {
 				'default' => null,
 				'comment' => 'Anchura del personaje en casillas'
 			],
+			'block_width' => [
+				'type'    => OCore::NUM,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Anchura del espacio que bloquea'
+			],
 			'height' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Altura del personaje en casillas'
+			],
+			'block_height' => [
+				'type'    => OCore::NUM,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Altura del espacio que bloquea'
 			],
 			'fixed_position' => [
 				'type' => OCore::BOOL,
