@@ -67,4 +67,26 @@ class webService extends OService {
 
 		return $games;
 	}
+
+	/**
+	 * Función para obtener la lista de mundos que un jugador ha desbloqueado en una partida
+	 *
+	 * @param int $id_game Id de la partida
+	 *
+	 * @return array Lista de mundos
+	 */
+	public function getUnlockedWorlds($id_game): array {
+		$db = new ODB();
+		$sql = "SELECT w.* FROM `world` w, `world_unlocked` wu, `game` g WHERE w.`id` = wu.`id_world` AND wu.`id_game` = g.`id` AND g.`id` = ?";
+		$db->query($sql, [$id_game]);
+		$worlds = [];
+
+		while ($res = $db->next()) {
+			$world = new World();
+			$world->update($res);
+			array_push($worlds, $world);
+		}
+
+		return $worlds;
+	}
 }

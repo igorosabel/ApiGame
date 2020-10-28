@@ -259,4 +259,29 @@ class api extends OModule {
 		$this->getTemplate()->addComponent('scenario_objects', 'admin/scenario_objects', ['list' => $scenario_objects, 'extra' => 'nourlencode']);
 		$this->getTemplate()->addComponent('characters',       'admin/characters',       ['list' => $characters,       'extra' => 'nourlencode']);
 	}
+	
+	/**
+	 * Función para obtener los mundos que un jugador a desbloqueado
+	 *
+	 * @url /get-unlocked-worlds
+	 * @filter gameFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function getUnlockedWorlds(ORequest $req): void {
+		$status  = 'ok';
+		$id_game = $req->getParamInt('id');
+		$list    = [];
+
+		if (is_null($id_game)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$list = $this->web_service->getUnlockedWorlds($id_game);
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/worlds', ['list' => $list, 'extra' => 'nourlencode']);
+	}
 }

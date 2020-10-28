@@ -14,7 +14,7 @@
 		"assetActiveUrl": <?php echo !is_null($scenario_object->getAssetActive()) ? '"'.urlencode($scenario_object->getAssetActive()->getUrl()).'"' : 'null' ?>,
 		"activeTime": <?php echo !is_null($scenario_object->get('active_time')) ? $scenario_object->get('active_time') : 'null' ?>,
 		"activeTrigger": <?php echo !is_null($scenario_object->get('active_trigger')) ? $scenario_object->get('active_trigger') : 'null' ?>,
-		"activeTriggerCustom": "<?php echo !is_null($scenario_object->get('active_trigger_custom')) ? urlencode($scenario_object->get('active_trigger_custom')) : 'null' ?>",
+		"activeTriggerCustom": <?php echo !is_null($scenario_object->get('active_trigger_custom')) ? '"'.urlencode($scenario_object->get('active_trigger_custom')).'"' : 'null' ?>,
 		"pickable": <?php echo $scenario_object->get('pickable') ? 'true' : 'false' ?>,
 		"grabbable": <?php echo $scenario_object->get('grabbable') ? 'true' : 'false' ?>,
 		"breakable": <?php echo $scenario_object->get('breakable') ? 'true' : 'false' ?>,
