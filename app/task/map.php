@@ -4,9 +4,12 @@ class mapTask extends OTask {
 		return "map: Nueva tarea map";
 	}
 
-	private $tile_size = 32;
-	private $rows = 20;
-	private $cols = 25;
+	private $scenario_width = null;
+	private $scenario_height = null;
+	private $tile_width = null;
+	private $tile_height = null;
+	private $rows = null;
+	private $cols = null;
 
 	private function getResource(string $file, string $ext) {
 		switch ($ext) {
@@ -30,10 +33,10 @@ class mapTask extends OTask {
 
 	private function calculatePosition(int $start_x, int $start_y, int $width, int $height): array {
 		$ret = [
-			'x' => ($start_x * $this->tile_size) - (($width-1) * $this->tile_size),
-			'y' => $start_y * $this->tile_size - (($height-1) * $this->tile_size),
-			'width' => $width * $this->tile_size,
-			'height' => $height * $this->tile_size
+			'x' => ($start_x * $this->tile_width) - (($width-1) * $this->tile_width),
+			'y' => $start_y * $this->tile_height - (($height-1) * $this->tile_height),
+			'width' => $width * $this->tile_width,
+			'height' => $height * $this->tile_height
 		];
 
 		return $ret;
@@ -57,11 +60,18 @@ class mapTask extends OTask {
 			exit;
 		}
 
+		$this->scenario_width = $this->getConfig()->getExtra('scenario_width');
+		$this->scenario_height = $this->getConfig()->getExtra('scenario_height');
+		$this->rows = $this->getConfig()->getExtra('height');
+		$this->cols = $this->getConfig()->getExtra('width');
+		$this->tile_width = $this->scenario_width / $this->cols;
+		$this->tile_height = $this->scenario_height / $this->rows;
+
 		$map_file = $this->getConfig()->getDir('maps').$scenario->get('id_world').'-'.$scenario->get('id').'.png';
 		if (file_exists($map_file)) {
 			unlink($map_file);
 		}
-		$outputImage = imagecreatetruecolor(($this->cols * $this->tile_size), ($this->rows * $this->tile_size));
+		$outputImage = imagecreatetruecolor($this->scenario_width, $this->scenario_height);
 		$data = $scenario->getData();
 
 		// Background
@@ -71,7 +81,7 @@ class mapTask extends OTask {
 			list($width, $height) = getimagesize($bg_file);
 			$bg = $this->getResource($bg_file, $bg_file_ext);
 
-			imagecopyresized($outputImage, $bg, ($scenario_data->get('x') * $this->tile_size), ($scenario_data->get('y') * $this->tile_size), 0, 0, $this->tile_size, $this->tile_size, $width, $height);
+			imagecopyresized($outputImage, $bg, ($scenario_data->get('x') * $this->tile_width), ($scenario_data->get('y') * $this->tile_height), 0, 0, $this->tile_width, $this->tile_height, $width, $height);
 		}
 
 		// Scenario objects

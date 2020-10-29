@@ -259,7 +259,7 @@ class api extends OModule {
 		$this->getTemplate()->addComponent('scenario_objects', 'admin/scenario_objects', ['list' => $scenario_objects, 'extra' => 'nourlencode']);
 		$this->getTemplate()->addComponent('characters',       'admin/characters',       ['list' => $characters,       'extra' => 'nourlencode']);
 	}
-	
+
 	/**
 	 * Función para obtener los mundos que un jugador a desbloqueado
 	 *
@@ -283,5 +283,139 @@ class api extends OModule {
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'admin/worlds', ['list' => $list, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para obtener las conexiones de un escenario
+	 *
+	 * @url /get-scenario-connections
+	 * @filter gameFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function getScenarioConnections(ORequest $req): void {
+		$status      = 'ok';
+		$id_scenario = $req->getParamInt('id');
+		$list        = [];
+
+		if (is_null($id_scenario)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$scenario = new Scenario();
+			if ($scenario->find(['id' => $id_scenario])){
+				$list = $scenario->getConnections();
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'admin/connections', ['list' => $list, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para viajar a otro mundo
+	 *
+	 * @url /travel
+	 * @filter gameFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function travel(ORequest $req): void {
+		$status     = 'ok';
+		$id_game   = $req->getParamInt('idGame');
+		$id_world   = $req->getParamInt('idWorld');
+		$word_one   = $req->getParamString('wordOne');
+		$word_two   = $req->getParamString('wordTwo');
+		$word_three = $req->getParamString('wordThree');
+
+		if (is_null($id_game) || is_null($word_one) || is_null($word_two) || is_null($word_three)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			// Si viene id es que es un mundo ya conocido
+			if (!is_null($id)) {
+				$world = new World();
+				if (!$world->find(['id' => $id])) {
+					$world = null;
+				}
+			}
+			// Si no viene id es que está probando a ir a un mundo nuevo
+			else {
+				$world = $this->web_service->getWorldByWords( strtolower($word_one), strtolower($word_two), strtolower($word_three));
+			}
+
+			if (!is_null($world)) {
+				$id_world = $world->get('id');
+
+				$world_unlocked = new WorldUnlocked();
+				$world_unlocked->set('id_game', $id_game);
+				$world_unlocked->set('id_world', $id_world);
+				$world_unlocked->save();
+			}
+			else {
+				$status = 'error';
+				$id_world = 'null';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('id',     $id_world);
+	}
+
+	/**
+	 * Función para cambiar de escenario
+	 *
+	 * @url /change-scenario
+	 * @filter gameFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function changeScenario(ORequest $req): void {
+		$status  = 'ok';
+		$to      = $req->getParamInt('to');
+		$x       = $req->getParamInt('x');
+		$y       = $req->getParamInt('y');
+		$id_game = $req->getParamInt('idGame');
+
+		if (is_null($to) || is_null($x) || is_null($y) || is_null($id_game)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$game = new Game();
+			if ($game->find(['id' => $id_game])) {
+				$changed_x = false;
+				$changed_y = false;
+				if ($x==$this->getConfig()->getExtra('width')) {
+					$x = 0;
+					$changed_x = true;
+				}
+				if ($y==$this->getConfig()->getExtra('height')) {
+					$y = 0;
+					$changed_y = true;
+				}
+				if (!$changed_x && $x==0) {
+					$x = ($this->getConfig()->getExtra('width') - 1);
+				}
+				if (!$changed_y && $y==0) {
+					$y = ($this->getConfig()->getExtra('height') - 1);
+				}
+
+				$game->set('id_scenario', $to);
+				$game->set('position_x', $x);
+				$game->set('position_y', $y);
+				$game->save();
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
 	}
 }
