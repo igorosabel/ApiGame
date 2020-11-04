@@ -270,6 +270,7 @@ class admin extends OModule {
 		$id_background      = $req->getParamInt('idBackground');
 		$id_scenario_object = $req->getParamInt('idScenarioObject');
 		$id_character       = $req->getParamInt('idCharacter');
+		$character_health   = $req->getParamInt('characterHealth');
 
 		if (is_null($id_scenario) || is_null($x) || is_null($y)) {
 			$status = 'error';
@@ -286,6 +287,7 @@ class admin extends OModule {
 			$scenario_data->set('id_background',      $id_background);
 			$scenario_data->set('id_scenario_object', $id_scenario_object);
 			$scenario_data->set('id_character',       $id_character);
+			$scenario_data->set('character_health',   $character_health);
 			$scenario_data->save();
 
 			$id = $scenario_data->get('id');
@@ -405,7 +407,7 @@ class admin extends OModule {
 		if (is_null($id)) {
 			$status = 'error';
 		}
-		
+
 		if ($status=='ok') {
 			OTools::runTask('map', [$id, 'true']);
 		}

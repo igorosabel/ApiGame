@@ -42,6 +42,13 @@ class Game extends OModel {
 				'default' => null,
 				'comment' => 'Última posición Y guardada del jugador'
 			],
+			'orientation' => [
+				'type'    => OCore::TEXT,
+				'nullable' => false,
+				'default' => null,
+				'size' => 5,
+				'comment' => 'Orientación del personaje al cargar el escenario'
+			],
 			'money' => [
 				'type'    => OCore::NUM,
 				'nullable' => false,
@@ -92,7 +99,7 @@ class Game extends OModel {
 
 		parent::load($table_name, $model);
 	}
-	
+
 	private $scenario = null;
 
 	/**
@@ -128,7 +135,7 @@ class Game extends OModel {
 		$scenario->find(['id' => $this->get('id_scenario')]);
 		$this->setScenario($scenario);
 	}
-	
+
 	private ?array $inventory = null;
 
 	/**
@@ -163,13 +170,13 @@ class Game extends OModel {
 		$sql = "SELECT * FROM `inventory_item` WHERE `id_game` = ? ORDER BY `order`";
 		$this->db->query($sql, [$this->get('id')]);
 		$inventory = [];
-		
+
 		while ($res = $this->db->next()) {
 			$inventory_item = new InventoryItem();
 			$inventory_item->update($res);
 			array_push($inventory, $inventory_item);
 		}
-		
+
 		$this->setInventory($inventory);
 	}
 }

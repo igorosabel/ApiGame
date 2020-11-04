@@ -4,6 +4,7 @@
 	"idScenario": <?php echo !is_null($values['game']->get('id_scenario')) ? $values['game']->get('id_scenario') : 'null' ?>,
 	"positionX": <?php echo !is_null($values['game']->get('position_x')) ? $values['game']->get('position_x') : 'null' ?>,
 	"positionY": <?php echo !is_null($values['game']->get('position_y')) ? $values['game']->get('position_y') : 'null' ?>,
+	"orientation": <?php echo !is_null($values['game']->get('orientation')) ? '"'.$values['game']->get('orientation').'"' : 'null' ?>,
 	"money": <?php echo $values['game']->get('money') ?>,
 	"health": <?php echo $values['game']->get('health') ?>,
 	"maxHealth": <?php echo $values['game']->get('max_health') ?>,

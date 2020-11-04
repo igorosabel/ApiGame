@@ -216,6 +216,8 @@ class api extends OModule {
 				$map_url           = $scenario->getMapUrl();
 
 				$data = $scenario->getData();
+				$in_scenario_objects = [];
+				$in_characters = [];
 				foreach ($data as $scenario_data) {
 					$in_datas   = false;
 					$background = $scenario_data->getBackground();
@@ -225,14 +227,19 @@ class api extends OModule {
 					$scenario_object = $scenario_data->getScenarioObject();
 					if (!is_null($scenario_object) && $scenario_object->get('crossable')===false) {
 						array_push($blockers,         ['x' => $scenario_data->get('x'), 'y' => $scenario_data->get('y')]);
-						array_push($scenario_objects, $scenario_object);
+						if (!in_array($scenario_object->get('id'), $in_scenario_objects)) {
+							array_push($scenario_objects, $scenario_object);
+							array_push($in_scenario_objects, $scenario_object->get('id'));
+						}
 						array_push($scenario_datas,   $scenario_data);
 						$in_datas = true;
 					}
 					$character = $scenario_data->getCharacter();
 					if (!is_null($character)) {
-						array_push($blockers,   ['x' => $scenario_data->get('x'), 'y' => $scenario_data->get('y')]);
-						array_push($characters, $character);
+						if (!in_array($character->get('id'), $in_characters)) {
+							array_push($characters, $character);
+							array_push($in_characters, $character->get('id'));
+						}
 						if (!$in_datas) {
 							array_push($scenario_datas, $scenario_data);
 						}
@@ -356,6 +363,8 @@ class api extends OModule {
 				$world_unlocked->set('id_game', $id_game);
 				$world_unlocked->set('id_world', $id_world);
 				$world_unlocked->save();
+
+				// TODO actualizar Game con la posición inicial del mundo al que va y orientation down
 			}
 			else {
 				$status = 'error';
@@ -391,24 +400,30 @@ class api extends OModule {
 			if ($game->find(['id' => $id_game])) {
 				$changed_x = false;
 				$changed_y = false;
+				$orientation = 'down';
 				if ($x==$this->getConfig()->getExtra('width')) {
 					$x = 0;
+					$orientation = 'right';
 					$changed_x = true;
 				}
 				if ($y==$this->getConfig()->getExtra('height')) {
 					$y = 0;
+					$orientation = 'down';
 					$changed_y = true;
 				}
 				if (!$changed_x && $x==0) {
 					$x = ($this->getConfig()->getExtra('width') - 1);
+					$orientation = 'right';
 				}
 				if (!$changed_y && $y==0) {
 					$y = ($this->getConfig()->getExtra('height') - 1);
+					$orientation = 'up';
 				}
 
 				$game->set('id_scenario', $to);
-				$game->set('position_x', $x);
-				$game->set('position_y', $y);
+				$game->set('position_x',  $x);
+				$game->set('position_y',  $y);
+				$game->set('orientation', $orientation);
 				$game->save();
 			}
 			else {

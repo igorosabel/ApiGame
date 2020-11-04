@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 class mapTask extends OTask {
 	public function __toString() {
-		return "map: Nueva tarea map";
+		return "map: Tarea para generar imagen de mapa de un escenario";
 	}
 
 	private $scenario_width = null;

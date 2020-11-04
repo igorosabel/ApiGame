@@ -49,6 +49,12 @@ class ScenarioData extends OModel {
 				'ref' => 'character.id',
 				'comment' => 'Id del personaje que va en el escenario'
 			],
+			'character_health' => [
+				'type'    => OCore::NUM,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Salud del personaje'
+			],
 			'created_at' => [
 				'type'    => OCore::CREATED,
 				'comment' => 'Fecha de creación del registro'
