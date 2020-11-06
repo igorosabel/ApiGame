@@ -433,4 +433,81 @@ class api extends OModule {
 
 		$this->getTemplate()->add('status', $status);
 	}
+
+	/**
+	 * Función para golpear a un enemigo
+	 *
+	 * @url /hit-enemy
+	 * @filter gameFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function hitEnemy(ORequest $req): void {
+		$status           = 'ok';
+		$id_game          = $req->getParamInt('idGame');
+		$id_scenario_data = $req->getParamInt('idScenarioData');
+
+		if (is_null($id_game) || is_null($id_scenario_data)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$game = new Game();
+			if (!$game->find(['id' => $id_game])) {
+				$status = 'error';
+			}
+			$scenario_data = new ScenarioData();
+			if (!$scenario_data->find(['id' => $id_scenario_data])) {
+				$status = 'error';
+			}
+
+			if ($status=='ok') {
+				$enemy = $scenario_data->getCharacter();
+				$damage = $game->get('attack') - $enemy->get('defense');
+				$hp = $scenario_data->get('character_health') - $damage;
+				if ($hp<0) {
+					$hp = 0;
+				}
+				$scenario_data->set('character_health', $hp);
+				$scenario_data->save();
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
+
+	/**
+	 * Función para guardar la última posición de un jugador
+	 *
+	 * @url /update-position
+	 * @filter gameFilter
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function updatePosition(ORequest $req): void {
+		$status      = 'ok';
+		$id_game     = $req->getParamInt('idGame');
+		$x           = $req->getParamInt('x');
+		$y           = $req->getParamInt('y');
+		$orientation = $req->getParamString('orientation');
+
+		if (is_null($id_game) || is_null($x) || is_null($y) || is_null($orientation)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$game = new Game();
+			if ($game->find(['id' => $id_game])) {
+				$game->set('position_x',  $x);
+				$game->set('position_y',  $y);
+				$game->set('orientation', $orientation);
+				$game->save();
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
 }
