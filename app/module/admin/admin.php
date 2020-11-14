@@ -932,7 +932,7 @@ class admin extends OModule {
 		$active_trigger_custom = $req->getParamString('activeTriggerCustom');
 		$pickable              = $req->getParamBool('pickable');
 		$grabbable             = $req->getParamBool('grabbable');
-		$breakable             = $req->getParamBool('crossable');
+		$breakable             = $req->getParamBool('breakable');
 		$drops                 = $req->getParam('drops');
 		$frames                = $req->getParam('frames');
 
