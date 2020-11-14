@@ -65,4 +65,60 @@ class Equipment extends OModel {
 
 		parent::load($table_name, $model);
 	}
+	
+	private ?array $items = null;
+	
+	/**
+	 * Obtiene el listado de items que componen el equipo del jugador
+	 *
+	 * @return array Listado de items que componen el equipo del jugador
+	 */
+	public function getAllItems(): array {
+		if (is_null($this->items)) {
+			$this->loadAllItems();
+		}
+		return $this->items;
+	}
+
+	/**
+	 * Guarda el listado de items que componen el equipo del jugador
+	 *
+	 * @param array $inventory Listado de items que componen el equipo del jugador
+	 *
+	 * @return void
+	 */
+	public function setAllItems(array $items): void {
+		$this->items = $items;
+	}
+
+	/**
+	 * Carga el listado de items que componen el equipo del jugador
+	 *
+	 * @return void
+	 */
+	public function loadAllItems(): void {
+		$items = [];
+		$item_list = ['head', 'necklace', 'body', 'boots', 'weapon'];
+
+		foreach ($item_list as $item_name) {
+			if (!is_null($this->get($item_name))) {
+				array_push($items, $this->getItem($this->get($item_name)));
+			}
+		}
+
+		$this->setAllItems($items);
+	}
+
+	/**
+	 * Función para obtener un item
+	 *
+	 * @param int Id del item a buscar
+	 *
+	 * @return Item Item indicado
+	 */
+	public function getItem(int $id): Item {
+		$item = new Item();
+		$item->find(['id' => $id]);
+		return $item;
+	}
 }

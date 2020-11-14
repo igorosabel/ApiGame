@@ -22,9 +22,10 @@
 		"origin_word_three": "juego",
 		"start_money": 0,
 		"start_health": 100,
-		"start_attack": 10,
+		"start_attack": 0,
 		"start_defense": 5,
-		"start_speed": 3
+		"start_speed": 3,
+		"start_weapon": 4
 	},
 	"dir": {
 		"assets": "{{web}}assets/",

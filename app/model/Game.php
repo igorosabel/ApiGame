@@ -179,4 +179,40 @@ class Game extends OModel {
 
 		$this->setInventory($inventory);
 	}
+	
+	private ?Equipment $equipment = null;
+	
+	/**
+	 * Obtiene el equipo del jugador
+	 *
+	 * @return Equipment Equipo del jugador
+	 */
+	public function getEquipment(): Equipment {
+		if (is_null($this->equipment)) {
+			$this->loadEquipment();
+		}
+		return $this->equipment;
+	}
+
+	/**
+	 * Guarda el equipo del jugador
+	 *
+	 * @param Equipment $equipment Equipo del jugador
+	 *
+	 * @return void
+	 */
+	public function setEquipment(Equipment $equipment): void {
+		$this->equipment = $equipment;
+	}
+
+	/**
+	 * Carga el equipo del jugador
+	 *
+	 * @return void
+	 */
+	public function loadEquipment(): void {
+		$equipment = new Equipment();
+		$equipment->find(['id_game' => $this->get('id')]);
+		$this->setEquipment($equipment);
+	}
 }
