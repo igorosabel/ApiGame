@@ -63,7 +63,7 @@ class admin extends OModule {
 	 */
 	public function worldList(ORequest $req): void {
 		$list = $this->admin_service->getWorlds();
-		$this->getTemplate()->addComponent('list', 'admin/worlds', ['list' => $list, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/worlds', ['list' => $list, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -157,7 +157,7 @@ class admin extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/scenarios', ['list' => $list, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/scenarios', ['list' => $list, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -248,9 +248,9 @@ class admin extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('scenario',   'admin/scenario',       ['sce' => $scenario,    'extra' => 'nourlencode']);
-		$this->getTemplate()->addComponent('data',       'admin/scenario_datas', ['list' => $data,       'extra' => 'nourlencode']);
-		$this->getTemplate()->addComponent('connection', 'admin/connections',    ['list' => $connection, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('scenario',   'model/scenario',       ['sce' => $scenario,    'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('data',       'model/scenario_datas', ['list' => $data,       'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('connection', 'model/connections',    ['list' => $connection, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -428,7 +428,7 @@ class admin extends OModule {
 		$assets = $this->admin_service->getAssets();
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/assets', ['list' => $assets, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/assets', ['list' => $assets, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -522,7 +522,7 @@ class admin extends OModule {
 		$tags   = $this->admin_service->getTags();
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/tags', ['list' => $tags, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/tags', ['list' => $tags, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -538,7 +538,7 @@ class admin extends OModule {
 		$background_categories = $this->admin_service->getBackgroundCategories();
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/background_categories', ['list' => $background_categories, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/background_categories', ['list' => $background_categories, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -616,7 +616,7 @@ class admin extends OModule {
 		$backgrounds = $this->admin_service->getBackgrounds();
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/backgrounds', ['list' => $backgrounds, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/backgrounds', ['list' => $backgrounds, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -696,7 +696,7 @@ class admin extends OModule {
 		$items  = $this->admin_service->getItems();
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/items', ['list' => $items, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/items', ['list' => $items, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -787,7 +787,7 @@ class admin extends OModule {
 		$items  = $this->admin_service->getCharacters();
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/characters', ['list' => $items, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/characters', ['list' => $items, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -904,7 +904,7 @@ class admin extends OModule {
 		$items  = $this->admin_service->getScenarioObjects();
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/scenario_objects', ['list' => $items, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/scenario_objects', ['list' => $items, 'extra' => 'nourlencode']);
 	}
 
 	/**

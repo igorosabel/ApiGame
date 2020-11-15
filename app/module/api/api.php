@@ -309,9 +309,9 @@ class api extends OModule {
 		$this->getTemplate()->add('scenario_name',     $scenario_name);
 		$this->getTemplate()->add('map_url',           $map_url);
 		$this->getTemplate()->addComponent('blockers',         'game/blockers',          ['list' => $blockers,         'extra' => 'nourlencode']);
-		$this->getTemplate()->addComponent('scenario_datas',   'admin/scenario_datas',   ['list' => $scenario_datas,   'extra' => 'nourlencode']);
-		$this->getTemplate()->addComponent('scenario_objects', 'admin/scenario_objects', ['list' => $scenario_objects, 'extra' => 'nourlencode']);
-		$this->getTemplate()->addComponent('characters',       'admin/characters',       ['list' => $characters,       'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('scenario_datas',   'model/scenario_datas',   ['list' => $scenario_datas,   'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('scenario_objects', 'model/scenario_objects', ['list' => $scenario_objects, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('characters',       'model/characters',       ['list' => $characters,       'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -336,7 +336,7 @@ class api extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/worlds', ['list' => $list, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/worlds', ['list' => $list, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -367,7 +367,7 @@ class api extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'admin/connections', ['list' => $list, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/connections', ['list' => $list, 'extra' => 'nourlencode']);
 	}
 
 	/**
