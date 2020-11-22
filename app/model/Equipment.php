@@ -102,7 +102,7 @@ class Equipment extends OModel {
 
 		foreach ($item_list as $item_name) {
 			if (!is_null($this->get($item_name))) {
-				array_push($items, $this->getItem($this->get($item_name)));
+				$items[$item_name] = $this->getItem($this->get($item_name));
 			}
 		}
 
@@ -120,5 +120,19 @@ class Equipment extends OModel {
 		$item = new Item();
 		$item->find(['id' => $id]);
 		return $item;
+	}
+
+	/**
+	 * Obtiene el item equipado en el lugar indicado, si lo tiene
+	 *
+	 * @param string $where Lugar indicado
+	 *
+	 * @return Item Item equipado en la cabeza
+	 */
+	public function getEquippedItem(string $where): ?Item {
+		if (is_null($this->items)) {
+			$this->loadAllItems();
+		}
+		return array_key_exists($where, $this->items) ? $this->items[$where] : null;
 	}
 }

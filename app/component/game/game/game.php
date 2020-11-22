@@ -14,13 +14,14 @@
 	"items": [
 <?php foreach ($values['game']->getInventory() as $j => $inventory_item): ?>
 		{
-			"id": <?php echo $inventory->get('id') ?>,
-			"idGame": <?php echo $inventory->get('id_game') ?>,
-			"idItem": <?php echo $inventory->get('id_item') ?>,
+			"id": <?php echo $inventory_item->get('id') ?>,
+			"idGame": <?php echo $inventory_item->get('id_game') ?>,
+			"idItem": <?php echo $inventory_item->get('id_item') ?>,
 			"item": <?php echo OTools::getComponent('model/item', ['item' => $inventory_item->getItem()]) ?>,
-			"order": <?php echo $inventory->get('order') ?>,
-			"num": <?php echo $inventory->get('num') ?>
+			"order": <?php echo $inventory_item->get('order') ?>,
+			"num": <?php echo $inventory_item->get('num') ?>
 		}<?php if ($j<count($values['game']->getInventory())-1): ?>,<?php endif ?>
 <?php endforeach ?>
-	]
+	],
+	"equipment": <?php echo OTools::getComponent('model/equipment', ['equipment' => $values['game']->getEquipment()]) ?>
 }
