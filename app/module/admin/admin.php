@@ -538,7 +538,7 @@ class admin extends OModule {
 		$background_categories = $this->admin_service->getBackgroundCategories();
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('list', 'model/background_categories', ['list' => $background_categories, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addModelComponentList('list', $background_categories, ['created_at', 'updated_at']);
 	}
 
 	/**
@@ -663,8 +663,9 @@ class admin extends OModule {
 	 * @return void
 	 */
 	public function deleteBackground(ORequest $req): void {
-		$status = 'ok';
-		$id     = $req->getParamInt('id');
+		$status  = 'ok';
+		$id      = $req->getParamInt('id');
+		$message = '';
 
 		if (is_null($id)) {
 			$status = 'error';
@@ -673,14 +674,17 @@ class admin extends OModule {
 		if ($status=='ok') {
 			$background = new Background();
 			if ($background->find(['id' => $id])) {
-				$status = $this->admin_service->deleteBackground($background);
+				$return = $this->admin_service->deleteBackground($background);
+				$status  = $return['status'];
+				$message = $return['message'];
 			}
 			else {
 				$status = 'error';
 			}
 		}
 
-		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('status',  $status);
+		$this->getTemplate()->add('message', $message);
 	}
 
 	/**

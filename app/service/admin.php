@@ -367,9 +367,9 @@ class adminService extends OService {
 	 *
 	 * @param BackgroundCategory $background_category Categoría de fondo a borrar
 	 *
-	 * @return string Estado de la operación
+	 * @return array Estado de la operación y mensaje en caso de error
 	 */
-	public function deleteBackgroundCategory(BackgroundCategory $background_category): string {
+	public function deleteBackgroundCategory(BackgroundCategory $background_category): array {
 		$ret = ['status' => 'ok', 'message' => ''];
 		$messages = [];
 
@@ -381,6 +381,9 @@ class adminService extends OService {
 			}
 			$ret['messages'] = implode(', ', $messages);
 		}
+		else {
+			$background_category->delete();
+		}
 
 		return $ret;
 	}
@@ -390,9 +393,9 @@ class adminService extends OService {
 	 *
 	 * @param Background $background Fondo a borrar
 	 *
-	 * @return string Estado de la operación
+	 * @return array Estado de la operación y mensaje en caso de error
 	 */
-	public function deleteBackground(Background $background): string {
+	public function deleteBackground(Background $background): array {
 		$ret = ['status' => 'ok', 'message' => ''];
 		$messages = [];
 		$db = new ODB();
@@ -408,6 +411,9 @@ class adminService extends OService {
 		if (count($messages)>0) {
 			$ret['status'] = 'in-use';
 			$ret['messages'] = implode(', ', $messages);
+		}
+		else {
+			$background->delete();
 		}
 
 		return $ret;
