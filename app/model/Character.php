@@ -1,4 +1,9 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+
 class Character extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,129 +11,129 @@ class Character extends OModel {
 		$table_name  = 'character';
 		$model = [
 			'id' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'comment' => 'Id único de cada tipo de personaje'
 			],
 			'name' => [
-				'type'    => OCore::TEXT,
+				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
 				'size' => 50,
 				'comment' => 'Nombre del tipo de personaje'
 			],
 			'width' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Anchura del personaje en casillas'
 			],
 			'block_width' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Anchura del espacio que bloquea'
 			],
 			'height' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Altura del personaje en casillas'
 			],
 			'block_height' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Altura del espacio que bloquea'
 			],
 			'fixed_position' => [
-				'type' => OCore::BOOL,
+				'type' => OModel::BOOL,
 				'nullable' => false,
 				'default' => false,
 				'comment' => 'Indica si el personaje se queda quieto o no'
 			],
 			'id_asset_up' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'ref' => 'asset.id',
 				'comment' => 'Imagen del personaje al mirar hacia arriba'
 			],
 			'id_asset_down' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'ref' => 'asset.id',
 				'comment' => 'Imagen del personaje al mirar hacia abajo'
 			],
 			'id_asset_left' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'ref' => 'asset.id',
 				'comment' => 'Imagen del personaje al mirar hacia la izquierda'
 			],
 			'id_asset_right' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'ref' => 'asset.id',
 				'comment' => 'Imagen del personaje al mirar hacia la derecha'
 			],
 			'type' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Tipo de personaje NPC 0 Enemigo 1'
 			],
 			'health' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Salud del tipo de personaje'
 			],
 			'attack' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Puntos de daño que hace el tipo de personaje'
 			],
 			'defense' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Puntos de defensa del personaje'
 			],
 			'speed' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Velocidad el tipo de personaje'
 			],
 			'drop_id_item' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'ref' => 'item.id',
 				'comment' => 'Id del elemento que da el tipo de personaje al morir'
 			],
 			'drop_chance' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Porcentaje de veces que otorga premio al morir'
 			],
 			'respawn' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Tiempo para que vuelva a aparecer el personaje en caso de ser un enemigo'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

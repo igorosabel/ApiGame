@@ -1,4 +1,12 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Task;
+
+use OsumiFramework\OFW\Core\OTask;
+use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\App\Model\Scenario;
+use OsumiFramework\App\Model\ScenarioData;
+
 class resetCharactersTask extends OTask {
 	public function __toString() {
 		return "resetCharacters: Tarea para resetear la salud de los enemigos";

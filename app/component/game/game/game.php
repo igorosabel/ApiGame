@@ -1,3 +1,4 @@
+<?php use OsumiFramework\OFW\Tools\OTools; ?>
 {
 	"id": <?php echo $values['game']->get('id') ?>,
 	"name": <?php echo !is_null($values['game']->get('name')) ? '"'.urlencode($values['game']->get('name')).'"' : 'null' ?>,

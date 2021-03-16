@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\App\Model\Connection;
+
 class Scenario extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,51 +12,51 @@ class Scenario extends OModel {
 		$table_name  = 'scenario';
 		$model = [
 			'id' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'comment' => 'Id único del escenario'
 			],
 			'id_world' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'world.id',
 				'comment' => 'Id del mundo al que pertenece el escenario'
 			],
 			'name' => [
-				'type'    => OCore::TEXT,
+				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
 				'size' => 100,
 				'comment' => 'Nombre del escenario'
 			],
 			'start_x' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Indica la casilla X de la que se sale'
 			],
 			'start_y' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Indica la casilla Y de la que se sale'
 			],
 			'initial' => [
-				'type'    => OCore::BOOL,
+				'type'    => OModel::BOOL,
 				'comment' => 'Indica si es el escenario inicial 1 o no 0 del mundo'
 			],
 			'friendly' => [
-				'type' => OCore::BOOL,
+				'type' => OModel::BOOL,
 				'nullable' => false,
 				'default' => false,
 				'comment' => 'Indica si el escenario es amistoso'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

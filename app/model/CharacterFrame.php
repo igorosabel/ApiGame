@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\App\Model\Character;
+
 class CharacterFrame extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,42 +12,42 @@ class CharacterFrame extends OModel {
 		$table_name  = 'character_frame';
 		$model = [
 			'id' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'comment' => 'Id único de cada frame del tipo de personaje'
 			],
 			'id_character' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'character.id',
 				'comment' => 'Id del tipo de personaje al que pertenece el frame'
 			],
 			'id_asset' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'asset.id',
 				'comment' => 'Id del recurso usado como frame'
 			],
 			'orientation' => [
-				'type'    => OCore::TEXT,
+				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
 				'size' => 5,
 				'comment' => 'Orientación de la imagen del frame up / down / left / right'
 			],
 			'order' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Orden del frame en la animación'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

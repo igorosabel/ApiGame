@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Task;
+
+use OsumiFramework\OFW\Core\OTask;
+use OsumiFramework\App\Model\Scenario;
+
 class mapTask extends OTask {
 	public function __toString() {
 		return "map: Tarea para generar imagen de mapa de un escenario";

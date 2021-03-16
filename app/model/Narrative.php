@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\App\Model\Character;
+
 class Narrative extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,34 +12,34 @@ class Narrative extends OModel {
 		$table_name  = 'narrative';
 		$model = [
 			'id' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'comment' => 'Id único para cada narrativa'
 			],
 			'id_character' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'character.id',
 				'comment' => 'Id del personaje'
 			],
 			'dialog' => [
-				'type'    => OCore::LONGTEXT,
+				'type'    => OModel::LONGTEXT,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Texto del dialogo'
 			],
 			'order' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Orden del dialogo en la narrativa'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

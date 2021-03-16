@@ -1,8 +1,28 @@
 <?php declare(strict_types=1);
-/**
- * @type json
- * @prefix /admin
-*/
+
+namespace OsumiFramework\App\Module;
+
+use OsumiFramework\OFW\Core\OModule;
+use OsumiFramework\OFW\Web\ORequest;
+use OsumiFramework\OFW\Routing\ORoute;
+use OsumiFramework\App\Model\Background;
+use OsumiFramework\App\Model\ScenarioObject;
+use OsumiFramework\App\Model\Character;
+use OsumiFramework\App\Model\Item;
+use OsumiFramework\App\Model\BackgroundCategory;
+use OsumiFramework\App\Model\User;
+use OsumiFramework\App\Model\Scenario;
+use OsumiFramework\App\Model\ScenarioData;
+use OsumiFramework\App\Model\World;
+use OsumiFramework\App\Model\Asset;
+use OsumiFramework\App\Service\webService;
+use OsumiFramework\App\Service\adminService;
+use OsumiFramework\OFW\Plugins\OToken;
+
+#[ORoute(
+	type: 'json',
+	prefix: '/admin'
+)]
 class admin extends OModule {
 	private ?adminService $admin_service = null;
 	private ?webService   $web_service   = null;
@@ -15,10 +35,10 @@ class admin extends OModule {
 	/**
 	 * Función para iniciar sesión en el admin
 	 *
-	 * @url /login
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/login')]
 	public function login(ORequest $req): void {
 		$status = 'ok';
 		$id     = -1;
@@ -39,7 +59,7 @@ class admin extends OModule {
 				$tk->addParam('id',    $id);
 				$tk->addParam('email', $email);
 				$tk->addParam('admin', true);
-				$tk->addParam('exp',   mktime() + (24 * 60 * 60));
+				$tk->addParam('exp',   time() + (24 * 60 * 60));
 				$token = $tk->getToken();
 			}
 			else {
@@ -56,11 +76,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de mundos
 	 *
-	 * @url /world-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/world-list',
+		filter: 'adminFilter'
+	)]
 	public function worldList(ORequest $req): void {
 		$list = $this->admin_service->getWorlds();
 		$this->getTemplate()->addComponent('list', 'model/worlds', ['list' => $list, 'extra' => 'nourlencode']);
@@ -69,11 +91,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un mundo
 	 *
-	 * @url /save-world
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-world',
+		filter: 'adminFilter'
+	)]
 	public function saveWorld(ORequest $req): void {
 		$status      = 'ok';
 		$id          = $req->getParamInt('id');
@@ -108,11 +132,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un mundo
 	 *
-	 * @url /delete-world
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-world',
+		filter: 'adminFilter'
+	)]
 	public function deleteWorld(ORequest $req): void {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
@@ -138,11 +164,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de escenarios
 	 *
-	 * @url /scenario-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/scenario-list',
+		filter: 'adminFilter'
+	)]
 	public function scenarioList(ORequest $req): void {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
@@ -163,11 +191,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un escenario
 	 *
-	 * @url /save-scenario
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-scenario',
+		filter: 'adminFilter'
+	)]
 	public function saveScenario(ORequest $req): void {
 		$status   = 'ok';
 		$id       = $req->getParamInt('id');
@@ -197,11 +227,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un mundo
 	 *
-	 * @url /delete-scenario
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-scenario',
+		filter: 'adminFilter'
+	)]
 	public function deleteScenario(ORequest $req): void {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
@@ -227,11 +259,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener el detalle de un escenario
 	 *
-	 * @url /get-scenario
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/get-scenario',
+		filter: 'adminFilter'
+	)]
 	public function getScenario(ORequest $req): void {
 		$status     = 'ok';
 		$id         = $req->getParamInt('id');
@@ -256,11 +290,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar el detalle de un escenario
 	 *
-	 * @url /save-scenario-data
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-scenario-data',
+		filter: 'adminFilter'
+	)]
 	public function saveScenarioData(ORequest $req): void {
 		$status             = 'ok';
 		$id                 = $req->getParamInt('id');
@@ -300,11 +336,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar una conexión de un escenario a otro
 	 *
-	 * @url /save-connection
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-connection',
+		filter: 'adminFilter'
+	)]
 	public function saveConnection(ORequest $req): void {
 		$status      = 'ok';
 		$id_from     = $req->getParamInt('from');
@@ -325,11 +363,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar una conexión de un escenario a otro
 	 *
-	 * @url /delete-connection
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-connection',
+		filter: 'adminFilter'
+	)]
 	public function deleteConnection(ORequest $req): void {
 		$status      = 'ok';
 		$id_from     = $req->getParamInt('from');
@@ -350,11 +390,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar una conexión de un escenario a otro
 	 *
-	 * @url /select-world-start
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/select-world-start',
+		filter: 'adminFilter'
+	)]
 	public function selectWorldStart(ORequest $req): void {
 		$status      = 'ok';
 		$id_scenario = $req->getParamInt('idScenario');
@@ -395,11 +437,13 @@ class admin extends OModule {
 	/**
 	 * Función para generar el mapa de un escenario
 	 *
-	 * @url /generate-map
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/generate-map',
+		filter: 'adminFilter'
+	)]
 	public function generateMap(ORequest $req): void {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
@@ -418,11 +462,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de recursos
 	 *
-	 * @url /asset-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/asset-list',
+		filter: 'adminFilter'
+	)]
 	public function assetList(ORequest $req): void {
 		$status = 'ok';
 		$assets = $this->admin_service->getAssets();
@@ -434,11 +480,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un recurso
 	 *
-	 * @url /save-asset
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-asset',
+		filter: 'adminFilter'
+	)]
 	public function saveAsset(ORequest $req): void {
 		$status   = 'ok';
 		$id       = $req->getParamInt('id');
@@ -485,11 +533,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un recurso
 	 *
-	 * @url /delete-asset
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-asset',
+		filter: 'adminFilter'
+	)]
 	public function deleteAsset(ORequest $req): void {
 		$status  = 'ok';
 		$id      = $req->getParamInt('id');
@@ -512,11 +562,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de tags
 	 *
-	 * @url /tag-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/tag-list',
+		filter: 'adminFilter'
+	)]
 	public function tagList(ORequest $req): void {
 		$status = 'ok';
 		$tags   = $this->admin_service->getTags();
@@ -528,11 +580,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de categorías de fondos
 	 *
-	 * @url /background-category-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/background-category-list',
+		filter: 'adminFilter'
+	)]
 	public function backgroundCategoryList(ORequest $req): void {
 		$status                = 'ok';
 		$background_categories = $this->admin_service->getBackgroundCategories();
@@ -544,11 +598,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar una categoría de fondo
 	 *
-	 * @url /save-background-category
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-background-category',
+		filter: 'adminFilter'
+	)]
 	public function saveBackgroundCategory(ORequest $req): void {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
@@ -573,11 +629,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar una categoría de fondo
 	 *
-	 * @url /delete-background-category
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-background-category',
+		filter: 'adminFilter'
+	)]
 	public function deleteBackgroundCategory(ORequest $req): void {
 		$status  = 'ok';
 		$id      = $req->getParamInt('id');
@@ -606,11 +664,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de fondos
 	 *
-	 * @url /background-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/background-list',
+		filter: 'adminFilter'
+	)]
 	public function backgroundList(ORequest $req): void {
 		$status      = 'ok';
 		$backgrounds = $this->admin_service->getBackgrounds();
@@ -622,11 +682,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un fondo
 	 *
-	 * @url /save-background
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-background',
+		filter: 'adminFilter'
+	)]
 	public function saveBackground(ORequest $req): void {
 		$status                 = 'ok';
 		$id                     = $req->getParamInt('id');
@@ -657,11 +719,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un fondo
 	 *
-	 * @url /delete-background
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-background',
+		filter: 'adminFilter'
+	)]
 	public function deleteBackground(ORequest $req): void {
 		$status  = 'ok';
 		$id      = $req->getParamInt('id');
@@ -690,11 +754,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de items
 	 *
-	 * @url /item-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/item-list',
+		filter: 'adminFilter'
+	)]
 	public function itemList(ORequest $req): void {
 		$status = 'ok';
 		$items  = $this->admin_service->getItems();
@@ -706,11 +772,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un item
 	 *
-	 * @url /save-item
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-item',
+		filter: 'adminFilter'
+	)]
 	public function saveItem(ORequest $req): void {
 		$status   = 'ok';
 		$id       = $req->getParamInt('id');
@@ -754,11 +822,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un item
 	 *
-	 * @url /delete-item
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-item',
+		filter: 'adminFilter'
+	)]
 	public function deleteItem(ORequest $req): void {
 		$status  = 'ok';
 		$id      = $req->getParamInt('id');
@@ -781,11 +851,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de personajes
 	 *
-	 * @url /character-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/character-list',
+		filter: 'adminFilter'
+	)]
 	public function characterList(ORequest $req): void {
 		$status = 'ok';
 		$items  = $this->admin_service->getCharacters();
@@ -797,11 +869,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un personaje
 	 *
-	 * @url /save-character
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-character',
+		filter: 'adminFilter'
+	)]
 	public function saveCharacter(ORequest $req): void {
 		$status         = 'ok';
 		$id             = $req->getParamInt('id');
@@ -871,11 +945,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un personaje
 	 *
-	 * @url /delete-character
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-character',
+		filter: 'adminFilter'
+	)]
 	public function deleteCharacter(ORequest $req): void {
 		$status  = 'ok';
 		$id      = $req->getParamInt('id');
@@ -898,11 +974,13 @@ class admin extends OModule {
 	/**
 	 * Función para obtener la lista de objetos de escenario
 	 *
-	 * @url /scenario-object-list
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/scenario-object-list',
+		filter: 'adminFilter'
+	)]
 	public function scenarioObjectList(ORequest $req): void {
 		$status = 'ok';
 		$items  = $this->admin_service->getScenarioObjects();
@@ -914,11 +992,13 @@ class admin extends OModule {
 	/**
 	 * Función para guardar un objeto de escenario
 	 *
-	 * @url /save-scenario-object
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/save-scenario-object',
+		filter: 'adminFilter'
+	)]
 	public function saveScenarioObject(ORequest $req): void {
 		$status                = 'ok';
 		$id                    = $req->getParamInt('id');
@@ -976,11 +1056,13 @@ class admin extends OModule {
 	/**
 	 * Función para borrar un objeto de escenario
 	 *
-	 * @url /delete-scenario-object
-	 * @filter adminFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-scenario-object',
+		filter: 'adminFilter'
+	)]
 	public function deleteScenarioObject(ORequest $req): void {
 		$status  = 'ok';
 		$id      = $req->getParamInt('id');

@@ -1,4 +1,13 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\App\Model\Background;
+use OsumiFramework\App\Model\ScenarioObject;
+use OsumiFramework\App\Model\Character;
+use OsumiFramework\App\Model\Scenario;
+
 class ScenarioData extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,61 +15,61 @@ class ScenarioData extends OModel {
 		$table_name  = 'scenario_data';
 		$model = [
 			'id' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'comment' => 'Id único para cada dato'
 			],
 			'id_scenario' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'scenario.id',
 				'comment' => 'Id del escenario al que pertenece el dato'
 			],
 			'x' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Coordenada X del dato en el escenario'
 			],
 			'y' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Coordenada Y del dato en el escenario'
 			],
 			'id_background' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'background.id',
 				'comment' => 'Id del fondo del escenario'
 			],
 			'id_scenario_object' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'ref' => 'scenario_object.id',
 				'comment' => 'Id del objeto relacionado que va en el escenario'
 			],
 			'id_character' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'ref' => 'character.id',
 				'comment' => 'Id del personaje que va en el escenario'
 			],
 			'character_health' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Salud del personaje'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

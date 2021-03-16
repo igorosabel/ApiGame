@@ -1,3 +1,4 @@
+<?php use OsumiFramework\OFW\Tools\OTools; ?>
 {
 	"head": <?php echo is_null($values['equipment']->getEquippedItem('head')) ? 'null' : OTools::getComponent('model/item', ['item' => $values['equipment']->getEquippedItem('head')]) ?>,
 	"necklace": <?php echo is_null($values['equipment']->getEquippedItem('necklace')) ? 'null' : OTools::getComponent('model/item', ['item' => $values['equipment']->getEquippedItem('necklace')]) ?>,

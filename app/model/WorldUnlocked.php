@@ -1,4 +1,9 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+
 class WorldUnlocked extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,23 +11,23 @@ class WorldUnlocked extends OModel {
 		$table_name  = 'world_unlocked';
 		$model = [
 			'id_game' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'incr' => false,
 				'ref' => 'game.id',
 				'comment' => 'Id de la partida'
 			],
 			'id_world' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'incr' => false,
 				'ref' => 'world.id',
 				'comment' => 'Id del mundo desbloqueado'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

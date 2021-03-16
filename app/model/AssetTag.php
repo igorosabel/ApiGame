@@ -1,4 +1,9 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+
 class AssetTag extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,23 +11,23 @@ class AssetTag extends OModel {
 		$table_name  = 'asset_tag';
 		$model = [
 			'id_asset' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'incr' => false,
 				'ref' => 'asset.id',
 				'comment' => 'Id del recurso'
 			],
 			'id_tag' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'incr' => false,
 				'ref' => 'tag.id',
 				'comment' => 'Id de la tag'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

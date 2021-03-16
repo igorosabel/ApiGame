@@ -1,4 +1,28 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Service;
+
+use OsumiFramework\OFW\Core\OService;
+use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\App\Model\ScenarioObjectDrop;
+use OsumiFramework\App\Model\Background;
+use OsumiFramework\App\Model\ScenarioObject;
+use OsumiFramework\App\Model\Connection;
+use OsumiFramework\App\Model\Character;
+use OsumiFramework\App\Model\Item;
+use OsumiFramework\App\Model\Equipment;
+use OsumiFramework\App\Model\Narrative;
+use OsumiFramework\App\Model\BackgroundCategory;
+use OsumiFramework\App\Model\Scenario;
+use OsumiFramework\App\Model\ScenarioData;
+use OsumiFramework\App\Model\ItemFrame;
+use OsumiFramework\App\Model\Tag;
+use OsumiFramework\App\Model\CharacterFrame;
+use OsumiFramework\App\Model\World;
+use OsumiFramework\App\Model\ScenarioObjectFrame;
+use OsumiFramework\App\Model\Asset;
+use OsumiFramework\App\Model\AssetTag;
+
 class adminService extends OService {
 	/**
 	 * Load service tools

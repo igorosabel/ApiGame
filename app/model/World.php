@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\App\Model\Scenario;
+
 class World extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,55 +12,55 @@ class World extends OModel {
 		$table_name  = 'world';
 		$model = [
 			'id' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'comment' => 'Id único para cada mundo'
 			],
 			'name' => [
-				'type'    => OCore::TEXT,
+				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
 				'size' => 50,
 				'comment' => 'Nombre del mundo'
 			],
 			'description' => [
-				'type'    => OCore::LONGTEXT,
+				'type'    => OModel::LONGTEXT,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Descripción del mundo'
 			],
 			'word_one' => [
-				'type'    => OCore::TEXT,
+				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
 				'size' => 20,
 				'comment' => 'Primera palabra para acceder al mundo'
 			],
 			'word_two' => [
-				'type'    => OCore::TEXT,
+				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
 				'size' => 20,
 				'comment' => 'Segunda palabra para acceder al mundo'
 			],
 			'word_three' => [
-				'type'    => OCore::TEXT,
+				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
 				'size' => 20,
 				'comment' => 'Tercera palabra para acceder al mundo'
 			],
 			'friendly' => [
-				'type' => OCore::BOOL,
+				'type' => OModel::BOOL,
 				'nullable' => false,
 				'default' => false,
 				'comment' => 'Indica si el mundo es amistoso'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

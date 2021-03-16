@@ -1,4 +1,11 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\App\Model\ScenarioObject;
+use OsumiFramework\App\Model\Scenario;
+
 class ScenarioObjectFrame extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -6,35 +13,35 @@ class ScenarioObjectFrame extends OModel {
 		$table_name  = 'scenario_object_frame';
 		$model = [
 			'id' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'comment' => 'Id único para cada frame de un objeto de escenario'
 			],
 			'id_scenario_object' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'scenario_object.id',
 				'comment' => 'Id del objeto de escenario que tiene la animación'
 			],
 			'id_asset' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'ref' => 'asset.id',
 				'comment' => 'Id del recurso usado como frame'
 			],
 			'order' => [
-				'type'    => OCore::NUM,
+				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => null,
 				'comment' => 'Orden del frame en la animación'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

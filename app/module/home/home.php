@@ -1,7 +1,16 @@
 <?php declare(strict_types=1);
-/**
- * @type html
-*/
+
+namespace OsumiFramework\App\Module;
+
+use OsumiFramework\OFW\Core\OModule;
+use OsumiFramework\OFW\Web\ORequest;
+use OsumiFramework\OFW\Routing\ORoute;
+use OsumiFramework\App\Model\Game;
+use OsumiFramework\App\Service\webService;
+
+#[ORoute(
+	type: 'html'
+)]
 class home extends OModule {
 	public ?webService $web_service = null;
 
@@ -12,10 +21,10 @@ class home extends OModule {
 	/**
 	 * Pantalla de inicio
 	 *
-	 * @url /
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/')]
 	public function index(ORequest $req): void {
 		$this->getTemplate()->addCss('home');
 	    $this->getTemplate()->addJs('home');
@@ -24,11 +33,13 @@ class home extends OModule {
 	/**
 	 * Nueva acción playerSelect
 	 *
-	 * @url /player-select
-	 * @filter playerFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/player-select',
+		filter: 'playerFilter'
+	)]
 	public function playerSelect(ORequest $req): void {
 	    $games = $this->web_service->getGames($this->getSession()->getParam('id'));
 	    $this->getTemplate()->addComponent('games', 'public/games', ['games' => $games]);
@@ -39,11 +50,13 @@ class home extends OModule {
 	/**
 	 * Pantalla de juego
 	 *
-	 * @url /game/:id
-	 * @type html
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/game/:id',
+		type: 'html'
+	)]
 	public function game(ORequest $req): void {
 		$game = new Game();
 	    $game->find(['id'=>$req->getParamInt('id')]);

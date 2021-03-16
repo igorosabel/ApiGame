@@ -1,8 +1,24 @@
 <?php declare(strict_types=1);
-/**
- * @type json
- * @prefix /api
-*/
+
+namespace OsumiFramework\App\Module;
+
+use OsumiFramework\OFW\Core\OModule;
+use OsumiFramework\OFW\Web\ORequest;
+use OsumiFramework\OFW\Routing\ORoute;
+use OsumiFramework\App\Model\Equipment;
+use OsumiFramework\App\Model\User;
+use OsumiFramework\App\Model\Scenario;
+use OsumiFramework\App\Model\ScenarioData;
+use OsumiFramework\App\Model\Game;
+use OsumiFramework\App\Model\World;
+use OsumiFramework\App\Model\WorldUnlocked;
+use OsumiFramework\App\Service\webService;
+use OsumiFramework\OFW\Plugins\OToken;
+
+#[ORoute(
+	type: 'json',
+	prefix: '/api'
+)]
 class api extends OModule {
 	public ?webService $web_service = null;
 
@@ -13,10 +29,10 @@ class api extends OModule {
 	/**
 	 * Función para iniciar sesión en el juego
 	 *
-	 * @url /login
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/login')]
 	public function login(ORequest $req): void {
 		$status = 'ok';
 		$id     = -1;
@@ -37,7 +53,7 @@ class api extends OModule {
 				$tk->addParam('id',    $id);
 				$tk->addParam('email', $email);
 				$tk->addParam('admin', $user->get('admin'));
-				$tk->addParam('exp',   mktime() + (24 * 60 * 60));
+				$tk->addParam('exp',   time() + (24 * 60 * 60));
 				$token = $tk->getToken();
 			}
 			else {
@@ -54,10 +70,10 @@ class api extends OModule {
 	/**
 	 * Función para registrar un nuevo usuario
 	 *
-	 * @url /register
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/register')]
 	public function register(ORequest $req): void {
 		$status = 'ok';
 		$id     = -1;
@@ -103,7 +119,7 @@ class api extends OModule {
 				$tk->addParam('id',    $id);
 				$tk->addParam('email', $email);
 				$tk->addParam('admin', false);
-				$tk->addParam('exp',   mktime() + (24 * 60 * 60));
+				$tk->addParam('exp',   time() + (24 * 60 * 60));
 				$token = $tk->getToken();
 			}
 		}
@@ -117,11 +133,13 @@ class api extends OModule {
 	/**
 	 * Función para obtener la lista de partidas de un usuario
 	 *
-	 * @url /get-games
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/get-games',
+		filter: 'gameFilter'
+	)]
 	public function getGames(ORequest $req): void {
 		$status = 'ok';
 		$filter = $req->getFilter('gameFilter');
@@ -134,11 +152,13 @@ class api extends OModule {
 	/**
 	 * Función para crear una nueva partida
 	 *
-	 * @url /new-game
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/new-game',
+		filter: 'gameFilter'
+	)]
 	public function newGame(ORequest $req): void {
 		$status      = 'ok';
 		$id_game     = $req->getParamInt('idGame');
@@ -197,11 +217,13 @@ class api extends OModule {
 	/**
 	 * Función para borrar una partida
 	 *
-	 * @url /delete-game
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/delete-game',
+		filter: 'gameFilter'
+	)]
 	public function deleteGame(ORequest $req): void {
 		$status  = 'ok';
 		$id_game = $req->getParamInt('id');
@@ -226,11 +248,13 @@ class api extends OModule {
 	/**
 	 * Función para obtener los datos de una partida
 	 *
-	 * @url /get-play-data
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/get-play-data',
+		filter: 'gameFilter'
+	)]
 	public function getPlayData(ORequest $req): void {
 		$status            = 'ok';
 		$id_game           = $req->getParamInt('id');
@@ -317,11 +341,13 @@ class api extends OModule {
 	/**
 	 * Función para obtener los mundos que un jugador a desbloqueado
 	 *
-	 * @url /get-unlocked-worlds
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/get-unlocked-worlds',
+		filter: 'gameFilter'
+	)]
 	public function getUnlockedWorlds(ORequest $req): void {
 		$status  = 'ok';
 		$id_game = $req->getParamInt('id');
@@ -342,11 +368,13 @@ class api extends OModule {
 	/**
 	 * Función para obtener las conexiones de un escenario
 	 *
-	 * @url /get-scenario-connections
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/get-scenario-connections',
+		filter: 'gameFilter'
+	)]
 	public function getScenarioConnections(ORequest $req): void {
 		$status      = 'ok';
 		$id_scenario = $req->getParamInt('id');
@@ -373,11 +401,13 @@ class api extends OModule {
 	/**
 	 * Función para viajar a otro mundo
 	 *
-	 * @url /travel
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/travel',
+		filter: 'gameFilter'
+	)]
 	public function travel(ORequest $req): void {
 		$status     = 'ok';
 		$id_game   = $req->getParamInt('idGame');
@@ -426,11 +456,13 @@ class api extends OModule {
 	/**
 	 * Función para cambiar de escenario
 	 *
-	 * @url /change-scenario
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/change-scenario',
+		filter: 'gameFilter'
+	)]
 	public function changeScenario(ORequest $req): void {
 		$status  = 'ok';
 		$to      = $req->getParamInt('to');
@@ -484,11 +516,13 @@ class api extends OModule {
 	/**
 	 * Función para golpear a un enemigo
 	 *
-	 * @url /hit-enemy
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/hit-enemy',
+		filter: 'gameFilter'
+	)]
 	public function hitEnemy(ORequest $req): void {
 		$status           = 'ok';
 		$id_game          = $req->getParamInt('idGame');
@@ -526,11 +560,13 @@ class api extends OModule {
 	/**
 	 * Función para guardar la última posición de un jugador
 	 *
-	 * @url /update-position
-	 * @filter gameFilter
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute(
+		'/update-position',
+		filter: 'gameFilter'
+	)]
 	public function updatePosition(ORequest $req): void {
 		$status      = 'ok';
 		$id_game     = $req->getParamInt('idGame');
