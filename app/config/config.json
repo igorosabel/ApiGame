@@ -1,4 +1,5 @@
 {
+	"name": "The Game",
 	"db": {
 		"host": "localhost",
 		"user": "game",
