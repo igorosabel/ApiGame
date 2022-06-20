@@ -13,7 +13,7 @@ use OsumiFramework\App\Component\ConnectionsComponent;
 #[OModuleAction(
 	url: '/get-scenario',
 	filter: 'admin',
-	components: 'model/scenario, model/scenario_datas, model/connections'
+	components: ['model/scenario', 'model/scenario_datas', 'model/connections']
 )]
 class getScenarioAction extends OAction {
 	/**
@@ -26,15 +26,15 @@ class getScenarioAction extends OAction {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
 
-		$scenario_component       = new ScenarioComponent(['sce' => null, 'extra' => 'nourlencode']);
-		$scenario_datas_component = new ScenarioDatasComponent(['list' => [], 'extra' => 'nourlencode']);
-		$connections_component    = new ConnectionsComponent(['list' => [], 'extra' => 'nourlencode']);
+		$scenario_component       = new ScenarioComponent(['sce' => null]);
+		$scenario_datas_component = new ScenarioDatasComponent(['list' => []]);
+		$connections_component    = new ConnectionsComponent(['list' => []]);
 
 		$scenario = new Scenario();
 		if ($scenario->find(['id' => $id])) {
-			$scenario_component       = new ScenarioComponent(['sce' => $scenario, 'extra' => 'nourlencode']);
-			$scenario_datas_component = new ScenarioDatasComponent(['list' => $scenario->getData(), 'extra' => 'nourlencode']);
-			$connections_component    = new ConnectionsComponent(['list' => $scenario->getConnections(), 'extra' => 'nourlencode']);
+			$scenario_component->setValue('sce', $scenario);
+			$scenario_datas_component->setValue('list', $scenario->getData());
+			$connections_component->setValue('list', $scenario->getConnections());
 		}
 		else {
 			$status = 'error';

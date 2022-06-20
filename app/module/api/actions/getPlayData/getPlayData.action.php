@@ -15,7 +15,7 @@ use OsumiFramework\App\Component\CharactersComponent;
 #[OModuleAction(
 	url: '/get-play-data',
 	filter: 'game',
-	components: 'game/game, game/blockers, model/scenario_datas, model/scenario_objects, model/characters'
+	components: ['game/game', 'game/blockers', 'model/scenario_datas', 'model/scenario_objects', 'model/characters']
 )]
 class getPlayDataAction extends OAction {
 	/**
@@ -37,10 +37,10 @@ class getPlayDataAction extends OAction {
 		$scenario_datas    = [];
 		$scenario_objects  = [];
 		$characters        = [];
-		$blockers_component         = new BlockersComponent(['list' => [], 'extra' => 'nourlencode']);
-		$scenario_datas_component   = new ScenarioDatasComponent(['list' => [], 'extra' => 'nourlencode']);
-		$scenario_objects_component = new ScenarioObjectsComponent(['list' => [], 'extra' => 'nourlencode']);
-		$characters_component       = new CharactersComponent(['list' => [], 'extra' => 'nourlencode']);
+		$blockers_component         = new BlockersComponent(['list' => []]);
+		$scenario_datas_component   = new ScenarioDatasComponent(['list' => []]);
+		$scenario_objects_component = new ScenarioObjectsComponent(['list' => []]);
+		$characters_component       = new CharactersComponent(['list' => []]);
 
 		if (is_null($id_game)) {
 			$status = 'error';
@@ -90,12 +90,12 @@ class getPlayDataAction extends OAction {
 					}
 				}
 
-				$blockers_component         = new BlockersComponent(['list' => $blockers, 'extra' => 'nourlencode']);
-				$scenario_datas_component   = new ScenarioDatasComponent(['list' => $scenario_datas, 'extra' => 'nourlencode']);
-				$scenario_objects_component = new ScenarioObjectsComponent(['list' => $scenario_objects, 'extra' => 'nourlencode']);
-				$characters_component       = new CharactersComponent(['list' => $characters, 'extra' => 'nourlencode']);
+				$blockers_component->setValue('list', $blockers);
+				$scenario_datas_component->setValue('list', $scenario_datas);
+				$scenario_objects_component->setValue('list', $scenario_objects);
+				$characters_component->setValue('list', $characters);
 
-				$game_component = new GameComponent(['game' => $game, 'extra' => 'nourlencode']);
+				$game_component = new GameComponent(['game' => $game]);
 				$this->getTemplate()->add('game', $game_component);
 			}
 			else {

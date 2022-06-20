@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\CharactersComponent;
 #[OModuleAction(
 	url: '/character-list',
 	filter: 'admin',
-	services: 'admin',
-	components: 'model/characters'
+	services: ['admin'],
+	components: ['model/characters']
 )]
 class characterListAction extends OAction {
 	/**
@@ -22,7 +22,7 @@ class characterListAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$characters_component = new CharactersComponent(['list' => $this->admin_service->getCharacters(), 'extra' => 'nourlencode']);
+		$characters_component = new CharactersComponent(['list' => $this->admin_service->getCharacters()]);
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('list',   $characters_component);

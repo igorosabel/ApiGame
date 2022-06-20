@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\WorldsComponent;
 #[OModuleAction(
 	url: '/world-list',
 	filter: 'admin',
-	services: 'admin',
-	components: 'model/worlds'
+	services: ['admin'],
+	components: ['model/worlds']
 )]
 class worldListAction extends OAction {
 	/**
@@ -21,7 +21,7 @@ class worldListAction extends OAction {
 	 * @return void
 	 */
 	public function run(ORequest $req):void {
-		$worlds_component = new WorldsComponent(['list' => $this->admin_service->getWorlds(), 'extra' => 'nourlencode']);
+		$worlds_component = new WorldsComponent(['list' => $this->admin_service->getWorlds()]);
 		$this->getTemplate()->add('list', $worlds_component);
 	}
 }

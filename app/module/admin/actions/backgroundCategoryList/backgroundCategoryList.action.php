@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\BackgroundCategoryListComponent;
 #[OModuleAction(
 	url: '/background-category-list',
 	filter: 'admin',
-	services: 'admin',
-	components: 'model/backgroundcategory_list'
+	services: ['admin'],
+	components: ['model/backgroundcategory_list']
 )]
 class backgroundCategoryListAction extends OAction {
 	/**
@@ -22,7 +22,7 @@ class backgroundCategoryListAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$background_list_categoeries_component = new BackgroundCategoryListComponent(['list' => $this->admin_service->getBackgroundCategories(), 'extra' => 'nourlencode']);
+		$background_list_categoeries_component = new BackgroundCategoryListComponent(['list' => $this->admin_service->getBackgroundCategories()]);
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('list',   $background_list_categoeries_component);

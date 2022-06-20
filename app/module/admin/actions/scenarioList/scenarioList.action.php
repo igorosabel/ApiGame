@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\ScenariosComponent;
 #[OModuleAction(
 	url: '/scenario-list',
 	filter: 'admin',
-	services: 'admin',
-	components: 'model/scenarios'
+	services: ['admin'],
+	components: ['model/scenarios']
 )]
 class scenarioListAction extends OAction {
 	/**
@@ -23,14 +23,14 @@ class scenarioListAction extends OAction {
 	public function run(ORequest $req):void {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
-		$scenarios_component = new ScenariosComponent(['list' => [], 'extra' => 'nourlencode']);
+		$scenarios_component = new ScenariosComponent(['list' => []]);
 
 		if (is_null($id)) {
 			$status = 'error';
 		}
 
 		if ($status=='ok') {
-			$scenarios_component = new ScenariosComponent(['list' => $this->admin_service->getScenarios($id), 'extra' => 'nourlencode']);
+			$scenarios_component->setValue('list', $this->admin_service->getScenarios($id));
 		}
 
 		$this->getTemplate()->add('status', $status);

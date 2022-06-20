@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\ScenarioObjectsComponent;
 #[OModuleAction(
 	url: '/scenario-object-list',
 	filter: 'admin',
-	services: 'admin',
-	components: 'model/scenario_objects'
+	services: ['admin'],
+	components: ['model/scenario_objects']
 )]
 class scenarioObjectListAction extends OAction {
 	/**
@@ -22,7 +22,7 @@ class scenarioObjectListAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$scenario_objects_component = new ScenarioObjectsComponent(['list' => $this->admin_service->getScenarioObjects(), 'extra' => 'nourlencode']);
+		$scenario_objects_component = new ScenarioObjectsComponent(['list' => $this->admin_service->getScenarioObjects()]);
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('list',   $scenario_objects_component);

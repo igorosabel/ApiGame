@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\AssetsComponent;
 #[OModuleAction(
 	url: '/asset-list',
 	filter: 'admin',
-	services: 'admin',
-	components: 'model/assets'
+	services: ['admin'],
+	components: ['model/assets']
 )]
 class assetListAction extends OAction {
 	/**
@@ -22,7 +22,7 @@ class assetListAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$assets_component = new AssetsComponent(['list' => $this->admin_service->getAssets(), 'extra' => 'nourlencode']);
+		$assets_component = new AssetsComponent(['list' => $this->admin_service->getAssets()]);
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('list',   $assets_component);

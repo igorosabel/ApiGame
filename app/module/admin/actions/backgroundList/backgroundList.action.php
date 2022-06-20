@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\BackgroundsComponent;
 #[OModuleAction(
 	url: '/background-list',
 	filter: 'admin',
-	services: 'admin',
-	components: 'model/backgrounds'
+	services: ['admin'],
+	components: ['model/backgrounds']
 )]
 class backgroundListAction extends OAction {
 	/**
@@ -22,7 +22,7 @@ class backgroundListAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$backgrounds_component = new BackgroundsComponent(['list' => $this->admin_service->getBackgrounds(), 'extra' => 'nourlencode']);
+		$backgrounds_component = new BackgroundsComponent(['list' => $this->admin_service->getBackgrounds()]);
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('list',   $backgrounds_component);

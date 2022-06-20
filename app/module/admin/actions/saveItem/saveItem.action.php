@@ -10,7 +10,7 @@ use OsumiFramework\App\Model\Item;
 #[OModuleAction(
 	url: '/save-item',
 	filter: 'admin',
-	services: 'admin'
+	services: ['admin']
 )]
 class saveItemAction extends OAction {
 	/**

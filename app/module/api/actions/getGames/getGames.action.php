@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\GamesComponent;
 #[OModuleAction(
 	url: '/get-games',
 	filter: 'game',
-	services: 'web',
-	components: 'game/games'
+	services: ['web'],
+	components: ['game/games']
 )]
 class getGamesAction extends OAction {
 	/**
@@ -24,7 +24,7 @@ class getGamesAction extends OAction {
 		$status = 'ok';
 		$filter = $req->getFilter('game');
 		$games  = $this->web_service->getGames($filter['id']);
-		$games_component = new GamesComponent(['list' => $games, 'extra' => 'nourlencode']);
+		$games_component = new GamesComponent(['list' => $games]);
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('list', $games_component);

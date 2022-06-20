@@ -11,7 +11,7 @@ use OsumiFramework\App\Component\ConnectionsComponent;
 #[OModuleAction(
 	url: '/get-scenario-connections',
 	filter: 'game',
-	components: 'model/connections'
+	components: ['model/connections']
 )]
 class getScenarioConnectionsAction extends OAction {
 	/**
@@ -23,7 +23,7 @@ class getScenarioConnectionsAction extends OAction {
 	public function run(ORequest $req):void {
 		$status      = 'ok';
 		$id_scenario = $req->getParamInt('id');
-		$connecions_component = new ConnectionsComponent(['list' => [], 'extra' => 'nourlencode']);
+		$connecions_component = new ConnectionsComponent(['list' => []]);
 
 		if (is_null($id_scenario)) {
 			$status = 'error';
@@ -32,7 +32,7 @@ class getScenarioConnectionsAction extends OAction {
 		if ($status=='ok') {
 			$scenario = new Scenario();
 			if ($scenario->find(['id' => $id_scenario])){
-				$connecions_component = new ConnectionsComponent(['list' => $scenario->getConnections(), 'extra' => 'nourlencode']);
+				$connecions_component->setValue('list', $scenario->getConnections());
 			}
 			else {
 				$status = 'error';

@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\WorldsComponent;
 #[OModuleAction(
 	url: '/get-unlocked-worlds',
 	filter: 'game',
-	services: 'web',
-	components: 'model/worlds'
+	services: ['web'],
+	components: ['model/worlds']
 )]
 class getUnlockedWorldsAction extends OAction {
 	/**
@@ -23,7 +23,7 @@ class getUnlockedWorldsAction extends OAction {
 	public function run(ORequest $req):void {
 		$status  = 'ok';
 		$id_game = $req->getParamInt('id');
-		$worlds_component = new WorldsComponent(['list' => [], 'extra' => 'nourlencode']);
+		$worlds_component = new WorldsComponent(['list' => []]);
 
 		if (is_null($id_game)) {
 			$status = 'error';
@@ -31,7 +31,7 @@ class getUnlockedWorldsAction extends OAction {
 
 		if ($status=='ok') {
 			$list = $this->web_service->getUnlockedWorlds($id_game);
-			$worlds_component = new WorldsComponent(['list' => $list, 'extra' => 'nourlencode']);
+			$worlds_component->setValue('list', $list);
 		}
 
 		$this->getTemplate()->add('status', $status);

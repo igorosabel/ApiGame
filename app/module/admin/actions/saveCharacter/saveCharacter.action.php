@@ -10,7 +10,7 @@ use OsumiFramework\App\Model\Character;
 #[OModuleAction(
 	url: '/save-character',
 	filter: 'admin',
-	services: 'admin'
+	services: ['admin']
 )]
 class saveCharacterAction extends OAction {
 	/**

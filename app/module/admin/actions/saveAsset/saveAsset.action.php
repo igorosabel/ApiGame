@@ -10,7 +10,7 @@ use OsumiFramework\App\Model\Asset;
 #[OModuleAction(
 	url: '/save-asset',
 	filter: 'admin',
-	services: 'admin'
+	services: ['admin']
 )]
 class saveAssetAction extends OAction {
 	/**

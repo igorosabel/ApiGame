@@ -11,7 +11,7 @@ use OsumiFramework\App\Model\WorldUnlocked;
 #[OModuleAction(
 	url: '/travel',
 	filter: 'game',
-	services: 'web'
+	services: ['web']
 )]
 class travelAction extends OAction {
 	/**

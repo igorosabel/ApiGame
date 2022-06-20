@@ -10,7 +10,7 @@ use OsumiFramework\App\Model\Background;
 #[OModuleAction(
 	url: '/delete-background',
 	filter: 'admin',
-	services: 'admin'
+	services: ['admin']
 )]
 class deleteBackgroundAction extends OAction {
 	/**

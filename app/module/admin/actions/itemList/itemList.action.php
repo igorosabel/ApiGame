@@ -10,8 +10,8 @@ use OsumiFramework\App\Component\ItemsComponent;
 #[OModuleAction(
 	url: '/item-list',
 	filter: 'admin',
-	services: 'admin',
-	components: 'model/items'
+	services: ['admin'],
+	components: ['model/items']
 )]
 class itemListAction extends OAction {
 	/**
@@ -22,7 +22,7 @@ class itemListAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$items_component = new ItemsComponent(['list' => $this->admin_service->getItems(), 'extra' => 'nourlencode']);
+		$items_component = new ItemsComponent(['list' => $this->admin_service->getItems()]);
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('list',   $items_component);
