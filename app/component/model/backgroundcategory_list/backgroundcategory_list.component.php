@@ -5,5 +5,5 @@ namespace OsumiFramework\App\Component;
 use OsumiFramework\OFW\Core\OComponent;
 
 class BackgroundCategoryListComponent extends OComponent {
-  private string $depends = 'model/backgroundcategory';
+	public array $depends = ['model/backgroundcategory'];
 }
