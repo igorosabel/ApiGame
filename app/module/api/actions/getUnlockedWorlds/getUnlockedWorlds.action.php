@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\WorldsComponent;
 
 #[OModuleAction(
 	url: '/get-unlocked-worlds',
-	filter: 'game',
+	filters: ['game'],
 	services: ['web'],
 	components: ['model/worlds']
 )]

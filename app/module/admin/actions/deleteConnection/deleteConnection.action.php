@@ -8,7 +8,7 @@ use OsumiFramework\OFW\Web\ORequest;
 
 #[OModuleAction(
 	url: '/delete-connection',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin']
 )]
 class deleteConnectionAction extends OAction {

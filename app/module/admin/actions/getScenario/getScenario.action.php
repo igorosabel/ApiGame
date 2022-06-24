@@ -12,7 +12,7 @@ use OsumiFramework\App\Component\ConnectionsComponent;
 
 #[OModuleAction(
 	url: '/get-scenario',
-	filter: 'admin',
+	filters: ['admin'],
 	components: ['model/scenario', 'model/scenario_datas', 'model/connections']
 )]
 class getScenarioAction extends OAction {

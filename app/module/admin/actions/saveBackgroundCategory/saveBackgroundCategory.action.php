@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\BackgroundCategory;
 
 #[OModuleAction(
 	url: '/save-background-category',
-	filter: 'admin'
+	filters: ['admin']
 )]
 class saveBackgroundCategoryAction extends OAction {
 	/**

@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\BackgroundCategory;
 
 #[OModuleAction(
 	url: '/delete-background-category',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin']
 )]
 class deleteBackgroundCategoryAction extends OAction {

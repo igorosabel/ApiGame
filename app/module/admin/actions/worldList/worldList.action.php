@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\WorldsComponent;
 
 #[OModuleAction(
 	url: '/world-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/worlds']
 )]

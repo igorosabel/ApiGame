@@ -14,7 +14,7 @@ use OsumiFramework\App\Component\CharactersComponent;
 
 #[OModuleAction(
 	url: '/get-play-data',
-	filter: 'game',
+	filters: ['game'],
 	components: ['game/game', 'game/blockers', 'model/scenario_datas', 'model/scenario_objects', 'model/characters']
 )]
 class getPlayDataAction extends OAction {

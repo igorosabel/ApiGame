@@ -9,7 +9,7 @@ use OsumiFramework\OFW\Tools\OTools;
 
 #[OModuleAction(
 	url: '/generate-map',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin']
 )]
 class generateMapAction extends OAction {

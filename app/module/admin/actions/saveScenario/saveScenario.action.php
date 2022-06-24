@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\Scenario;
 
 #[OModuleAction(
 	url: '/save-scenario',
-	filter: 'admin'
+	filters: ['admin']
 )]
 class saveScenarioAction extends OAction {
 	/**

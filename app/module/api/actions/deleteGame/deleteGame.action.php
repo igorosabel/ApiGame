@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\Game;
 
 #[OModuleAction(
 	url: '/delete-game',
-	filter: 'game',
+	filters: ['game'],
 	services: ['web']
 )]
 class deleteGameAction extends OAction {

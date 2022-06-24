@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\CharactersComponent;
 
 #[OModuleAction(
 	url: '/character-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/characters']
 )]

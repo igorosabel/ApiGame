@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\Game;
 
 #[OModuleAction(
 	url: '/change-scenario',
-	filter: 'game'
+	filters: ['game']
 )]
 class changeScenarioAction extends OAction {
 	/**

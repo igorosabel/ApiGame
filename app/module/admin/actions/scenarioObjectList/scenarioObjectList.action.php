@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\ScenarioObjectsComponent;
 
 #[OModuleAction(
 	url: '/scenario-object-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/scenario_objects']
 )]

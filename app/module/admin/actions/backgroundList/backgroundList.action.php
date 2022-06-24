@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\BackgroundsComponent;
 
 #[OModuleAction(
 	url: '/background-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/backgrounds']
 )]

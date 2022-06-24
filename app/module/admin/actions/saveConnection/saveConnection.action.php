@@ -8,7 +8,7 @@ use OsumiFramework\OFW\Web\ORequest;
 
 #[OModuleAction(
 	url: '/save-connection',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin']
 )]
 class saveConnectionAction extends OAction {

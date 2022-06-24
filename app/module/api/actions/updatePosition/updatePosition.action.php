@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\Game;
 
 #[OModuleAction(
 	url: '/update-position',
-	filter: 'game'
+	filters: ['game']
 )]
 class updatePositionAction extends OAction {
 	/**

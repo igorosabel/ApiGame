@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\World;
 
 #[OModuleAction(
 	url: '/delete-world',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['web', 'admin']
 )]
 class deleteWorldAction extends OAction {

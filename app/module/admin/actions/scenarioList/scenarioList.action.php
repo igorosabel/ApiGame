@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\ScenariosComponent;
 
 #[OModuleAction(
 	url: '/scenario-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/scenarios']
 )]

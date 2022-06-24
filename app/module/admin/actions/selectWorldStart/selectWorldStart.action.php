@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\Scenario;
 
 #[OModuleAction(
 	url: '/select-world-start',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin']
 )]
 class selectWorldStartAction extends OAction {

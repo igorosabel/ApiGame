@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\GamesComponent;
 
 #[OModuleAction(
 	url: '/get-games',
-	filter: 'game',
+	filters: ['game'],
 	services: ['web'],
 	components: ['game/games']
 )]

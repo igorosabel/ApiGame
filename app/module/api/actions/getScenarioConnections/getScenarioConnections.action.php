@@ -10,7 +10,7 @@ use OsumiFramework\App\Component\ConnectionsComponent;
 
 #[OModuleAction(
 	url: '/get-scenario-connections',
-	filter: 'game',
+	filters: ['game'],
 	components: ['model/connections']
 )]
 class getScenarioConnectionsAction extends OAction {

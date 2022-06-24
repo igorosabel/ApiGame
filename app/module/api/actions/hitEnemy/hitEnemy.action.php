@@ -10,7 +10,7 @@ use OsumiFramework\App\Model\ScenarioData;
 
 #[OModuleAction(
 	url: '/hit-enemy',
-	filter: 'game'
+	filters: ['game']
 )]
 class hitEnemyAction extends OAction {
 	/**

@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\AssetsComponent;
 
 #[OModuleAction(
 	url: '/asset-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/assets']
 )]

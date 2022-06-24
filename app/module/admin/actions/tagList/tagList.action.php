@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\TagsComponent;
 
 #[OModuleAction(
 	url: '/tag-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/tags']
 )]

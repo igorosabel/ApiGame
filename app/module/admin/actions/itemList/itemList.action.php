@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\ItemsComponent;
 
 #[OModuleAction(
 	url: '/item-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/items']
 )]

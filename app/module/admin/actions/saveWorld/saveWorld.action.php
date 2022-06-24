@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\World;
 
 #[OModuleAction(
 	url: '/save-world',
-	filter: 'admin'
+	filters: ['admin']
 )]
 class saveWorldAction extends OAction {
 	/**

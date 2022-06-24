@@ -9,7 +9,7 @@ use OsumiFramework\App\Component\BackgroundCategoryListComponent;
 
 #[OModuleAction(
 	url: '/background-category-list',
-	filter: 'admin',
+	filters: ['admin'],
 	services: ['admin'],
 	components: ['model/backgroundcategory_list']
 )]

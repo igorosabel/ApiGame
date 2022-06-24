@@ -11,7 +11,7 @@ use OsumiFramework\App\Model\Equipment;
 
 #[OModuleAction(
 	url: '/new-game',
-	filter: 'game',
+	filters: ['game'],
 	services: ['web']
 )]
 class newGameAction extends OAction {
