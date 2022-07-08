@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace OsumiFramework\App\Component;
+namespace OsumiFramework\App\Component\Game;
 
 use OsumiFramework\OFW\Core\OComponent;
 
-class GameComponent extends OComponent {
-	public array $depends = ['model/equipment', 'model/item'];
-}
+class GameComponent extends OComponent {}

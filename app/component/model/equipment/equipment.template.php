@@ -1,4 +1,6 @@
-<?php use OsumiFramework\App\Component\ItemComponent; ?>
+<?php
+use OsumiFramework\App\Component\Model\ItemComponent;
+?>
 {
 	"head": <?php echo is_null($values['equipment']->getEquippedItem('head')) ? 'null' : strval(new ItemComponent(['item' => $values['equipment']->getEquippedItem('head')])) ?>,
 	"necklace": <?php echo is_null($values['equipment']->getEquippedItem('necklace')) ? 'null' : strval(new ItemComponent(['item' => $values['equipment']->getEquippedItem('necklace')])) ?>,

@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\ItemComponent;
+use OsumiFramework\App\Component\Model\ItemComponent;
 
 foreach ($values['list'] as $i => $item) {
 	$item_component = new ItemComponent([ 'item' => $item ]);

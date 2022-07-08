@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\ScenarioComponent;
+use OsumiFramework\App\Component\Model\ScenarioComponent;
 
 foreach ($values['list'] as $i => $sce) {
 	$scenario_component = new ScenarioComponent([ 'sce' => $sce ]);

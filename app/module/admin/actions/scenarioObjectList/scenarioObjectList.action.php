@@ -5,13 +5,12 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\ScenarioObjectsComponent;
+use OsumiFramework\App\Component\Model\ScenarioObjectsComponent;
 
 #[OModuleAction(
 	url: '/scenario-object-list',
 	filters: ['admin'],
-	services: ['admin'],
-	components: ['model/scenario_objects']
+	services: ['admin']
 )]
 class scenarioObjectListAction extends OAction {
 	/**

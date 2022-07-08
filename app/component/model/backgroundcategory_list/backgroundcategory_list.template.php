@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\BackgroundCategoryComponent;
+use OsumiFramework\App\Component\Model\BackgroundCategoryComponent;
 
 foreach ($values['list'] as $i => $backgroundcategory) {
   $component = new BackgroundCategoryComponent([ 'backgroundcategory' => $backgroundcategory ]);

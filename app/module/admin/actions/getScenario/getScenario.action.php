@@ -6,14 +6,13 @@ use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\App\Model\Scenario;
-use OsumiFramework\App\Component\ScenarioComponent;
-use OsumiFramework\App\Component\ScenarioDatasComponent;
-use OsumiFramework\App\Component\ConnectionsComponent;
+use OsumiFramework\App\Component\Model\ScenarioComponent;
+use OsumiFramework\App\Component\Model\ScenarioDatasComponent;
+use OsumiFramework\App\Component\Model\ConnectionsComponent;
 
 #[OModuleAction(
 	url: '/get-scenario',
-	filters: ['admin'],
-	components: ['model/scenario', 'model/scenario_datas', 'model/connections']
+	filters: ['admin']
 )]
 class getScenarioAction extends OAction {
 	/**

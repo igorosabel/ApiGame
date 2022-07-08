@@ -5,13 +5,12 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\CharactersComponent;
+use OsumiFramework\App\Component\Model\CharactersComponent;
 
 #[OModuleAction(
 	url: '/character-list',
 	filters: ['admin'],
-	services: ['admin'],
-	components: ['model/characters']
+	services: ['admin']
 )]
 class characterListAction extends OAction {
 	/**

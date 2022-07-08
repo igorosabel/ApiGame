@@ -6,16 +6,15 @@ use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\App\Model\Game;
-use OsumiFramework\App\Component\GameComponent;
-use OsumiFramework\App\Component\BlockersComponent;
-use OsumiFramework\App\Component\ScenarioDatasComponent;
-use OsumiFramework\App\Component\ScenarioObjectsComponent;
-use OsumiFramework\App\Component\CharactersComponent;
+use OsumiFramework\App\Component\Game\GameComponent;
+use OsumiFramework\App\Component\Game\BlockersComponent;
+use OsumiFramework\App\Component\Model\ScenarioDatasComponent;
+use OsumiFramework\App\Component\Model\ScenarioObjectsComponent;
+use OsumiFramework\App\Component\Model\CharactersComponent;
 
 #[OModuleAction(
 	url: '/get-play-data',
-	filters: ['game'],
-	components: ['game/game', 'game/blockers', 'model/scenario_datas', 'model/scenario_objects', 'model/characters']
+	filters: ['game']
 )]
 class getPlayDataAction extends OAction {
 	/**

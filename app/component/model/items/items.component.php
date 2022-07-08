@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace OsumiFramework\App\Component;
+namespace OsumiFramework\App\Component\Model;
 
 use OsumiFramework\OFW\Core\OComponent;
 
-class ItemsComponent extends OComponent {
-	public array $depends = ['model/item'];
-}
+class ItemsComponent extends OComponent {}

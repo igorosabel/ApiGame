@@ -5,13 +5,12 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\TagsComponent;
+use OsumiFramework\App\Component\Model\TagsComponent;
 
 #[OModuleAction(
 	url: '/tag-list',
 	filters: ['admin'],
-	services: ['admin'],
-	components: ['model/tags']
+	services: ['admin']
 )]
 class tagListAction extends OAction {
 	/**

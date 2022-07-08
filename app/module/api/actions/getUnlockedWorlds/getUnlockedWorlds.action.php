@@ -5,13 +5,12 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\WorldsComponent;
+use OsumiFramework\App\Component\Model\WorldsComponent;
 
 #[OModuleAction(
 	url: '/get-unlocked-worlds',
 	filters: ['game'],
-	services: ['web'],
-	components: ['model/worlds']
+	services: ['web']
 )]
 class getUnlockedWorldsAction extends OAction {
 	/**

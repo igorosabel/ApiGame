@@ -5,13 +5,12 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\GamesComponent;
+use OsumiFramework\App\Component\Game\GamesComponent;
 
 #[OModuleAction(
 	url: '/get-games',
 	filters: ['game'],
-	services: ['web'],
-	components: ['game/games']
+	services: ['web']
 )]
 class getGamesAction extends OAction {
 	/**

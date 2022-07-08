@@ -5,13 +5,12 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\BackgroundCategoryListComponent;
+use OsumiFramework\App\Component\Model\BackgroundCategoryListComponent;
 
 #[OModuleAction(
 	url: '/background-category-list',
 	filters: ['admin'],
-	services: ['admin'],
-	components: ['model/backgroundcategory_list']
+	services: ['admin']
 )]
 class backgroundCategoryListAction extends OAction {
 	/**

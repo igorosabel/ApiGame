@@ -1,7 +1,7 @@
 <?php
-	use OsumiFramework\App\Component\EquipmentComponent;
-	use OsumiFramework\App\Component\ItemComponent;
-	$equipment_component = new EquipmentComponent(['equipment' => $values['game']->getEquipment()]);
+use OsumiFramework\App\Component\Model\EquipmentComponent;
+use OsumiFramework\App\Component\Model\ItemComponent;
+$equipment_component = new EquipmentComponent(['equipment' => $values['game']->getEquipment()]);
 ?>
 {
 	"id": <?php echo $values['game']->get('id') ?>,
