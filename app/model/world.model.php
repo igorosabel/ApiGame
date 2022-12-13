@@ -3,66 +3,77 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\App\Model\Scenario;
 
 class World extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada mundo'
-			],
-			'name' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre del mundo'
-			],
-			'description' => [
-				'type'    => OModel::LONGTEXT,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Descripción del mundo'
-			],
-			'word_one' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 20,
-				'comment' => 'Primera palabra para acceder al mundo'
-			],
-			'word_two' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 20,
-				'comment' => 'Segunda palabra para acceder al mundo'
-			],
-			'word_three' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 20,
-				'comment' => 'Tercera palabra para acceder al mundo'
-			],
-			'friendly' => [
-				'type' => OModel::BOOL,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Indica si el mundo es amistoso'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada mundo'
+			),
+			new OModelField(
+				name: 'name',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 50,
+				comment: 'Nombre del mundo'
+			),
+			new OModelField(
+				name: 'description',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Descripción del mundo'
+			),
+			new OModelField(
+				name: 'word_one',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 20,
+				comment: 'Primera palabra para acceder al mundo'
+			),
+			new OModelField(
+				name: 'word_two',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 20,
+				comment: 'Segunda palabra para acceder al mundo'
+			),
+			new OModelField(
+				name: 'word_three',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 20,
+				comment: 'Tercera palabra para acceder al mundo'
+			),
+			new OModelField(
+				name: 'friendly',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si el mundo es amistoso'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

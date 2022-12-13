@@ -3,45 +3,53 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\App\Model\Character;
 
 class Narrative extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada narrativa'
-			],
-			'id_character' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'character.id',
-				'comment' => 'Id del personaje'
-			],
-			'dialog' => [
-				'type'    => OModel::LONGTEXT,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Texto del dialogo'
-			],
-			'order' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Orden del dialogo en la narrativa'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada narrativa'
+			),
+			new OModelField(
+				name: 'id_character',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'character.id',
+				comment: 'Id del personaje'
+			),
+			new OModelField(
+				name: 'dialog',
+				type: OMODEL_LONGTEXT,
+				nullable: false,
+				default: null,
+				comment: 'Texto del dialogo'
+			),
+			new OModelField(
+				name: 'order',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Orden del dialogo en la narrativa'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

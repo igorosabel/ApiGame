@@ -3,62 +3,73 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\App\Model\Connection;
 
 class Scenario extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único del escenario'
-			],
-			'id_world' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'world.id',
-				'comment' => 'Id del mundo al que pertenece el escenario'
-			],
-			'name' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Nombre del escenario'
-			],
-			'start_x' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Indica la casilla X de la que se sale'
-			],
-			'start_y' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Indica la casilla Y de la que se sale'
-			],
-			'initial' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Indica si es el escenario inicial 1 o no 0 del mundo'
-			],
-			'friendly' => [
-				'type' => OModel::BOOL,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Indica si el escenario es amistoso'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único del escenario'
+			),
+			new OModelField(
+				name: 'id_world',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'world.id',
+				comment: 'Id del mundo al que pertenece el escenario'
+			),
+			new OModelField(
+				name: 'name',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 100,
+				comment: 'Nombre del escenario'
+			),
+			new OModelField(
+				name: 'start_x',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Indica la casilla X de la que se sale'
+			),
+			new OModelField(
+				name: 'start_y',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Indica la casilla Y de la que se sale'
+			),
+			new OModelField(
+				name: 'initial',
+				type: OMODEL_BOOL,
+				comment: 'Indica si es el escenario inicial 1 o no 0 del mundo'
+			),
+			new OModelField(
+				name: 'friendly',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si el escenario es amistoso'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

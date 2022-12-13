@@ -3,6 +3,8 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\App\Model\Background;
 use OsumiFramework\App\Model\ScenarioObject;
 use OsumiFramework\App\Model\Character;
@@ -10,68 +12,78 @@ use OsumiFramework\App\Model\Scenario;
 
 class ScenarioData extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada dato'
-			],
-			'id_scenario' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'scenario.id',
-				'comment' => 'Id del escenario al que pertenece el dato'
-			],
-			'x' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Coordenada X del dato en el escenario'
-			],
-			'y' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Coordenada Y del dato en el escenario'
-			],
-			'id_background' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'background.id',
-				'comment' => 'Id del fondo del escenario'
-			],
-			'id_scenario_object' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'ref' => 'scenario_object.id',
-				'comment' => 'Id del objeto relacionado que va en el escenario'
-			],
-			'id_character' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'ref' => 'character.id',
-				'comment' => 'Id del personaje que va en el escenario'
-			],
-			'character_health' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Salud del personaje'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada dato'
+			),
+			new OModelField(
+				name: 'id_scenario',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'scenario.id',
+				comment: 'Id del escenario al que pertenece el dato'
+			),
+			new OModelField(
+				name: 'x',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Coordenada X del dato en el escenario'
+			),
+			new OModelField(
+				name: 'y',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Coordenada Y del dato en el escenario'
+			),
+			new OModelField(
+				name: 'id_background',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'background.id',
+				comment: 'Id del fondo del escenario'
+			),
+			new OModelField(
+				name: 'id_scenario_object',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				ref: 'scenario_object.id',
+				comment: 'Id del objeto relacionado que va en el escenario'
+			),
+			new OModelField(
+				name: 'id_character',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				ref: 'character.id',
+				comment: 'Id del personaje que va en el escenario'
+			),
+			new OModelField(
+				name: 'character_health',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Salud del personaje'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

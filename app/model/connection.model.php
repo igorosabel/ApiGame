@@ -3,40 +3,47 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class Connection extends OModel {
 	function __construct() {
-		$model = [
-			'id_from' => [
-				'type'    => OModel::PK,
-				'incr' => false,
-				'ref' => 'scenario.id',
-				'comment' => 'Id de un escenario'
-			],
-			'id_to' => [
-				'type'    => OModel::PK,
-				'incr' => false,
-				'ref' => 'scenario.id',
-				'comment' => 'Id del escenario con el que conecta'
-			],
-			'orientation' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 5,
-				'comment' => 'Sentido de la conexión up / down / left / right'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id_from',
+				type: OMODEL_PK,
+				incr: false,
+				ref: 'scenario.id',
+				comment: 'Id de un escenario'
+			),
+			new OModelField(
+				name: 'id_to',
+				type: OMODEL_PK,
+				incr: false,
+				ref: 'scenario.id',
+				comment: 'Id del escenario con el que conecta'
+			),
+			new OModelField(
+				name: 'orientation',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 5,
+				comment: 'Sentido de la conexión up / down / left / right'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

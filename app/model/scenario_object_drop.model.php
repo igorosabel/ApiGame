@@ -3,45 +3,53 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class ScenarioObjectDrop extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada recurso de un objeto'
-			],
-			'id_scenario_object' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'scenario_object.id',
-				'comment' => 'Id del objeto de escenario'
-			],
-			'id_item' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'item.id',
-				'comment' => 'Id del item obtenido'
-			],
-			'num' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Número de items que se obtienen'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada recurso de un objeto'
+			),
+			new OModelField(
+				name: 'id_scenario_object',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'scenario_object.id',
+				comment: 'Id del objeto de escenario'
+			),
+			new OModelField(
+				name: 'id_item',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'item.id',
+				comment: 'Id del item obtenido'
+			),
+			new OModelField(
+				name: 'num',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Número de items que se obtienen'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

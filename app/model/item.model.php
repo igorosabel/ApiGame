@@ -3,81 +3,95 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class Item extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada item'
-			],
-			'type' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Tipo de item 0 moneda 1 arma 2 poción 3 equipamiento 4 objeto'
-			],
-			'id_asset' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'asset.id',
-				'comment' => 'Id del recurso usado para el item'
-			],
-			'name' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre del item'
-			],
-			'money' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Número de monedas que vale al ser comprado o vendido, NULL si no se puede comprar o vender'
-			],
-			'health' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Puntos de daño que cura el item si es una poción o NULL si no lo es'
-			],
-			'attack' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Puntos de daño que hace el item si es un arma o NULL si no lo es'
-			],
-			'defense' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Puntos de defensa que otorga el item si es un equipamiento o NULL si no lo es'
-			],
-			'speed' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Puntos de velocidad que otorga el item si es un equipamiento o NULL si no lo es'
-			],
-			'wearable' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Indica donde se puede equipar en caso de ser equipamiento Cabeza 0 Cuello 1 Cuerpo 2 Botas 3 o NULL si no se puede equipar'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada item'
+			),
+			new OModelField(
+				name: 'type',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Tipo de item 0 moneda 1 arma 2 poción 3 equipamiento 4 objeto'
+			),
+			new OModelField(
+				name: 'id_asset',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'asset.id',
+				comment: 'Id del recurso usado para el item'
+			),
+			new OModelField(
+				name: 'name',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 50,
+				comment: 'Nombre del item'
+			),
+			new OModelField(
+				name: 'money',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Número de monedas que vale al ser comprado o vendido, NULL si no se puede comprar o vender'
+			),
+			new OModelField(
+				name: 'health',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Puntos de daño que cura el item si es una poción o NULL si no lo es'
+			),
+			new OModelField(
+				name: 'attack',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Puntos de daño que hace el item si es un arma o NULL si no lo es'
+			),
+			new OModelField(
+				name: 'defense',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Puntos de defensa que otorga el item si es un equipamiento o NULL si no lo es'
+			),
+			new OModelField(
+				name: 'speed',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Puntos de velocidad que otorga el item si es un equipamiento o NULL si no lo es'
+			),
+			new OModelField(
+				name: 'wearable',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Indica donde se puede equipar en caso de ser equipamiento Cabeza 0 Cuello 1 Cuerpo 2 Botas 3 o NULL si no se puede equipar'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

@@ -3,33 +3,39 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class WorldUnlocked extends OModel {
 	function __construct() {
-		$model = [
-			'id_game' => [
-				'type'    => OModel::PK,
-				'incr' => false,
-				'ref' => 'game.id',
-				'comment' => 'Id de la partida'
-			],
-			'id_world' => [
-				'type'    => OModel::PK,
-				'incr' => false,
-				'ref' => 'world.id',
-				'comment' => 'Id del mundo desbloqueado'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id_game',
+				type: OMODEL_PK,
+				incr: false,
+				ref: 'game.id',
+				comment: 'Id de la partida'
+			),
+			new OModelField(
+				name: 'id_world',
+				type: OMODEL_PK,
+				incr: false,
+				ref: 'world.id',
+				comment: 'Id del mundo desbloqueado'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

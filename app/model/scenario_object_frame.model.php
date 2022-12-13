@@ -3,47 +3,55 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\App\Model\ScenarioObject;
 use OsumiFramework\App\Model\Scenario;
 
 class ScenarioObjectFrame extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada frame de un objeto de escenario'
-			],
-			'id_scenario_object' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'scenario_object.id',
-				'comment' => 'Id del objeto de escenario que tiene la animación'
-			],
-			'id_asset' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'asset.id',
-				'comment' => 'Id del recurso usado como frame'
-			],
-			'order' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Orden del frame en la animación'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada frame de un objeto de escenario'
+			),
+			new OModelField(
+				name: 'id_scenario_object',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'scenario_object.id',
+				comment: 'Id del objeto de escenario que tiene la animación'
+			),
+			new OModelField(
+				name: 'id_asset',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'asset.id',
+				comment: 'Id del recurso usado como frame'
+			),
+			new OModelField(
+				name: 'order',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Orden del frame en la animación'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

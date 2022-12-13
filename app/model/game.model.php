@@ -3,103 +3,120 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\App\Model\Equipment;
 use OsumiFramework\App\Model\Scenario;
 
 class Game extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único de cada partida'
-			],
-			'id_user' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'user.id',
-				'comment' => 'Id del usuario al que pertenece la partida'
-			],
-			'name' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre del personaje'
-			],
-			'id_scenario' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'scenario.id',
-				'comment' => 'Id del escenario en el que está el usuario'
-			],
-			'position_x' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Última posición X guardada del jugador'
-			],
-			'position_y' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Última posición Y guardada del jugador'
-			],
-			'orientation' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 5,
-				'comment' => 'Orientación del personaje al cargar el escenario'
-			],
-			'money' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Cantidad de dinero que tiene el jugador'
-			],
-			'health' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => '100',
-				'comment' => 'Salud actual del jugador'
-			],
-			'max_health' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => '100',
-				'comment' => 'Máxima salud del jugador'
-			],
-			'attack' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Puntos de daño que hace el personaje'
-			],
-			'defense' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Puntos de defensa del personaje'
-			],
-			'speed' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Puntos de velocidad del personaje'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único de cada partida'
+			),
+			new OModelField(
+				name: 'id_user',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'user.id',
+				comment: 'Id del usuario al que pertenece la partida'
+			),
+			new OModelField(
+				name: 'name',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 50,
+				comment: 'Nombre del personaje'
+			),
+			new OModelField(
+				name: 'id_scenario',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'scenario.id',
+				comment: 'Id del escenario en el que está el usuario'
+			),
+			new OModelField(
+				name: 'position_x',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Última posición X guardada del jugador'
+			),
+			new OModelField(
+				name: 'position_y',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Última posición Y guardada del jugador'
+			),
+			new OModelField(
+				name: 'orientation',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 5,
+				comment: 'Orientación del personaje al cargar el escenario'
+			),
+			new OModelField(
+				name: 'money',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Cantidad de dinero que tiene el jugador'
+			),
+			new OModelField(
+				name: 'health',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 100,
+				comment: 'Salud actual del jugador'
+			),
+			new OModelField(
+				name: 'max_health',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 100,
+				comment: 'Máxima salud del jugador'
+			),
+			new OModelField(
+				name: 'attack',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Puntos de daño que hace el personaje'
+			),
+			new OModelField(
+				name: 'defense',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Puntos de defensa del personaje'
+			),
+			new OModelField(
+				name: 'speed',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Puntos de velocidad del personaje'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}
