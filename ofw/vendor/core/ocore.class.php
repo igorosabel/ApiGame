@@ -39,7 +39,6 @@ class OCore {
 	 * @return void
 	 */
 	public function load(bool $from_cli=false): void {
-		session_start();
 		date_default_timezone_set('Europe/Madrid');
 
 		$basedir = realpath(dirname(__FILE__));
@@ -157,7 +156,7 @@ class OCore {
 		}
 
 		// Database model classes
-		if (file_exists($this->config->getDir('app_model'))) {
+		if (file_exists($this->config->getDir('app_model')) && !is_null($this->dbContainer)) {
 			if ($model = opendir($this->config->getDir('app_model'))) {
 				while (false !== ($entry = readdir($model))) {
 					if ($entry != '.' && $entry != '..') {
@@ -184,6 +183,11 @@ class OCore {
 	 * @return void
 	 */
 	public function run(): void {
+		// Check if session is to be used
+		if ($this->config->getUseSession()) {
+			session_start();
+		}
+
 		if ($this->config->getAllowCrossOrigin()) {
 			header('Access-Control-Allow-Origin: *');
 			header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -517,18 +521,16 @@ class OCore {
 	public function errorHandler(\Throwable $ex): void {
 		$log = new OLog(get_class($this));
 		$params = ['message' => OTools::getMessage('ERROR_500_LABEL')];
-		if ($this->config->getEnvironment()!='prod') {
-			$params['message'] = "<strong>Error:</strong> \"".$ex->getMessage()."\"\n<strong>File:</strong> \"".$ex->getFile()."\" (Line: ".$ex->getLine().")\n\n<strong>Trace:</strong> \n";
-			foreach ($ex->getTrace() as $trace) {
-				if (array_key_exists('file', $trace)) {
-					$params['message'] .= "  <strong>File:</strong> \"".$trace['file']." (Line: ".$trace['line'].")\"\n";
-				}
-				if (array_key_exists('class', $trace)) {
-					$params['message'] .= "  <strong>Class:</strong> \"".$trace['class']."\"\n";
-				}
-				if (array_key_exists('function', $trace)) {
-					$params['message'] .= "  <strong>Function:</strong> \"".$trace['function']."\"\n\n";
-				}
+		$params['message'] = "<strong>Error:</strong> \"".$ex->getMessage()."\"\n<strong>File:</strong> \"".$ex->getFile()."\" (Line: ".$ex->getLine().")\n\n<strong>Trace:</strong> \n";
+		foreach ($ex->getTrace() as $trace) {
+			if (array_key_exists('file', $trace)) {
+				$params['message'] .= "  <strong>File:</strong> \"".$trace['file']." (Line: ".$trace['line'].")\"\n";
+			}
+			if (array_key_exists('class', $trace)) {
+				$params['message'] .= "  <strong>Class:</strong> \"".$trace['class']."\"\n";
+			}
+			if (array_key_exists('function', $trace)) {
+				$params['message'] .= "  <strong>Function:</strong> \"".$trace['function']."\"\n\n";
 			}
 		}
 		$log->error( str_ireplace('</strong>', '', str_ireplace('<strong>', '', $params['message'])) );
