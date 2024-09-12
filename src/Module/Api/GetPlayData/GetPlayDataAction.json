@@ -1,0 +1,22 @@
+{
+	"status": "{{status}}",
+	"idWorld": {{id_world}},
+	"worldName": "{{world_name}}",
+	"worldDescription": "{{world_description}}",
+	"idScenario": {{id_scenario}},
+	"scenarioName": "{{scenario_name}}",
+	"mapBackground": "{{map_url}}",
+	"game": {{game}},
+	"blockers": [
+{{blockers}}
+	],
+	"scenarioDatas": [
+{{scenario_datas}}
+	],
+	"scenarioObjects": [
+{{scenario_objects}}
+	],
+	"characters": [
+{{characters}}
+	]
+}
