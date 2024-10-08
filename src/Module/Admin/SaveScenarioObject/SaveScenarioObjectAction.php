@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Admin\SaveScenarioObject;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Model\ScenarioObject;
 
 class SaveScenarioObjectAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para guardar un objeto de escenario
@@ -39,7 +46,7 @@ class SaveScenarioObjectAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$scenario_object = new ScenarioObject();
 			if (!is_null($id)) {
 				$scenario_object->find(['id' => $id]);
@@ -61,8 +68,8 @@ class SaveScenarioObjectAction extends OAction {
 			$scenario_object->set('breakable',             $breakable);
 			$scenario_object->save();
 
-			$this->service['Admin']->updateScenarioObjectFrames($scenario_object, $frames);
-			$this->service['Admin']->updateScenarioObjectDrops($scenario_object, $drops);
+			$this->as->updateScenarioObjectFrames($scenario_object, $frames);
+			$this->as->updateScenarioObjectDrops($scenario_object, $drops);
 		}
 	}
 }

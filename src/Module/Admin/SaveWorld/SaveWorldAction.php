@@ -28,7 +28,7 @@ class SaveWorldAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$world = new World();
 			if (!is_null($id)) {
 				$world->find(['id' => $id]);

@@ -23,7 +23,7 @@ class SaveBackgroundCategoryAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$background_category = new BackgroundCategory();
 			if (!is_null($id)) {
 				$background_category->find(['id' => $id]);

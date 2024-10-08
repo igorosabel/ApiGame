@@ -4,11 +4,18 @@ namespace Osumi\OsumiFramework\App\Module\Admin\AssetList;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Component\Model\AssetList\AssetListComponent;
 
 class AssetListAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
   public ?AssetListComponent $list = null;
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para obtener la lista de recursos
@@ -17,6 +24,6 @@ class AssetListAction extends OAction {
 	 * @return void
 	 */
 	public function run(ORequest $req):void {
-		$this->list = new AssetListComponent(['list' => $this->service['Admin']->getAssets()]);
+		$this->list = new AssetListComponent(['list' => $this->as->getAssets()]);
 	}
 }

@@ -4,9 +4,16 @@ namespace Osumi\OsumiFramework\App\Module\Admin\SaveConnection;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 
 class SaveConnectionAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para guardar una conexión de un escenario a otro
@@ -23,8 +30,8 @@ class SaveConnectionAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
-			$this->service['Admin']->updateConnection($id_from, $id_to, $orientation);
+		if ($this->status === 'ok') {
+			$this->as->updateConnection($id_from, $id_to, $orientation);
 		}
 	}
 }

@@ -4,11 +4,18 @@ namespace Osumi\OsumiFramework\App\Module\Admin\ScenarioObjectList;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Component\Model\ScenarioObjectList\ScenarioObjectListComponent;
 
 class ScenarioObjectListAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
   public ?ScenarioObjectListComponent $list = null;
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para obtener la lista de objetos de escenario
@@ -17,6 +24,6 @@ class ScenarioObjectListAction extends OAction {
 	 * @return void
 	 */
 	public function run(ORequest $req):void {
-		$this->list = new ScenarioObjectListComponent(['list' => $this->service['Admin']->getScenarioObjects()]);
+		$this->list = new ScenarioObjectListComponent(['list' => $this->as->getScenarioObjects()]);
 	}
 }

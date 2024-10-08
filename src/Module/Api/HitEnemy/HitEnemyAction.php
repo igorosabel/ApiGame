@@ -24,7 +24,7 @@ class HitEnemyAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$game = new Game();
 			if (!$game->find(['id' => $id_game])) {
 				$status = 'error';
@@ -34,7 +34,7 @@ class HitEnemyAction extends OAction {
 				$this->status = 'error';
 			}
 
-			if ($this->status=='ok') {
+			if ($this->status === 'ok') {
 				$enemy = $scenario_data->getCharacter();
 				$damage = $game->get('attack') - $enemy->get('defense');
 				$hp = $scenario_data->get('character_health') - $damage;

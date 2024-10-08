@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Admin\DeleteAsset;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 
 class DeleteAssetAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status  = 'ok';
   public string $message = '';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para borrar un recurso
@@ -22,8 +29,8 @@ class DeleteAssetAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
-			$return = $this->service['Admin']->deleteAsset($id);
+		if ($this->status === 'ok') {
+			$return = $this->as->deleteAsset($id);
 			$this->status  = $return['status'];
 			$this->message = $return['message'];
 		}

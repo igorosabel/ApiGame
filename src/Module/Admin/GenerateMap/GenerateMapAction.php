@@ -5,9 +5,16 @@ namespace Osumi\OsumiFramework\App\Module\Admin\GenerateMap;
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
 use Osumi\OsumiFramework\Tools\OTools;
+use Osumi\OsumiFramework\App\Service\AdminService;
 
 class GenerateMapAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para generar el mapa de un escenario
@@ -22,8 +29,8 @@ class GenerateMapAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
-			OTools::runTask('map', [$id, 'true']);
+		if ($this->status === 'ok') {
+			OTools::runTask('map', ['id_scenario' => $id, 'silent' => 'true']);
 		}
 	}
 }

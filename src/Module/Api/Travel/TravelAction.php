@@ -4,12 +4,19 @@ namespace Osumi\OsumiFramework\App\Module\Api\Travel;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\WebService;
 use Osumi\OsumiFramework\App\Model\World;
 use Osumi\OsumiFramework\App\Model\WorldUnlocked;
 
 class TravelAction extends OAction {
+  private ?WebService $ws = null;
+
   public string              $status   = 'ok';
   public string | int | null $id_world = null;
+
+  public function __construct() {
+    $this->ws = inject(WebService::class);
+  }
 
 	/**
 	 * Función para viajar a otro mundo
@@ -28,7 +35,7 @@ class TravelAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			// Si viene id es que es un mundo ya conocido
 			if (!is_null($this->id_world)) {
 				$world = new World();
@@ -38,7 +45,7 @@ class TravelAction extends OAction {
 			}
 			// Si no viene id es que está probando a ir a un mundo nuevo
 			else {
-				$world = $this->service['Web']->getWorldByWords( strtolower($word_one), strtolower($word_two), strtolower($word_three));
+				$world = $this->ws->getWorldByWords( strtolower($word_one), strtolower($word_two), strtolower($word_three));
 			}
 
 			if (!is_null($world)) {

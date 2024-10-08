@@ -4,10 +4,20 @@ namespace Osumi\OsumiFramework\App\Module\Admin\DeleteScenario;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
+use Osumi\OsumiFramework\App\Service\WebService;
 use Osumi\OsumiFramework\App\Model\Scenario;
 
 class DeleteScenarioAction extends OAction {
+  private ?AdminService $as = null;
+  private ?WebService $ws = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+    $this->ws = inject(WebService::class);
+  }
 
 	/**
 	 * Función para borrar un escenario
@@ -22,11 +32,11 @@ class DeleteScenarioAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$scenario = new Scenario();
 			if ($scenario->find(['id' => $id])) {
-				$origin_world = $this->service['Web']->getOriginWorld();
-				$this->service['Admin']->deleteScenario($scenario, $origin_world);
+				$origin_world = $this->ws->getOriginWorld();
+				$this->as->deleteScenario($scenario, $origin_world);
 			}
 			else {
 				$this->status = 'error';

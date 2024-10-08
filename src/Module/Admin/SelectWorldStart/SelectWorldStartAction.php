@@ -4,11 +4,18 @@ namespace Osumi\OsumiFramework\App\Module\Admin\SelectWorldStart;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Model\Scenario;
 
 class SelectWorldStartAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status  = 'ok';
   public string $message = '';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para borrar una conexión de un escenario a otro
@@ -26,16 +33,16 @@ class SelectWorldStartAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$scenario = new Scenario();
 			if ($scenario->find(['id' => $id_scenario])) {
 				if ($check) {
-					$result  = $this->service['Admin']->checkWorldStart($scenario);
+					$result  = $this->as->checkWorldStart($scenario);
 					$this->status  = $result['status'];
 					$this->message = $result['message'];
 				}
-				if ($this->status=='ok') {
-					$this->service['Admin']->clearWorldStart($scenario);
+				if ($this->status === 'ok') {
+					$this->as->clearWorldStart($scenario);
 					$scenario->set('start_x', $x);
 					$scenario->set('start_y', $y);
 					$scenario->set('initial', true);

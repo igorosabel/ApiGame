@@ -30,7 +30,7 @@ class SaveScenarioDataAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$scenario_data = new ScenarioData();
 			if (!is_null($this->id)) {
 				$scenario_data->find(['id' => $this->id]);

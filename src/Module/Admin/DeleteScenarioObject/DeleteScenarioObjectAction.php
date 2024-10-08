@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Admin\DeleteScenarioObject;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 
 class DeleteScenarioObjectAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status  = 'ok';
   public string $message = '';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para borrar un objeto de escenario
@@ -22,8 +29,8 @@ class DeleteScenarioObjectAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
-			$return = $this->service['Admin']->deleteScenarioObject($id);
+		if ($this->status === 'ok') {
+			$return = $this->as->deleteScenarioObject($id);
 			$this->status  = $return['status'];
 			$this->message = $return['message'];
 		}

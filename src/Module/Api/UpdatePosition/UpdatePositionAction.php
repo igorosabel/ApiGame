@@ -25,7 +25,7 @@ class UpdatePositionAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$game = new Game();
 			if ($game->find(['id' => $id_game])) {
 				$game->set('position_x',  $x);

@@ -4,10 +4,20 @@ namespace Osumi\OsumiFramework\App\Module\Admin\DeleteWorld;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
+use Osumi\OsumiFramework\App\Service\WebService;
 use Osumi\OsumiFramework\App\Model\World;
 
 class DeleteWorldAction extends OAction {
+  private ?AdminService $as = null;
+  private ?WebService $ws = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+    $this->ws = inject(WebService::class);
+  }
 
 	/**
 	 * Función para borrar un mundo
@@ -22,11 +32,11 @@ class DeleteWorldAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$world = new World();
 			if ($world->find(['id' => $id])) {
-				$origin_world = $this->service['Web']->getOriginWorld();
-				$this->service['Admin']->deleteWorld($world, $origin_world);
+				$origin_world = $this->ws->getOriginWorld();
+				$this->as->deleteWorld($world, $origin_world);
 			}
 			else {
 				$this->status = 'error';

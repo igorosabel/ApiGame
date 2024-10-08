@@ -4,11 +4,18 @@ namespace Osumi\OsumiFramework\App\Module\Api\GetGames;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\WebService;
 use Osumi\OsumiFramework\App\Component\Game\Games\GamesComponent;
 
 class GetGamesAction extends OAction {
+  private ?WebService $ws = null;
+
   public string $status = 'ok';
   public ?GamesComponent $list = null;
+
+  public function __construct() {
+    $this->ws = inject(WebService::class);
+  }
 
 	/**
 	 * Función para obtener la lista de partidas de un usuario
@@ -18,7 +25,7 @@ class GetGamesAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$filter = $req->getFilter('Game');
-		$games  = $this->service['Web']->getGames($filter['id']);
+		$games  = $this->ws->getGames($filter['id']);
 		$this->list = new GamesComponent(['list' => $games]);
 	}
 }

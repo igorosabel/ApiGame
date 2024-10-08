@@ -49,14 +49,14 @@ class MapTask extends OTask {
 	}
 
 	public function run(array $options=[]): void {
-		if (count($options)==0) {
+		if (count($options) === 0) {
 			echo "\n  ERROR: Debes indicar el id del escenario del que crear el mapa.\n\n";
 			exit;
 		}
 
-		$id_scenario = intval($options[0]);
+		$id_scenario = intval($options['id_scenario']);
 		$silent = false;
-		if (count($options)==2 && $options[1]=='true') {
+		if (count($options) === 2 && $options['silent']=='true') {
 			$silent = true;
 		}
 

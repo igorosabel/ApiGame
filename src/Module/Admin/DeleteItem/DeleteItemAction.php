@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Admin\DeleteItem;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 
 class DeleteItemAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status  = 'ok';
   public string $message = '';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para borrar un item
@@ -22,8 +29,8 @@ class DeleteItemAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
-			$return  = $this->service['Admin']->deleteItem($id);
+		if ($this->status === 'ok') {
+			$return  = $this->as->deleteItem($id);
 			$this->status  = $return['status'];
 			$this->message = $return['message'];
 		}

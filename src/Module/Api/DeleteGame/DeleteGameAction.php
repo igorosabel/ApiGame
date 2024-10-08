@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Api\DeleteGame;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\WebService;
 use Osumi\OsumiFramework\App\Model\Game;
 
 class DeleteGameAction extends OAction {
+  private ?WebService $ws = null;
+
   public string $status  = 'ok';
+
+  public function __construct() {
+    $this->ws = inject(WebService::class);
+  }
 
 	/**
 	 * Función para borrar una partida
@@ -22,10 +29,10 @@ class DeleteGameAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$game = new Game();
 			if ($game->find(['id' => $id_game])) {
-				$this->service['Web']->deleteGame($game);
+				$this->ws->deleteGame($game);
 			}
 			else {
 				$this->status = 'error';

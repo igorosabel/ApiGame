@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Admin\SaveItem;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Model\Item;
 
 class SaveItemAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para guardar un item
@@ -32,7 +39,7 @@ class SaveItemAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$item = new Item();
 			if (!is_null($id)) {
 				$item->find(['id' => $id]);
@@ -48,7 +55,7 @@ class SaveItemAction extends OAction {
 			$item->set('wearable', $wearable);
 			$item->save();
 
-			$this->service['Admin']->updateItemFrames($item, $frames);
+			$this->as->updateItemFrames($item, $frames);
 		}
 	}
 }

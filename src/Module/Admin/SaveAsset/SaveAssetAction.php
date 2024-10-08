@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Admin\SaveAsset;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Model\Asset;
 
 class SaveAssetAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para guardar un recurso
@@ -26,7 +33,7 @@ class SaveAssetAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$ext = null;
 			$asset = new Asset();
 			if (!is_null($id)) {
@@ -34,7 +41,7 @@ class SaveAssetAction extends OAction {
 				$ext = $asset->get('ext');
 			}
 			if (!is_null($url)) {
-				$ext = $this->service['Admin']->getFileExt($url);
+				$ext = $this->as->getFileExt($url);
 			}
 			$asset->set('id_world', $id_world);
 			$asset->set('name',     $name);
@@ -42,15 +49,15 @@ class SaveAssetAction extends OAction {
 			$asset->save();
 
 			if (!is_null($url)) {
-				$this->service['Admin']->saveAssetImage($asset, $url);
+				$this->as->saveAssetImage($asset, $url);
 			}
 
-			if (!is_null($tags) && $tags!='') {
-				$this->service['Admin']->updateAssetTags($asset, $tags);
+			if (!is_null($tags) && $tags !== '') {
+				$this->as->updateAssetTags($asset, $tags);
 			}
 			else {
-				$this->service['Admin']->cleanAssetTags($asset);
-				$this->service['Admin']->cleanUnnusedTags();
+				$this->as->cleanAssetTags($asset);
+				$this->as->cleanUnnusedTags();
 			}
 		}
 	}

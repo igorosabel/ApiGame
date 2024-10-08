@@ -12,7 +12,7 @@ class ResetCharactersTask extends OTask {
 		return "resetCharacters: Tarea para resetear la salud de los enemigos";
 	}
 
-	public function run(array $options=[]): void {
+	public function run(array $options = []): void {
 		$db = new ODB();
 		$sql = "SELECT * FROM `scenario_data` WHERE `id_character` IS NOT NULL";
 		$db->query($sql);

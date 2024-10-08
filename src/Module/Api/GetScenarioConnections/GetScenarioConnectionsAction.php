@@ -11,6 +11,10 @@ class GetScenarioConnectionsAction extends OAction {
   public string $status = 'ok';
   public ?ConnectionListComponent $list = null;
 
+  public function __construct() {
+    $this->list = new ConnectionListComponent(['list' => []]);
+  }
+
 	/**
 	 * Función para obtener las conexiones de un escenario
 	 *
@@ -19,13 +23,12 @@ class GetScenarioConnectionsAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$id_scenario = $req->getParamInt('id');
-		$this->list = new ConnectionListComponent(['list' => []]);
 
 		if (is_null($id_scenario)) {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$scenario = new Scenario();
 			if ($scenario->find(['id' => $id_scenario])){
 				$this->list->setValue('list', $scenario->getConnections());

@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Admin\WorldList;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Component\Model\WorldList\WorldListComponent;
 
 class WorldListAction extends OAction {
+  private ?AdminService $as = null;
+
   public ?WorldListComponent $list = null;
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para obtener la lista de mundos
@@ -16,6 +23,6 @@ class WorldListAction extends OAction {
 	 * @return void
 	 */
 	public function run(ORequest $req):void {
-		$this->list = new WorldListComponent(['list' => $this->service['Admin']->getWorlds()]);
+		$this->list = new WorldListComponent(['list' => $this->as->getWorlds()]);
 	}
 }

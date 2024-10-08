@@ -26,10 +26,10 @@ class SaveBackgroundAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$background = new Background();
 			if (!is_null($id)) {
-				$background->find(['id'=>$id]);
+				$background->find(['id' => $id]);
 			}
 			$background->set('id_background_category', $id_background_category);
 			$background->set('id_asset',               $id_asset);

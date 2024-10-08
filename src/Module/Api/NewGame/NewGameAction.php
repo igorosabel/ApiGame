@@ -4,13 +4,20 @@ namespace Osumi\OsumiFramework\App\Module\Api\NewGame;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\WebService;
 use Osumi\OsumiFramework\App\Model\Game;
 use Osumi\OsumiFramework\App\Model\WorldUnlocked;
 use Osumi\OsumiFramework\App\Model\Equipment;
 
 class NewGameAction extends OAction {
+  private ?WebService $ws = null;
+
   public string $status = 'ok';
   public string | int $id_scenario = 'null';
+
+  public function __construct() {
+    $this->ws = inject(WebService::class);
+  }
 
 	/**
 	 * Función para crear una nueva partida
@@ -26,10 +33,10 @@ class NewGameAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$game = new Game();
 			if ($game->find(['id' => $id_game])) {
-				$world             = $this->web_service->getOriginWorld();
+				$world             = $this->ws->getOriginWorld();
 				$scenario          = $world->getInitialScenario();
 				$this->id_scenario = $scenario->get('id');
 
@@ -60,7 +67,7 @@ class NewGameAction extends OAction {
 				$equipment->set('weapon', $this->getConfig()->getExtra('start_weapon'));
 				$equipment->save();
 
-				$this->service['Web']->updateGameStats($game);
+				$this->ws->updateGameStats($game);
 			}
 			else {
 				$this->status = 'error';

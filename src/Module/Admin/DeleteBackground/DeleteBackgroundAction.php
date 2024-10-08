@@ -4,11 +4,18 @@ namespace Osumi\OsumiFramework\App\Module\Admin\DeleteBackground;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Model\Background;
 
 class DeleteBackgroundAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status  = 'ok';
   public string $message = '';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para borrar un fondo
@@ -23,10 +30,10 @@ class DeleteBackgroundAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$background = new Background();
 			if ($background->find(['id' => $id])) {
-				$return = $this->service['Admin']->deleteBackground($background);
+				$return = $this->as->deleteBackground($background);
 				$this->status  = $return['status'];
 				$this->message = $return['message'];
 			}

@@ -27,7 +27,7 @@ class AdminLoginAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$user = new User();
 			if ($user->login($this->email, $pass) && $user->get('admin')) {
 				$this->id = $user->get('id');

@@ -25,28 +25,28 @@ class ChangeScenarioAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$game = new Game();
 
 			if ($game->find(['id' => $id_game])) {
 				$changed_x = false;
 				$changed_y = false;
 				$orientation = 'down';
-				if ($x == $this->getConfig()->getExtra('width')) {
+				if ($x === $this->getConfig()->getExtra('width')) {
 					$x = 0;
 					$orientation = 'right';
 					$changed_x = true;
 				}
-				if ($y == $this->getConfig()->getExtra('height')) {
+				if ($y === $this->getConfig()->getExtra('height')) {
 					$y = 0;
 					$orientation = 'down';
 					$changed_y = true;
 				}
-				if (!$changed_x && $x == 0) {
+				if (!$changed_x && $x === 0) {
 					$x = ($this->getConfig()->getExtra('width') - 1);
 					$orientation = 'right';
 				}
-				if (!$changed_y && $y == 0) {
+				if (!$changed_y && $y === 0) {
 					$y = ($this->getConfig()->getExtra('height') - 1);
 					$orientation = 'up';
 				}

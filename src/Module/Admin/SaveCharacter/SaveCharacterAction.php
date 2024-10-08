@@ -4,10 +4,17 @@ namespace Osumi\OsumiFramework\App\Module\Admin\SaveCharacter;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 use Osumi\OsumiFramework\App\Model\Character;
 
 class SaveCharacterAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para guardar un personaje
@@ -45,7 +52,7 @@ class SaveCharacterAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$character = new Character();
 			if (!is_null($id)) {
 				$character->find(['id' => $id]);
@@ -70,11 +77,11 @@ class SaveCharacterAction extends OAction {
 			$character->set('respawn',        $respawn);
 			$character->save();
 
-			$this->service['Admin']->updateCharacterFrames($character, $framesUp,    'up');
-			$this->service['Admin']->updateCharacterFrames($character, $framesDown,  'down');
-			$this->service['Admin']->updateCharacterFrames($character, $framesLeft,  'left');
-			$this->service['Admin']->updateCharacterFrames($character, $framesRight, 'right');
-			$this->service['Admin']->updateCharacterNarratives($character, $narratives);
+			$this->as->updateCharacterFrames($character, $framesUp,    'up');
+			$this->as->updateCharacterFrames($character, $framesDown,  'down');
+			$this->as->updateCharacterFrames($character, $framesLeft,  'left');
+			$this->as->updateCharacterFrames($character, $framesRight, 'right');
+			$this->as->updateCharacterNarratives($character, $narratives);
 		}
 	}
 }

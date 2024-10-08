@@ -4,9 +4,16 @@ namespace Osumi\OsumiFramework\App\Module\Admin\DeleteConnection;
 
 use Osumi\OsumiFramework\Routing\OAction;
 use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\App\Service\AdminService;
 
 class DeleteConnectionAction extends OAction {
+  private ?AdminService $as = null;
+
   public string $status = 'ok';
+
+  public function __construct() {
+    $this->as = inject(AdminService::class);
+  }
 
 	/**
 	 * Función para borrar una conexión de un escenario a otro
@@ -23,8 +30,8 @@ class DeleteConnectionAction extends OAction {
 			$this->status = 'error';
 		}
 
-    if ($this->status=='ok') {
-			$this->service['Admin']->deleteConnection($id_from, $id_to, $orientation);
+    if ($this->status === 'ok') {
+			$this->as->deleteConnection($id_from, $id_to, $orientation);
 		}
 	}
 }

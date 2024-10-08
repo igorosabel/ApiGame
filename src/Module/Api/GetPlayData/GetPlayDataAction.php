@@ -25,6 +25,14 @@ class GetPlayDataAction extends OAction {
   public ?CharacterListComponent $characters = null;
   public ?GameComponent $game = null;
 
+  public function __construct() {
+    $this->blockers         = new BlockersComponent(['list' => []]);
+		$this->scenario_datas   = new ScenarioDataListComponent(['list' => []]);
+		$this->scenario_objects = new ScenarioObjectListComponent(['list' => []]);
+		$this->characters       = new CharacterListComponent(['list' => []]);
+    $this->game             = new GameComponent(['Game' => null]);
+  }
+
 	/**
 	 * Función para obtener los datos de una partida
 	 *
@@ -37,17 +45,12 @@ class GetPlayDataAction extends OAction {
 		$scenario_datas    = [];
 		$scenario_objects  = [];
 		$characters        = [];
-		$this->blockers         = new BlockersComponent(['list' => []]);
-		$this->scenario_datas   = new ScenarioDataListComponent(['list' => []]);
-		$this->scenario_objects = new ScenarioObjectListComponent(['list' => []]);
-		$this->characters       = new CharacterListComponent(['list' => []]);
-    $this->game             = new GameComponent(['Game' => null]);
 
 		if (is_null($id_game)) {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$game = new Game();
 			if ($game->find(['id' => $id_game])) {
 				$scenario = $game->getScenario();
@@ -70,7 +73,7 @@ class GetPlayDataAction extends OAction {
 						array_push($blockers, ['x' => $scenario_data->get('x'), 'y' => $scenario_data->get('y')]);
 					}
 					$scenario_object = $scenario_data->getScenarioObject();
-					if (!is_null($scenario_object) && $scenario_object->get('crossable')===false) {
+					if (!is_null($scenario_object) && $scenario_object->get('crossable') === false) {
 						array_push($blockers, ['x' => $scenario_data->get('x'), 'y' => $scenario_data->get('y')]);
 						if (!in_array($scenario_object->get('id'), $in_scenario_objects)) {
 							array_push($scenario_objects, $scenario_object);

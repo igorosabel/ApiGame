@@ -28,7 +28,7 @@ class RegisterAction extends OAction {
 			$this->status = 'error';
 		}
 
-		if ($this->status=='ok') {
+		if ($this->status === 'ok') {
 			$user = new User();
 
 			if ($user->find(['email' => $email])) {
@@ -42,7 +42,7 @@ class RegisterAction extends OAction {
 
 				$this->id = $user->get('id');
 
-				for ($i=0; $i<3; $i++) {
+				for ($i = 0; $i < 3; $i++) {
 					$game = new Game();
 					$game->set('id_user',     $user->get('id'));
 					$game->set('name',        null);
