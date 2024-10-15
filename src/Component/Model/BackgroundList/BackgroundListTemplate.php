@@ -1,10 +1,10 @@
 <?php
 use Osumi\OsumiFramework\App\Component\Model\Background\BackgroundComponent;
 
-foreach ($values['list'] as $i => $Background) {
-  $component = new BackgroundComponent([ 'Background' => $Background ]);
+foreach ($list as $i => $background) {
+  $component = new BackgroundComponent([ 'background' => $background ]);
 	echo strval($component);
-	if ($i<count($values['list'])-1) {
+	if ($i < count($list) - 1) {
 		echo ",\n";
 	}
 }

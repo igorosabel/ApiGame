@@ -1,10 +1,10 @@
 <?php
 use Osumi\OsumiFramework\App\Component\Model\Asset\AssetComponent;
 
-foreach ($values['list'] as $i => $Asset) {
-  $component = new AssetComponent([ 'Asset' => $Asset ]);
+foreach ($list as $i => $asset) {
+  $component = new AssetComponent([ 'asset' => $asset ]);
 	echo strval($component);
-	if ($i<count($values['list'])-1) {
+	if ($i < count($list) - 1) {
 		echo ",\n";
 	}
 }

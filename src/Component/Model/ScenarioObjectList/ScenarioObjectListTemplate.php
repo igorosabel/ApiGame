@@ -1,10 +1,10 @@
 <?php
 use Osumi\OsumiFramework\App\Component\Model\ScenarioObject\ScenarioObjectComponent;
 
-foreach ($values['list'] as $i => $ScenarioObject) {
-  $component = new ScenarioObjectComponent([ 'ScenarioObject' => $ScenarioObject ]);
+foreach ($list as $i => $scenarioobject) {
+  $component = new ScenarioObjectComponent([ 'scenarioobject' => $scenarioobject ]);
 	echo strval($component);
-	if ($i<count($values['list'])-1) {
+	if ($i < count($list) - 1) {
 		echo ",\n";
 	}
 }

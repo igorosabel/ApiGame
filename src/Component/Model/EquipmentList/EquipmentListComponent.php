@@ -4,4 +4,6 @@ namespace Osumi\OsumiFramework\App\Component\Model\EquipmentList;
 
 use Osumi\OsumiFramework\Core\OComponent;
 
-class EquipmentListComponent extends OComponent {}
+class EquipmentListComponent extends OComponent {
+  public array $list = [];
+}

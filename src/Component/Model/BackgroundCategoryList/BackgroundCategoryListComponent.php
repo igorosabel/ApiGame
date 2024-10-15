@@ -4,4 +4,6 @@ namespace Osumi\OsumiFramework\App\Component\Model\BackgroundCategoryList;
 
 use Osumi\OsumiFramework\Core\OComponent;
 
-class BackgroundCategoryListComponent extends OComponent {}
+class BackgroundCategoryListComponent extends OComponent {
+  public array $list = [];
+}

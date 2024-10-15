@@ -3,5 +3,8 @@
 namespace Osumi\OsumiFramework\App\Component\Model\ScenarioData;
 
 use Osumi\OsumiFramework\Core\OComponent;
+use Osumi\OsumiFramework\App\Model\ScenarioData;
 
-class ScenarioDataComponent extends OComponent {}
+class ScenarioDataComponent extends OComponent {
+  public ?ScenarioData $scenariodata = null;
+}

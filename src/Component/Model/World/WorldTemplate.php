@@ -1,13 +1,13 @@
-<?php if (is_null($values['World'])): ?>
+<?php if (is_null($world)): ?>
 null
 <?php else: ?>
 {
-	"id": <?php echo $values['World']->get('id') ?>,
-	"name": "<?php echo urlencode($values['World']->get('name')) ?>",
-	"description": "<?php echo is_null($values['World']->get('description')) ? 'null' : urlencode($values['World']->get('description')) ?>",
-	"wordOne": "<?php echo urlencode($values['World']->get('word_one')) ?>",
-	"wordTwo": "<?php echo urlencode($values['World']->get('word_two')) ?>",
-	"wordThree": "<?php echo urlencode($values['World']->get('word_three')) ?>",
-	"friendly": <?php echo $values['World']->get('friendly') ? 'true' : 'false' ?>
+	"id": <?php echo $world->get('id') ?>,
+	"name": "<?php echo urlencode($world->get('name')) ?>",
+	"description": "<?php echo is_null($world->get('description')) ? 'null' : urlencode($world->get('description')) ?>",
+	"wordOne": "<?php echo urlencode($world->get('word_one')) ?>",
+	"wordTwo": "<?php echo urlencode($world->get('word_two')) ?>",
+	"wordThree": "<?php echo urlencode($world->get('word_three')) ?>",
+	"friendly": <?php echo $world->get('friendly') ? 'true' : 'false' ?>
 }
 <?php endif ?>

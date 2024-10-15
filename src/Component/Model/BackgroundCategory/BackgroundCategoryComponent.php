@@ -3,5 +3,8 @@
 namespace Osumi\OsumiFramework\App\Component\Model\BackgroundCategory;
 
 use Osumi\OsumiFramework\Core\OComponent;
+use Osumi\OsumiFramework\App\Model\BackgroundCategory;
 
-class BackgroundCategoryComponent extends OComponent {}
+class BackgroundCategoryComponent extends OComponent {
+  public ?BackgroundCategory $backgroundcategory = null;
+}

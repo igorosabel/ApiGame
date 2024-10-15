@@ -4,4 +4,6 @@ namespace Osumi\OsumiFramework\App\Component\Model\WorldList;
 
 use Osumi\OsumiFramework\Core\OComponent;
 
-class WorldListComponent extends OComponent {}
+class WorldListComponent extends OComponent {
+  public array $list = [];
+}

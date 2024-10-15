@@ -4,4 +4,6 @@ namespace Osumi\OsumiFramework\App\Component\Model\ItemList;
 
 use Osumi\OsumiFramework\Core\OComponent;
 
-class ItemListComponent extends OComponent {}
+class ItemListComponent extends OComponent {
+  public array $list = [];
+}

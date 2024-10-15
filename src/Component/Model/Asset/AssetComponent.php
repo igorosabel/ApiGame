@@ -3,5 +3,8 @@
 namespace Osumi\OsumiFramework\App\Component\Model\Asset;
 
 use Osumi\OsumiFramework\Core\OComponent;
+use Osumi\OsumiFramework\App\Model\Asset;
 
-class AssetComponent extends OComponent {}
+class AssetComponent extends OComponent {
+  public ?Asset $asset = null;
+}

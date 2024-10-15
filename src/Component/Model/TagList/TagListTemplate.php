@@ -1,10 +1,10 @@
 <?php
 use Osumi\OsumiFramework\App\Component\Model\Tag\TagComponent;
 
-foreach ($values['list'] as $i => $Tag) {
-  $component = new TagComponent([ 'Tag' => $Tag ]);
+foreach ($list as $i => $tag) {
+  $component = new TagComponent([ 'tag' => $tag ]);
 	echo strval($component);
-	if ($i<count($values['list'])-1) {
+	if ($i < count($list) - 1) {
 		echo ",\n";
 	}
 }

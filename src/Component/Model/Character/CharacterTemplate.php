@@ -1,82 +1,82 @@
-<?php if (is_null($values['Character'])): ?>
+<?php if (is_null($character)): ?>
 null
 <?php else: ?>
 {
-	"id": <?php echo $values['Character']->get('id') ?>,
-	"name": "<?php echo urlencode($values['Character']->get('name')) ?>",
-	"width": <?php echo $values['Character']->get('width') ?>,
-	"blockWidth": <?php echo is_null($values['Character']->get('block_width')) ? 'null' : $values['Character']->get('block_width') ?>,
-	"height": <?php echo $values['Character']->get('height') ?>,
-	"blockHeight": <?php echo is_null($values['Character']->get('block_height')) ? 'null' : $values['Character']->get('block_height') ?>,
-	"fixedPosition": <?php echo $values['Character']->get('fixed_position') ? 'true' : 'false' ?>,
-	"idAssetUp": <?php echo is_null($values['Character']->get('id_asset_up')) ? 'null' : $values['Character']->get('id_asset_up') ?>,
-	"assetUpUrl": <?php echo !is_null($values['Character']->getAsset('up')) ? '"'.urlencode($values['Character']->getAsset('up')->getUrl()).'"' : 'null' ?>,
-	"idAssetDown": <?php echo is_null($values['Character']->get('id_asset_down')) ? 'null' : $values['Character']->get('id_asset_down') ?>,
-	"assetDownUrl": <?php  echo !is_null($values['Character']->getAsset('down')) ? '"'.urlencode($values['Character']->getAsset('down')->getUrl()).'"' : 'null' ?>,
-	"idAssetLeft": <?php echo is_null($values['Character']->get('id_asset_left')) ? 'null' : $values['Character']->get('id_asset_left') ?>,
-	"assetLeftUrl": <?php  echo !is_null($values['Character']->getAsset('left')) ? '"'.urlencode($values['Character']->getAsset('left')->getUrl()).'"' : 'null' ?>,
-	"idAssetRight": <?php echo is_null($values['Character']->get('id_asset_right')) ? 'null' : $values['Character']->get('id_asset_right') ?>,
-	"assetRightUrl": <?php echo !is_null($values['Character']->getAsset('right')) ? '"'.urlencode($values['Character']->getAsset('right')->getUrl()).'"' : 'null' ?>,
-	"type": <?php echo $values['Character']->get('type') ?>,
-	"health": <?php echo is_null($values['Character']->get('health')) ? 'null' : $values['Character']->get('health') ?>,
-	"attack": <?php echo is_null($values['Character']->get('attack')) ? 'null' : $values['Character']->get('attack') ?>,
-	"defense": <?php echo is_null($values['Character']->get('defense')) ? 'null' : $values['Character']->get('defense') ?>,
-	"speed": <?php echo is_null($values['Character']->get('speed')) ? 'null' : $values['Character']->get('speed') ?>,
-	"dropIdItem": <?php echo is_null($values['Character']->get('drop_id_item')) ? 'null' : $values['Character']->get('drop_id_item') ?>,
-	"dropAssetUrl": <?php  echo !is_null($values['Character']->getAsset('drop')) ? '"'.urlencode($values['Character']->getAsset('drop')->getUrl()).'"' : 'null' ?>,
-	"dropChance": <?php echo is_null($values['Character']->get('drop_chance')) ? 'null' : $values['Character']->get('drop_chance') ?>,
-	"respawn": <?php echo is_null($values['Character']->get('respawn')) ? 'null' : $values['Character']->get('respawn') ?>,
+	"id": <?php echo $character->get('id') ?>,
+	"name": "<?php echo urlencode($character->get('name')) ?>",
+	"width": <?php echo $character->get('width') ?>,
+	"blockWidth": <?php echo is_null($character->get('block_width')) ? 'null' : $character->get('block_width') ?>,
+	"height": <?php echo $character->get('height') ?>,
+	"blockHeight": <?php echo is_null($character->get('block_height')) ? 'null' : $character->get('block_height') ?>,
+	"fixedPosition": <?php echo $character->get('fixed_position') ? 'true' : 'false' ?>,
+	"idAssetUp": <?php echo is_null($character->get('id_asset_up')) ? 'null' : $character->get('id_asset_up') ?>,
+	"assetUpUrl": <?php echo !is_null($character->getAsset('up')) ? '"'.urlencode($character->getAsset('up')->getUrl()).'"' : 'null' ?>,
+	"idAssetDown": <?php echo is_null($character->get('id_asset_down')) ? 'null' : $character->get('id_asset_down') ?>,
+	"assetDownUrl": <?php  echo !is_null($character->getAsset('down')) ? '"'.urlencode($character->getAsset('down')->getUrl()).'"' : 'null' ?>,
+	"idAssetLeft": <?php echo is_null($character->get('id_asset_left')) ? 'null' : $character->get('id_asset_left') ?>,
+	"assetLeftUrl": <?php  echo !is_null($character->getAsset('left')) ? '"'.urlencode($character->getAsset('left')->getUrl()).'"' : 'null' ?>,
+	"idAssetRight": <?php echo is_null($character->get('id_asset_right')) ? 'null' : $character->get('id_asset_right') ?>,
+	"assetRightUrl": <?php echo !is_null($character->getAsset('right')) ? '"'.urlencode($character->getAsset('right')->getUrl()).'"' : 'null' ?>,
+	"type": <?php echo $character->get('type') ?>,
+	"health": <?php echo is_null($character->get('health')) ? 'null' : $character->get('health') ?>,
+	"attack": <?php echo is_null($character->get('attack')) ? 'null' : $character->get('attack') ?>,
+	"defense": <?php echo is_null($character->get('defense')) ? 'null' : $character->get('defense') ?>,
+	"speed": <?php echo is_null($character->get('speed')) ? 'null' : $character->get('speed') ?>,
+	"dropIdItem": <?php echo is_null($character->get('drop_id_item')) ? 'null' : $character->get('drop_id_item') ?>,
+	"dropAssetUrl": <?php  echo !is_null($character->getAsset('drop')) ? '"'.urlencode($character->getAsset('drop')->getUrl()).'"' : 'null' ?>,
+	"dropChance": <?php echo is_null($character->get('drop_chance')) ? 'null' : $character->get('drop_chance') ?>,
+	"respawn": <?php echo is_null($character->get('respawn')) ? 'null' : $character->get('respawn') ?>,
 	"framesUp": [
-<?php foreach ($values['Character']->getFrames('up') as $j => $character_frame): ?>
+<?php foreach ($character->getFrames('up') as $j => $character_frame): ?>
 		{
 			"id": <?php echo $character_frame->get('id') ?>,
 			"idAsset": <?php echo $character_frame->get('id_asset') ?>,
 			"assetUrl": "<?php echo urlencode($character_frame->getAsset()->getUrl()) ?>",
 			"orientation": "<?php echo $character_frame->get('orientation') ?>",
 			"order": <?php echo $character_frame->get('order') ?>
-		}<?php if ($j<count($values['Character']->getFrames('up'))-1): ?>,<?php endif ?>
+		}<?php if ($j<count($character->getFrames('up'))-1): ?>,<?php endif ?>
 <?php endforeach ?>
 	],
 	"framesDown": [
-<?php foreach ($values['Character']->getFrames('down') as $j => $character_frame): ?>
+<?php foreach ($character->getFrames('down') as $j => $character_frame): ?>
 		{
 			"id": <?php echo $character_frame->get('id') ?>,
 			"idAsset": <?php echo $character_frame->get('id_asset') ?>,
 			"assetUrl": "<?php echo urlencode($character_frame->getAsset()->getUrl()) ?>",
 			"orientation": "<?php echo $character_frame->get('orientation') ?>",
 			"order": <?php echo $character_frame->get('order') ?>
-		}<?php if ($j<count($values['Character']->getFrames('down'))-1): ?>,<?php endif ?>
+		}<?php if ($j<count($character->getFrames('down'))-1): ?>,<?php endif ?>
 <?php endforeach ?>
 	],
 	"framesLeft": [
-<?php foreach ($values['Character']->getFrames('left') as $j => $character_frame): ?>
+<?php foreach ($character->getFrames('left') as $j => $character_frame): ?>
 		{
 			"id": <?php echo $character_frame->get('id') ?>,
 			"idAsset": <?php echo $character_frame->get('id_asset') ?>,
 			"assetUrl": "<?php echo urlencode($character_frame->getAsset()->getUrl()) ?>",
 			"orientation": "<?php echo $character_frame->get('orientation') ?>",
 			"order": <?php echo $character_frame->get('order') ?>
-		}<?php if ($j<count($values['Character']->getFrames('left'))-1): ?>,<?php endif ?>
+		}<?php if ($j<count($character->getFrames('left'))-1): ?>,<?php endif ?>
 <?php endforeach ?>
 	],
 	"framesRight": [
-<?php foreach ($values['Character']->getFrames('right') as $j => $character_frame): ?>
+<?php foreach ($character->getFrames('right') as $j => $character_frame): ?>
 		{
 			"id": <?php echo $character_frame->get('id') ?>,
 			"idAsset": <?php echo $character_frame->get('id_asset') ?>,
 			"assetUrl": "<?php echo urlencode($character_frame->getAsset()->getUrl()) ?>",
 			"orientation": "<?php echo $character_frame->get('orientation') ?>",
 			"order": <?php echo $character_frame->get('order') ?>
-		}<?php if ($j<count($values['Character']->getFrames('right'))-1): ?>,<?php endif ?>
+		}<?php if ($j<count($character->getFrames('right'))-1): ?>,<?php endif ?>
 <?php endforeach ?>
 	],
 	"narratives": [
-<?php foreach ($values['Character']->getNarratives() as $j => $narrative): ?>
+<?php foreach ($character->getNarratives() as $j => $narrative): ?>
 		{
 			"id": <?php echo $narrative->get('id') ?>,
 			"dialog": "<?php echo urlencode($narrative->get('dialog')) ?>",
 			"order": <?php echo $narrative->get('order') ?>
-		}<?php if ($j<count($values['Character']->getNarratives())-1): ?>,<?php endif ?>
+		}<?php if ($j<count($character->getNarratives())-1): ?>,<?php endif ?>
 <?php endforeach ?>
 	]
 }

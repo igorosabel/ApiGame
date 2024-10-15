@@ -4,4 +4,6 @@ namespace Osumi\OsumiFramework\App\Component\Model\TagList;
 
 use Osumi\OsumiFramework\Core\OComponent;
 
-class TagListComponent extends OComponent {}
+class TagListComponent extends OComponent {
+  public array $list = [];
+}

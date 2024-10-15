@@ -1,10 +1,10 @@
 <?php
 use Osumi\OsumiFramework\App\Component\Model\Equipment\EquipmentComponent;
 
-foreach ($values['list'] as $i => $Equipment) {
-  $component = new EquipmentComponent([ 'Equipment' => $Equipment ]);
+foreach ($list as $i => $equipment) {
+  $component = new EquipmentComponent([ 'equipment' => $equipment ]);
 	echo strval($component);
-	if ($i<count($values['list'])-1) {
+	if ($i < count($list) - 1) {
 		echo ",\n";
 	}
 }

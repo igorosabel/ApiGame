@@ -1,10 +1,10 @@
 <?php
 use Osumi\OsumiFramework\App\Component\Model\World\WorldComponent;
 
-foreach ($values['list'] as $i => $World) {
-  $component = new WorldComponent([ 'World' => $World ]);
+foreach ($list as $i => $world) {
+  $component = new WorldComponent([ 'world' => $world ]);
 	echo strval($component);
-	if ($i<count($values['list'])-1) {
+	if ($i < count($list) - 1) {
 		echo ",\n";
 	}
 }

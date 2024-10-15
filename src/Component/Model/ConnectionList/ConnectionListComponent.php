@@ -4,4 +4,6 @@ namespace Osumi\OsumiFramework\App\Component\Model\ConnectionList;
 
 use Osumi\OsumiFramework\Core\OComponent;
 
-class ConnectionListComponent extends OComponent {}
+class ConnectionListComponent extends OComponent {
+  public array $list = [];
+}

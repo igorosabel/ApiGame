@@ -1,10 +1,10 @@
 <?php
 use Osumi\OsumiFramework\App\Component\Game\Game\GameComponent;
 
-foreach ($values['list'] as $i => $Game) {
-	$game_component = new GameComponent([ 'Game' => $Game ]);
+foreach ($list as $i => $game) {
+	$game_component = new GameComponent([ 'game' => $game ]);
 	echo strval($game_component);
-	if ($i<count($values['list'])-1) {
+	if ($i < count($list) - 1) {
 		echo ",\n";
 	}
 }

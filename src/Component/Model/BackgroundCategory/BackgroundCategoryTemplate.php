@@ -1,8 +1,8 @@
-<?php if (is_null($values['BackgroundCategory'])): ?>
+<?php if (is_null($backgroundcategory)): ?>
 null
 <?php else: ?>
 {
-	"id": <?php echo $values['BackgroundCategory']->get('id') ?>,
-	"name": "<?php echo urlencode($values['BackgroundCategory']->get('name')) ?>"
+	"id": <?php echo $backgroundcategory->get('id') ?>,
+	"name": "<?php echo urlencode($backgroundcategory->get('name')) ?>"
 }
 <?php endif ?>

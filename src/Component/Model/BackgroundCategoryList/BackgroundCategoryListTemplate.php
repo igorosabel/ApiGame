@@ -1,10 +1,10 @@
 <?php
 use Osumi\OsumiFramework\App\Component\Model\BackgroundCategory\BackgroundCategoryComponent;
 
-foreach ($values['list'] as $i => $BackgroundCategory) {
-  $component = new BackgroundCategoryComponent([ 'BackgroundCategory' => $BackgroundCategory ]);
+foreach ($list as $i => $backgroundcategory) {
+  $component = new BackgroundCategoryComponent([ 'backgroundcategory' => $backgroundcategory ]);
 	echo strval($component);
-	if ($i<count($values['list'])-1) {
+	if ($i < count($list) - 1) {
 		echo ",\n";
 	}
 }

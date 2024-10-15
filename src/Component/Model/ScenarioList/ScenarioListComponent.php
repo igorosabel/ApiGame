@@ -4,4 +4,6 @@ namespace Osumi\OsumiFramework\App\Component\Model\ScenarioList;
 
 use Osumi\OsumiFramework\Core\OComponent;
 
-class ScenarioListComponent extends OComponent {}
+class ScenarioListComponent extends OComponent {
+  public array $list = [];
+}

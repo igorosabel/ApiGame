@@ -1,8 +1,8 @@
-<?php if (is_null($values['Tag'])): ?>
+<?php if (is_null($tag)): ?>
 null
 <?php else: ?>
 {
-	"id": <?php echo $values['Tag']->get('id') ?>,
-	"name": "<?php echo urlencode($values['Tag']->get('name')) ?>"
+	"id": <?php echo $tag->get('id') ?>,
+	"name": "<?php echo urlencode($tag->get('name')) ?>"
 }
 <?php endif ?>
