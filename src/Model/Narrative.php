@@ -2,57 +2,51 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Character;
 
 class Narrative extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único para cada narrativa'
-			),
-			new OModelField(
-				name: 'id_character',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'character.id',
-				comment: 'Id del personaje'
-			),
-			new OModelField(
-				name: 'dialog',
-				type: OMODEL_LONGTEXT,
-				nullable: false,
-				default: null,
-				comment: 'Texto del dialogo'
-			),
-			new OModelField(
-				name: 'order',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Orden del dialogo en la narrativa'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único para cada narrativa'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id del personaje',
+	  nullable: false,
+	  ref: 'character.id',
+	  default: null
+	)]
+	public ?int $id_character;
+
+	#[OField(
+	  comment: 'Texto del dialogo',
+	  nullable: false,
+	  default: null,
+	  type: OField::LONGTEXT
+	)]
+	public ?string $dialog;
+
+	#[OField(
+	  comment: 'Orden del dialogo en la narrativa',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $order;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Character $character = null;
 
@@ -83,8 +77,7 @@ class Narrative extends OModel {
 	 * @return void
 	 */
 	public function loadCharacter(): void {
-		$character = new Character();
-		$character->find(['id' => $this->get('id_character')]);
+		$character = Character::findOne(['id' => $this->id_character]);
 		$this->setCharacter($character);
 	}
 }

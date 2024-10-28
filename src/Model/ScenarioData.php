@@ -2,91 +2,84 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Background;
 use Osumi\OsumiFramework\App\Model\ScenarioObject;
 use Osumi\OsumiFramework\App\Model\Character;
 use Osumi\OsumiFramework\App\Model\Scenario;
 
 class ScenarioData extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único para cada dato'
-			),
-			new OModelField(
-				name: 'id_scenario',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'scenario.id',
-				comment: 'Id del escenario al que pertenece el dato'
-			),
-			new OModelField(
-				name: 'x',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Coordenada X del dato en el escenario'
-			),
-			new OModelField(
-				name: 'y',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Coordenada Y del dato en el escenario'
-			),
-			new OModelField(
-				name: 'id_background',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'background.id',
-				comment: 'Id del fondo del escenario'
-			),
-			new OModelField(
-				name: 'id_scenario_object',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'scenario_object.id',
-				comment: 'Id del objeto relacionado que va en el escenario'
-			),
-			new OModelField(
-				name: 'id_character',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'character.id',
-				comment: 'Id del personaje que va en el escenario'
-			),
-			new OModelField(
-				name: 'character_health',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Salud del personaje'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único para cada dato'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id del escenario al que pertenece el dato',
+	  nullable: false,
+	  ref: 'scenario.id',
+	  default: null
+	)]
+	public ?int $id_scenario;
+
+	#[OField(
+	  comment: 'Coordenada X del dato en el escenario',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $x;
+
+	#[OField(
+	  comment: 'Coordenada Y del dato en el escenario',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $y;
+
+	#[OField(
+	  comment: 'Id del fondo del escenario',
+	  nullable: false,
+	  ref: 'background.id',
+	  default: null
+	)]
+	public ?int $id_background;
+
+	#[OField(
+	  comment: 'Id del objeto relacionado que va en el escenario',
+	  nullable: true,
+	  ref: 'scenario_object.id',
+	  default: null
+	)]
+	public ?int $id_scenario_object;
+
+	#[OField(
+	  comment: 'Id del personaje que va en el escenario',
+	  nullable: true,
+	  ref: 'character.id',
+	  default: null
+	)]
+	public ?int $id_character;
+
+	#[OField(
+	  comment: 'Salud del personaje',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $character_health;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Scenario $scenario = null;
 
@@ -119,8 +112,7 @@ class ScenarioData extends OModel {
 	 * @return void
 	 */
 	public function loadScenario(): void {
-		$scenario = new Scenario();
-		$scenario->find(['id' => $this->get('id_scenario')]);
+		$scenario = Scenario::findOne(['id' => $this->id_scenario]);
 		$this->setScenario($scenario);
 	}
 
@@ -132,7 +124,7 @@ class ScenarioData extends OModel {
 	 * @return Background Elemento de fondo de la casilla
 	 */
 	public function getBackground(): ?Background {
-		if (is_null($this->background) && !is_null($this->get('id_background'))) {
+		if (is_null($this->background) && !is_null($this->id_background)) {
 			$this->loadBackground();
 		}
 		return $this->background;
@@ -155,8 +147,7 @@ class ScenarioData extends OModel {
 	 * @return void
 	 */
 	public function loadBackground(): void {
-		$background = new Background();
-		$background->find(['id' => $this->get('id_background')]);
+		$background = Background::findOne(['id' => $this->id_background]);
 		$this->setBackground($background);
 	}
 
@@ -168,7 +159,7 @@ class ScenarioData extends OModel {
 	 * @return ScenarioObject Objeto de la casilla
 	 */
 	public function getScenarioObject(): ?ScenarioObject {
-		if (is_null($this->scenario_object) && !is_null($this->get('id_scenario_object'))) {
+		if (is_null($this->scenario_object) && !is_null($this->id_scenario_object)) {
 			$this->loadScenarioObject();
 		}
 		return $this->scenario_object;
@@ -191,8 +182,7 @@ class ScenarioData extends OModel {
 	 * @return void
 	 */
 	public function loadScenarioObject(): void {
-		$scenario_object = new ScenarioObject();
-		$scenario_object->find(['id' => $this->get('id_scenario_object')]);
+		$scenario_object = ScenarioObject::findOne(['id' => $this->id_scenario_object]);
 		$this->setScenarioObject($scenario_object);
 	}
 
@@ -204,7 +194,7 @@ class ScenarioData extends OModel {
 	 * @return Character Personaje de la casilla
 	 */
 	public function getCharacter(): ?Character {
-		if (is_null($this->character) && !is_null($this->get('id_character'))) {
+		if (is_null($this->character) && !is_null($this->id_character)) {
 			$this->loadCharacter();
 		}
 		return $this->character;
@@ -227,8 +217,7 @@ class ScenarioData extends OModel {
 	 * @return void
 	 */
 	public function loadCharacter(): void {
-		$character = new Character();
-		$character->find(['id' => $this->get('id_character')]);
+		$character = Character::findOne(['id' => $this->id_character]);
 		$this->setCharacter($character);
 	}
 }

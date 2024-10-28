@@ -2,81 +2,75 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Scenario;
 
 class World extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único para cada mundo'
-			),
-			new OModelField(
-				name: 'name',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 50,
-				comment: 'Nombre del mundo'
-			),
-			new OModelField(
-				name: 'description',
-				type: OMODEL_LONGTEXT,
-				nullable: true,
-				default: null,
-				comment: 'Descripción del mundo'
-			),
-			new OModelField(
-				name: 'word_one',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 20,
-				comment: 'Primera palabra para acceder al mundo'
-			),
-			new OModelField(
-				name: 'word_two',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 20,
-				comment: 'Segunda palabra para acceder al mundo'
-			),
-			new OModelField(
-				name: 'word_three',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 20,
-				comment: 'Tercera palabra para acceder al mundo'
-			),
-			new OModelField(
-				name: 'friendly',
-				type: OMODEL_BOOL,
-				nullable: false,
-				default: false,
-				comment: 'Indica si el mundo es amistoso'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único para cada mundo'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Nombre del mundo',
+	  nullable: false,
+	  max: 50,
+	  default: null
+	)]
+	public ?string $name;
+
+	#[OField(
+	  comment: 'Descripción del mundo',
+	  nullable: true,
+	  default: null,
+	  type: OField::LONGTEXT
+	)]
+	public ?string $description;
+
+	#[OField(
+	  comment: 'Primera palabra para acceder al mundo',
+	  nullable: false,
+	  max: 20,
+	  default: null
+	)]
+	public ?string $word_one;
+
+	#[OField(
+	  comment: 'Segunda palabra para acceder al mundo',
+	  nullable: false,
+	  max: 20,
+	  default: null
+	)]
+	public ?string $word_two;
+
+	#[OField(
+	  comment: 'Tercera palabra para acceder al mundo',
+	  nullable: false,
+	  max: 20,
+	  default: null
+	)]
+	public ?string $word_three;
+
+	#[OField(
+	  comment: 'Indica si el mundo es amistoso',
+	  nullable: false,
+	  default: false
+	)]
+	public ?bool $friendly;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?array $scenarios = null;
 
@@ -109,16 +103,7 @@ class World extends OModel {
 	 * @return void
 	 */
 	public function loadScenarios(): void {
-		$list = [];
-		$sql = "SELECT * FROM `scenario` WHERE `id_world` = ?";
-		$this->db->query($sql, [$this->get('id')]);
-
-		while ($res = $this->db->next()) {
-			$scenario = new Scenario();
-			$scenario->update($res);
-			array_push($list, $scenario);
-		}
-
+		$list = Scenario::where(['id_world' => $this->id]);
 		$this->setScenarios($list);
 	}
 
@@ -153,14 +138,7 @@ class World extends OModel {
 	 * @return void
 	 */
 	public function loadInitialScenario(): void {
-		$sql = "SELECT * FROM `scenario` WHERE `id_world` = ? AND `initial` = 1";
-		$this->db->query($sql, [$this->get('id')]);
-
-		if ($res = $this->db->next()) {
-			$scenario = new Scenario();
-			$scenario->update($res);
-
-			$this->setInitialScenario($scenario);
-		}
+		$scenario = Scenario::findOne(['id_world' => $this->id, 'initial' => 1]);
+		$this->setInitialScenario($scenario);
 	}
 }

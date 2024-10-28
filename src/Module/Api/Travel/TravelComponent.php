@@ -39,10 +39,7 @@ class TravelComponent extends OComponent {
 		if ($this->status === 'ok') {
 			// Si viene id es que es un mundo ya conocido
 			if (!is_null($this->id_world)) {
-				$world = new World();
-				if (!$world->find(['id' => $this->id_world])) {
-					$world = null;
-				}
+				$world = World::findOne(['id' => $this->id_world]);
 			}
 			// Si no viene id es que está probando a ir a un mundo nuevo
 			else {
@@ -50,11 +47,11 @@ class TravelComponent extends OComponent {
 			}
 
 			if (!is_null($world)) {
-				$this->id_world = $world->get('id');
+				$this->id_world = $world->id;
 
-				$world_unlocked = new WorldUnlocked();
-				$world_unlocked->set('id_game', $id_game);
-				$world_unlocked->set('id_world', $id_world);
+				$world_unlocked = WorldUnlocked::create();
+				$world_unlocked->id_game  = $id_game;
+				$world_unlocked->id_world = $id_world;
 				$world_unlocked->save();
 
 				// TODO actualizar Game con la posición inicial del mundo al que va y orientation down

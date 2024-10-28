@@ -40,7 +40,7 @@ class GetPlayDataComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id_game           = $req->getParamInt('id');
 		$blockers          = [];
 		$scenario_datas    = [];
@@ -52,16 +52,16 @@ class GetPlayDataComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$game = new Game();
-			if ($game->find(['id' => $id_game])) {
+			$game = Game::findOne(['id' => $id_game]);
+			if (!is_null($game)) {
 				$scenario = $game->getScenario();
 				$world    = $scenario->getWorld();
 
-				$this->id_world          = $world->get('id');
-				$this->world_name        = $world->get('name');
-				$this->world_description = $world->get('description');
-				$this->id_scenario       = $scenario->get('id');
-				$this->scenario_name     = $scenario->get('name');
+				$this->id_world          = $world->id;
+				$this->world_name        = $world->name;
+				$this->world_description = $world->description;
+				$this->id_scenario       = $scenario->id;
+				$this->scenario_name     = $scenario->name;
 				$this->map_url           = $scenario->getMapUrl();
 
 				$data = $scenario->getData();
@@ -70,27 +70,27 @@ class GetPlayDataComponent extends OComponent {
 				foreach ($data as $scenario_data) {
 					$in_datas   = false;
 					$background = $scenario_data->getBackground();
-					if (!$background->get('crossable')) {
-						array_push($blockers, ['x' => $scenario_data->get('x'), 'y' => $scenario_data->get('y')]);
+					if (!$background->crossable) {
+						$blockers[] = ['x' => $scenario_data->x, 'y' => $scenario_data->y];
 					}
 					$scenario_object = $scenario_data->getScenarioObject();
-					if (!is_null($scenario_object) && $scenario_object->get('crossable') === false) {
-						array_push($blockers, ['x' => $scenario_data->get('x'), 'y' => $scenario_data->get('y')]);
-						if (!in_array($scenario_object->get('id'), $in_scenario_objects)) {
-							array_push($scenario_objects, $scenario_object);
-							array_push($in_scenario_objects, $scenario_object->get('id'));
+					if (!is_null($scenario_object) && $scenario_object->crossable === false) {
+						$blockers[] = ['x' => $scenario_data->x, 'y' => $scenario_data->y];
+						if (!in_array($scenario_object->id, $in_scenario_objects)) {
+							$scenario_objects[] = $scenario_object;
+							$in_scenario_objects[] = $scenario_object->id;
 						}
-						array_push($scenario_datas, $scenario_data);
+						$scenario_datas[] = $scenario_data;
 						$in_datas = true;
 					}
 					$character = $scenario_data->getCharacter();
 					if (!is_null($character)) {
-						if (!in_array($character->get('id'), $in_characters)) {
-							array_push($characters, $character);
-							array_push($in_characters, $character->get('id'));
+						if (!in_array($character->id, $in_characters)) {
+							$characters[] = $character;
+							$in_characters[] = $character->id;
 						}
 						if (!$in_datas) {
-							array_push($scenario_datas, $scenario_data);
+							$scenario_datas[] = $scenario_data;
 						}
 					}
 				}

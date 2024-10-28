@@ -2,63 +2,56 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 
 class Background extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único de cada fondo'
-			),
-			new OModelField(
-				name: 'id_background_category',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'background_category.id',
-				comment: 'Id de la categoría a la que pertenece'
-			),
-			new OModelField(
-				name: 'id_asset',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Id del recurso que se utiliza para el fondo'
-			),
-			new OModelField(
-				name: 'name',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 50,
-				comment: 'Nombre del fondo'
-			),
-			new OModelField(
-				name: 'crossable',
-				type: OMODEL_BOOL,
-				comment: 'Indica si la casilla se puede cruzar 1 o no 0'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único de cada fondo'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id de la categoría a la que pertenece',
+	  nullable: false,
+	  ref: 'background_category.id',
+	  default: null
+	)]
+	public ?int $id_background_category;
+
+	#[OField(
+	  comment: 'Id del recurso que se utiliza para el fondo',
+	  nullable: false,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset;
+
+	#[OField(
+	  comment: 'Nombre del fondo',
+	  nullable: false,
+	  max: 50,
+	  default: null
+	)]
+	public ?string $name;
+
+	#[OField(
+	  comment: 'Indica si la casilla se puede cruzar 1 o no 0'
+	)]
+	public ?bool $crossable;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Asset $asset = null;
 
@@ -91,8 +84,7 @@ class Background extends OModel {
 	 * @return void
 	 */
 	public function loadAsset(): void {
-		$asset = new Asset();
-		$asset->find(['id' => $this->get('id_asset')]);
+		$asset = Asset::findOne(['id' => $this->id_asset]);
 		$this->setAsset($asset);
 	}
 }

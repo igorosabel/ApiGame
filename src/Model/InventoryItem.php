@@ -2,65 +2,58 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Item;
 
 class InventoryItem extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único del elemento del inventario'
-			),
-			new OModelField(
-				name: 'id_game',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'game.id',
-				comment: 'Id de la partida en la que está el elemento'
-			),
-			new OModelField(
-				name: 'id_item',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'item.id',
-				comment: 'Id del elemento'
-			),
-			new OModelField(
-				name: 'order',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Orden del elemento en el inventario'
-			),
-			new OModelField(
-				name: 'num',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Cantidad del item en el inventario'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único del elemento del inventario'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id de la partida en la que está el elemento',
+	  nullable: false,
+	  ref: 'game.id',
+	  default: null
+	)]
+	public ?int $id_game;
+
+	#[OField(
+	  comment: 'Id del elemento',
+	  nullable: false,
+	  ref: 'item.id',
+	  default: null
+	)]
+	public ?int $id_item;
+
+	#[OField(
+	  comment: 'Orden del elemento en el inventario',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $order;
+
+	#[OField(
+	  comment: 'Cantidad del item en el inventario',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $num;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Item $item = null;
 
@@ -93,8 +86,7 @@ class InventoryItem extends OModel {
 	 * @return void
 	 */
 	public function loadItem(): void {
-		$item = new Item();
-		$item->find(['id' => $this->get('id_item')]);
+		$item = Item::findOne(['id' => $this->id_item]);
 		$this->setItem($item);
 	}
 }

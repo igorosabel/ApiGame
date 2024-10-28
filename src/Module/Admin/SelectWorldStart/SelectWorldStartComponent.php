@@ -24,7 +24,7 @@ class SelectWorldStartComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id_scenario = $req->getParamInt('idScenario');
 		$x           = $req->getParamInt('x');
 		$y           = $req->getParamInt('y');
@@ -35,8 +35,8 @@ class SelectWorldStartComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$scenario = new Scenario();
-			if ($scenario->find(['id' => $id_scenario])) {
+			$scenario = Scenario::findOne(['id' => $id_scenario]);
+			if (!is_null($scenario)) {
 				if ($check) {
 					$result  = $this->as->checkWorldStart($scenario);
 					$this->status  = $result['status'];
@@ -44,9 +44,9 @@ class SelectWorldStartComponent extends OComponent {
 				}
 				if ($this->status === 'ok') {
 					$this->as->clearWorldStart($scenario);
-					$scenario->set('start_x', $x);
-					$scenario->set('start_y', $y);
-					$scenario->set('initial', true);
+					$scenario->start_x = $x;
+					$scenario->start_y = $y;
+					$scenario->initial = true;
 					$scenario->save();
 				}
 			}

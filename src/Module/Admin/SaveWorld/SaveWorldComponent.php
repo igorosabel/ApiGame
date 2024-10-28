@@ -15,7 +15,7 @@ class SaveWorldComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id          = $req->getParamInt('id');
 		$name        = $req->getParamString('name');
 		$description = $req->getParamString('description');
@@ -29,16 +29,16 @@ class SaveWorldComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$world = new World();
+			$world = World::create();
 			if (!is_null($id)) {
-				$world->find(['id' => $id]);
+        $world = World::findOne(['id' => $id]);
 			}
-			$world->set('name',        $name);
-			$world->set('description', $description);
-			$world->set('word_one',    $word_one);
-			$world->set('word_two',    $word_two);
-			$world->set('word_three',  $word_three);
-			$world->set('friendly',    $friendly);
+			$world->name        = $name;
+			$world->description = $description;
+			$world->word_one    = $word_one;
+			$world->word_two    = $word_two;
+			$world->word_three  = $word_three;
+			$world->friendly    = $friendly;
 			$world->save();
 		}
 	}

@@ -2,12 +2,12 @@
 null
 <?php else: ?>
 {
-	"id": <?php echo $world->get('id') ?>,
-	"name": "<?php echo urlencode($world->get('name')) ?>",
-	"description": "<?php echo is_null($world->get('description')) ? 'null' : urlencode($world->get('description')) ?>",
-	"wordOne": "<?php echo urlencode($world->get('word_one')) ?>",
-	"wordTwo": "<?php echo urlencode($world->get('word_two')) ?>",
-	"wordThree": "<?php echo urlencode($world->get('word_three')) ?>",
-	"friendly": <?php echo $world->get('friendly') ? 'true' : 'false' ?>
+	"id": <?php echo $world->id ?>,
+	"name": "<?php echo urlencode($world->name) ?>",
+	"description": "<?php echo is_null($world->description) ? 'null' : urlencode($world->description) ?>",
+	"wordOne": "<?php echo urlencode($world->word_one) ?>",
+	"wordTwo": "<?php echo urlencode($world->word_two) ?>",
+	"wordThree": "<?php echo urlencode($world->word_three) ?>",
+	"friendly": <?php echo $world->friendly ? 'true' : 'false' ?>
 }
 <?php endif ?>

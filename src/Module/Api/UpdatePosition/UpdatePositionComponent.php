@@ -26,11 +26,11 @@ class UpdatePositionComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$game = new Game();
-			if ($game->find(['id' => $id_game])) {
-				$game->set('position_x',  $x);
-				$game->set('position_y',  $y);
-				$game->set('orientation', $orientation);
+			$game = Game::findOne(['id' => $id_game]);
+			if (!is_null($game)) {
+				$game->position_x  = $x;
+				$game->position_y  = $y;
+				$game->orientation = $orientation;
 				$game->save();
 			}
 			else {

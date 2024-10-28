@@ -26,7 +26,7 @@ class NewGameComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id_game     = $req->getParamInt('idGame');
 		$name        = $req->getParamString('name');
 
@@ -35,37 +35,37 @@ class NewGameComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$game = new Game();
-			if ($game->find(['id' => $id_game])) {
+			$game = Game::findOne(['id' => $id_game]);
+			if (!is_null($game)) {
 				$world             = $this->ws->getOriginWorld();
 				$scenario          = $world->getInitialScenario();
-				$this->id_scenario = $scenario->get('id');
+				$this->id_scenario = $scenario->id;
 
-				$game->set('name',        $name);
-				$game->set('id_scenario', $scenario->get('id'));
-				$game->set('position_x',  $scenario->get('start_x'));
-				$game->set('position_y',  $scenario->get('start_y'));
-				$game->set('orientation', 'down');
-				$game->set('money',       null);
-				$game->set('health',      $this->getConfig()->getExtra('start_health'));
-				$game->set('max_health',  null);
-				$game->set('attack',      null);
-				$game->set('defense',     null);
-				$game->set('speed',       null);
+				$game->name        = $name;
+				$game->id_scenario = $scenario->id;
+				$game->position_x  = $scenario->start_x;
+				$game->position_y  = $scenario->start_y;
+				$game->orientation = 'down';
+				$game->money       = null;
+				$game->health      = $this->getConfig()->getExtra('start_health');
+				$game->max_health  = null;
+				$game->attack      = null;
+				$game->defense     = null;
+				$game->speed       = null;
 				$game->save();
 
-				$world_unlocked = new WorldUnlocked();
-				$world_unlocked->set('id_game',  $game->get('id'));
-				$world_unlocked->set('id_world', $world->get('id'));
+				$world_unlocked = WorldUnlocked::create();
+				$world_unlocked->id_game  = $game->id;
+				$world_unlocked->id_world = $world->id;
 				$world_unlocked->save();
 
-				$equipment = new Equipment();
-				$equipment->set('id_game', $game->get('id'));
-				$equipment->set('head', null);
-				$equipment->set('necklace', null);
-				$equipment->set('body', null);
-				$equipment->set('boots', null);
-				$equipment->set('weapon', $this->getConfig()->getExtra('start_weapon'));
+				$equipment = Equipment::create();
+				$equipment->id_game  = $game->id;
+				$equipment->head     = null;
+				$equipment->necklace = null;
+				$equipment->body     = null;
+				$equipment->boots    = null;
+				$equipment->weapon   = $this->getConfig()->getExtra('start_weapon');
 				$equipment->save();
 
 				$this->ws->updateGameStats($game);

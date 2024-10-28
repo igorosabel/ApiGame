@@ -22,7 +22,7 @@ class SaveConnectionComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id_from     = $req->getParamInt('from');
 		$id_to       = $req->getParamInt('to');
 		$orientation = $req->getParamString('orientation');

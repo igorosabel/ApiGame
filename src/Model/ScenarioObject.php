@@ -2,134 +2,127 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\ScenarioObjectDrop;
 
 class ScenarioObject extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único de cada objeto del escenario'
-			),
-			new OModelField(
-				name: 'name',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 50,
-				comment: 'Nombre del objeto'
-			),
-			new OModelField(
-				name: 'id_asset',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Id del recurso usado para el objeto'
-			),
-			new OModelField(
-				name: 'width',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Anchura del objeto en casillas'
-			),
-			new OModelField(
-				name: 'block_width',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Anchura del espacio que bloquea'
-			),
-			new OModelField(
-				name: 'height',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Altura del objeto en casillas'
-			),
-			new OModelField(
-				name: 'block_height',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Altura del espacio que bloquea'
-			),
-			new OModelField(
-				name: 'crossable',
-				type: OMODEL_BOOL,
-				comment: 'Indica si el objeto se puede cruzar'
-			),
-			new OModelField(
-				name: 'activable',
-				type: OMODEL_BOOL,
-				comment: 'Indica si el objeto se puede activar 1 o no 0'
-			),
-			new OModelField(
-				name: 'id_asset_active',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Id del recurso usado para el objeto al ser activado'
-			),
-			new OModelField(
-				name: 'active_time',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Tiempo en segundos que el objeto se mantiene activo, 0 para indefinido'
-			),
-			new OModelField(
-				name: 'active_trigger',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Acción que se dispara en caso de que sea activable Mensaje 0 Teleport 1 Custom 2'
-			),
-			new OModelField(
-				name: 'active_trigger_custom',
-				type: OMODEL_TEXT,
-				nullable: true,
-				default: null,
-				size: 200,
-				comment: 'Nombre de la acción a ejecutar o mensaje a mostrar en caso de que se active el trigger'
-			),
-			new OModelField(
-				name: 'pickable',
-				type: OMODEL_BOOL,
-				comment: 'Indica si el objeto se puede coger al inventario 1 o no 0'
-			),
-			new OModelField(
-				name: 'grabbable',
-				type: OMODEL_BOOL,
-				comment: 'Indica si el objeto se puede levantar 1 o no 0'
-			),
-			new OModelField(
-				name: 'breakable',
-				type: OMODEL_BOOL,
-				comment: 'Indica si el objeto se puede romper 1 o no 0'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único de cada objeto del escenario'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Nombre del objeto',
+	  nullable: false,
+	  max: 50,
+	  default: null
+	)]
+	public ?string $name;
+
+	#[OField(
+	  comment: 'Id del recurso usado para el objeto',
+	  nullable: false,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset;
+
+	#[OField(
+	  comment: 'Anchura del objeto en casillas',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $width;
+
+	#[OField(
+	  comment: 'Anchura del espacio que bloquea',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $block_width;
+
+	#[OField(
+	  comment: 'Altura del objeto en casillas',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $height;
+
+	#[OField(
+	  comment: 'Altura del espacio que bloquea',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $block_height;
+
+	#[OField(
+	  comment: 'Indica si el objeto se puede cruzar'
+	)]
+	public ?bool $crossable;
+
+	#[OField(
+	  comment: 'Indica si el objeto se puede activar 1 o no 0'
+	)]
+	public ?bool $activable;
+
+	#[OField(
+	  comment: 'Id del recurso usado para el objeto al ser activado',
+	  nullable: true,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset_active;
+
+	#[OField(
+	  comment: 'Tiempo en segundos que el objeto se mantiene activo, 0 para indefinido',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $active_time;
+
+	#[OField(
+	  comment: 'Acción que se dispara en caso de que sea activable Mensaje 0 Teleport 1 Custom 2',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $active_trigger;
+
+	#[OField(
+	  comment: 'Nombre de la acción a ejecutar o mensaje a mostrar en caso de que se active el trigger',
+	  nullable: true,
+	  max: 200,
+	  default: null
+	)]
+	public ?string $active_trigger_custom;
+
+	#[OField(
+	  comment: 'Indica si el objeto se puede coger al inventario 1 o no 0'
+	)]
+	public ?bool $pickable;
+
+	#[OField(
+	  comment: 'Indica si el objeto se puede levantar 1 o no 0'
+	)]
+	public ?bool $grabbable;
+
+	#[OField(
+	  comment: 'Indica si el objeto se puede romper 1 o no 0'
+	)]
+	public ?bool $breakable;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Asset $asset = null;
 
@@ -162,8 +155,7 @@ class ScenarioObject extends OModel {
 	 * @return void
 	 */
 	public function loadAsset(): void {
-		$asset = new Asset();
-		$asset->find(['id' => $this->get('id_asset')]);
+		$asset = Asset::findOne(['id' => $this->id_asset]);
 		$this->setAsset($asset);
 	}
 
@@ -175,7 +167,7 @@ class ScenarioObject extends OModel {
 	 * @return Asset Recurso usado para el objeto de escenario una vez activado
 	 */
 	public function getAssetActive(): ?Asset {
-		if (is_null($this->asset_active) && !is_null($this->get('id_asset_active'))) {
+		if (is_null($this->asset_active) && !is_null($this->id_asset_active)) {
 			$this->loadAssetActive();
 		}
 		return $this->asset_active;
@@ -198,8 +190,7 @@ class ScenarioObject extends OModel {
 	 * @return void
 	 */
 	public function loadAssetActive(): void {
-		$asset_active = new Asset();
-		$asset_active->find(['id' => $this->get('id_asset_active')]);
+		$asset_active = Asset::findOne(['id' => $this->id_asset_active]);
 		$this->setAssetActive($asset_active);
 	}
 
@@ -234,17 +225,8 @@ class ScenarioObject extends OModel {
 	 * @return void
 	 */
 	public function loadDrops(): void {
-		$sql = "SELECT * FROM `scenario_object_drop` WHERE `id_scenario_object` = ?";
-		$this->db->query($sql, [$this->get('id')]);
-		$drops = [];
-
-		while ($res = $this->db->next()) {
-			$scenario_object_drop = new ScenarioObjectDrop();
-			$scenario_object_drop->update($res);
-			array_push($drops, $scenario_object_drop);
-		}
-
-		$this->setDrops($drops);
+		$list = ScenarioObjectDrop::where(['id_scenario_object' => $this->id]);
+		$this->setDrops($list);
 	}
 
 	private ?array $frames = null;
@@ -278,16 +260,7 @@ class ScenarioObject extends OModel {
 	 * @return void
 	 */
 	public function loadFrames(): void {
-		$sql = "SELECT * FROM `scenario_object_frame` WHERE `id_scenario_object` = ? ORDER BY `order`";
-		$this->db->query($sql, [$this->get('id')]);
-		$frames = [];
-
-		while ($res = $this->db->next()) {
-			$scenario_object_frame = new ScenarioObjectFrame();
-			$scenario_object_frame->update($res);
-			array_push($frames, $scenario_object_frame);
-		}
-
-		$this->setFrames($frames);
+		$list = ScenarioObjectFrame::where(['id_scenario_object' => $this->id]);
+		$this->setFrames($list);
 	}
 }

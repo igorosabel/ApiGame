@@ -26,7 +26,7 @@ class DeleteWorldComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id = $req->getParamInt('id');
 
 		if (is_null($id)) {
@@ -34,8 +34,8 @@ class DeleteWorldComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$world = new World();
-			if ($world->find(['id' => $id])) {
+			$world = World::findOne(['id' => $id]);
+			if (!is_null($world)) {
 				$origin_world = $this->ws->getOriginWorld();
 				$this->as->deleteWorld($world, $origin_world);
 			}

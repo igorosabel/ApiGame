@@ -2,77 +2,70 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Connection;
 
 class Scenario extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único del escenario'
-			),
-			new OModelField(
-				name: 'id_world',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'world.id',
-				comment: 'Id del mundo al que pertenece el escenario'
-			),
-			new OModelField(
-				name: 'name',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 100,
-				comment: 'Nombre del escenario'
-			),
-			new OModelField(
-				name: 'start_x',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Indica la casilla X de la que se sale'
-			),
-			new OModelField(
-				name: 'start_y',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Indica la casilla Y de la que se sale'
-			),
-			new OModelField(
-				name: 'initial',
-				type: OMODEL_BOOL,
-				comment: 'Indica si es el escenario inicial 1 o no 0 del mundo'
-			),
-			new OModelField(
-				name: 'friendly',
-				type: OMODEL_BOOL,
-				nullable: false,
-				default: false,
-				comment: 'Indica si el escenario es amistoso'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único del escenario'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id del mundo al que pertenece el escenario',
+	  nullable: false,
+	  ref: 'world.id',
+	  default: null
+	)]
+	public ?int $id_world;
+
+	#[OField(
+	  comment: 'Nombre del escenario',
+	  nullable: false,
+	  max: 100,
+	  default: null
+	)]
+	public ?string $name;
+
+	#[OField(
+	  comment: 'Indica la casilla X de la que se sale',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $start_x;
+
+	#[OField(
+	  comment: 'Indica la casilla Y de la que se sale',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $start_y;
+
+	#[OField(
+	  comment: 'Indica si es el escenario inicial 1 o no 0 del mundo'
+	)]
+	public ?bool $initial;
+
+	#[OField(
+	  comment: 'Indica si el escenario es amistoso',
+	  nullable: false,
+	  default: false
+	)]
+	public ?bool $friendly;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private $world = null;
 
@@ -105,8 +98,7 @@ class Scenario extends OModel {
 	 * @return void
 	 */
 	public function loadWorld(): void {
-		$world = new World();
-		$world->find(['id' => $this->get('id_world')]);
+		$world = World::findOne(['id' => $this->id_world]);
 		$this->setWorld($world);
 	}
 
@@ -141,17 +133,8 @@ class Scenario extends OModel {
 	 * @return void
 	 */
 	public function loadData(): void {
-		$sql = "SELECT * FROM `scenario_data` WHERE `id_scenario` = ?";
-		$this->db->query($sql, [$this->get('id')]);
-		$data = [];
-
-		while ($res = $this->db->next()) {
-			$scenario_data = new ScenarioData();
-			$scenario_data->update($res);
-			array_push($data, $scenario_data);
-		}
-
-		$this->setData($data);
+		$list = ScenarioData::where(['id_scenario' => $this->id]);
+		$this->setData($list);
 	}
 
 	private ?array $connections = null;
@@ -185,17 +168,8 @@ class Scenario extends OModel {
 	 * @return void
 	 */
 	public function loadConnections(): void {
-		$sql = "SELECT * FROM `connection` WHERE `id_from` = ?";
-		$this->db->query($sql, [$this->get('id')]);
-		$connections = [];
-
-		while ($res = $this->db->next()) {
-			$connection = new Connection();
-			$connection->update($res);
-			array_push($connections, $connection);
-		}
-
-		$this->setConnections($connections);
+		$list = Connection::where(['id_from' => $this->id]);
+		$this->setConnections($list);
 	}
 
 	/**
@@ -203,7 +177,7 @@ class Scenario extends OModel {
 	 */
 	public function getMapUrl(): string {
 		global $core;
-		return $core->config->getUrl('base').'/maps/'.$this->get('id_world').'-'.$this->get('id').'.png';
+		return $core->config->getUrl('base') . '/maps/' . $this->id_world . '-' . $this->id . '.png';
 	}
 
 	/**
@@ -212,10 +186,11 @@ class Scenario extends OModel {
 	 * @return void
 	 */
 	public function deleteFull(): void {
+		$db = new ODB();
 		$sql = "DELETE FROM `connection` WHERE `id_from` = ? OR `id_to` = ?";
-		$this->db->query($sql, [$this->get('id'), $this->get('id')]);
+		$db->query($sql, [$this->id, $this->id]);
 		$sql = "DELETE FROM `scenario_data` WHERE `id_scenario` = ?";
-		$this->db->query($sql, [$this->get('id')]);
+		$db->query($sql, [$this->id]);
 
 		$this->delete();
 	}

@@ -24,7 +24,7 @@ class GetBackgroundCategoryListComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$this->list = new BackgroundCategoryListComponent(['list' => $this->as->getBackgroundCategories()]);
 	}
 }

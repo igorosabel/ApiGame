@@ -2,83 +2,76 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Item;
 
 class Equipment extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único para cada equipamiento'
-			),
-			new OModelField(
-				name: 'id_game',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'game.id',
-				comment: 'Id de la partida a la que pertenece el equipamiento'
-			),
-			new OModelField(
-				name: 'head',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'item.id',
-				comment: 'Id del item que va en la cabeza'
-			),
-			new OModelField(
-				name: 'necklace',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'item.id',
-				comment: 'Id del item que va al cuello'
-			),
-			new OModelField(
-				name: 'body',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'item.id',
-				comment: 'Id del item que viste'
-			),
-			new OModelField(
-				name: 'boots',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'item.id',
-				comment: 'Id del item usado como botas'
-			),
-			new OModelField(
-				name: 'weapon',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'item.id',
-				comment: 'Id del item que usa como arma'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único para cada equipamiento'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id de la partida a la que pertenece el equipamiento',
+	  nullable: false,
+	  ref: 'game.id',
+	  default: null
+	)]
+	public ?int $id_game;
+
+	#[OField(
+	  comment: 'Id del item que va en la cabeza',
+	  nullable: true,
+	  ref: 'item.id',
+	  default: null
+	)]
+	public ?int $head;
+
+	#[OField(
+	  comment: 'Id del item que va al cuello',
+	  nullable: true,
+	  ref: 'item.id',
+	  default: null
+	)]
+	public ?int $necklace;
+
+	#[OField(
+	  comment: 'Id del item que viste',
+	  nullable: true,
+	  ref: 'item.id',
+	  default: null
+	)]
+	public ?int $body;
+
+	#[OField(
+	  comment: 'Id del item usado como botas',
+	  nullable: true,
+	  ref: 'item.id',
+	  default: null
+	)]
+	public ?int $boots;
+
+	#[OField(
+	  comment: 'Id del item que usa como arma',
+	  nullable: true,
+	  ref: 'item.id',
+	  default: null
+	)]
+	public ?int $weapon;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?array $items = null;
 
@@ -131,8 +124,7 @@ class Equipment extends OModel {
 	 * @return Item Item indicado
 	 */
 	public function getItem(int $id): Item {
-		$item = new Item();
-		$item->find(['id' => $id]);
+		$item = Item::findOne(['id' => $id]);
 		return $item;
 	}
 

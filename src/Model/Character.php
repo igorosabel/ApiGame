@@ -2,166 +2,160 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
+use Osumi\OsumiFramework\ORM\ODB;
 
 class Character extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único de cada tipo de personaje'
-			),
-			new OModelField(
-				name: 'name',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 50,
-				comment: 'Nombre del tipo de personaje'
-			),
-			new OModelField(
-				name: 'width',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Anchura del personaje en casillas'
-			),
-			new OModelField(
-				name: 'block_width',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Anchura del espacio que bloquea'
-			),
-			new OModelField(
-				name: 'height',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Altura del personaje en casillas'
-			),
-			new OModelField(
-				name: 'block_height',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Altura del espacio que bloquea'
-			),
-			new OModelField(
-				name: 'fixed_position',
-				type: OMODEL_BOOL,
-				nullable: false,
-				default: false,
-				comment: 'Indica si el personaje se queda quieto o no'
-			),
-			new OModelField(
-				name: 'id_asset_up',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Imagen del personaje al mirar hacia arriba'
-			),
-			new OModelField(
-				name: 'id_asset_down',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Imagen del personaje al mirar hacia abajo'
-			),
-			new OModelField(
-				name: 'id_asset_left',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Imagen del personaje al mirar hacia la izquierda'
-			),
-			new OModelField(
-				name: 'id_asset_right',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Imagen del personaje al mirar hacia la derecha'
-			),
-			new OModelField(
-				name: 'type',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Tipo de personaje NPC 0 Enemigo 1'
-			),
-			new OModelField(
-				name: 'health',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Salud del tipo de personaje'
-			),
-			new OModelField(
-				name: 'attack',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Puntos de daño que hace el tipo de personaje'
-			),
-			new OModelField(
-				name: 'defense',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Puntos de defensa del personaje'
-			),
-			new OModelField(
-				name: 'speed',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Velocidad el tipo de personaje'
-			),
-			new OModelField(
-				name: 'drop_id_item',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'item.id',
-				comment: 'Id del elemento que da el tipo de personaje al morir'
-			),
-			new OModelField(
-				name: 'drop_chance',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Porcentaje de veces que otorga premio al morir'
-			),
-			new OModelField(
-				name: 'respawn',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				comment: 'Tiempo para que vuelva a aparecer el personaje en caso de ser un enemigo'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único de cada tipo de personaje'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Nombre del tipo de personaje',
+	  nullable: false,
+	  max: 50,
+	  default: null
+	)]
+	public ?string $name;
+
+	#[OField(
+	  comment: 'Anchura del personaje en casillas',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $width;
+
+	#[OField(
+	  comment: 'Anchura del espacio que bloquea',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $block_width;
+
+	#[OField(
+	  comment: 'Altura del personaje en casillas',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $height;
+
+	#[OField(
+	  comment: 'Altura del espacio que bloquea',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $block_height;
+
+	#[OField(
+	  comment: 'Indica si el personaje se queda quieto o no',
+	  nullable: false,
+	  default: false
+	)]
+	public ?bool $fixed_position;
+
+	#[OField(
+	  comment: 'Imagen del personaje al mirar hacia arriba',
+	  nullable: true,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset_up;
+
+	#[OField(
+	  comment: 'Imagen del personaje al mirar hacia abajo',
+	  nullable: true,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset_down;
+
+	#[OField(
+	  comment: 'Imagen del personaje al mirar hacia la izquierda',
+	  nullable: true,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset_left;
+
+	#[OField(
+	  comment: 'Imagen del personaje al mirar hacia la derecha',
+	  nullable: true,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset_right;
+
+	#[OField(
+	  comment: 'Tipo de personaje NPC 0 Enemigo 1',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $type;
+
+	#[OField(
+	  comment: 'Salud del tipo de personaje',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $health;
+
+	#[OField(
+	  comment: 'Puntos de daño que hace el tipo de personaje',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $attack;
+
+	#[OField(
+	  comment: 'Puntos de defensa del personaje',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $defense;
+
+	#[OField(
+	  comment: 'Velocidad el tipo de personaje',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $speed;
+
+	#[OField(
+	  comment: 'Id del elemento que da el tipo de personaje al morir',
+	  nullable: true,
+	  ref: 'item.id',
+	  default: null
+	)]
+	public ?int $drop_id_item;
+
+	#[OField(
+	  comment: 'Porcentaje de veces que otorga premio al morir',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $drop_chance;
+
+	#[OField(
+	  comment: 'Tiempo para que vuelva a aparecer el personaje en caso de ser un enemigo',
+	  nullable: true,
+	  default: null
+	)]
+	public ?int $respawn;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?array $asset_list = null;
 
@@ -204,13 +198,12 @@ class Character extends OModel {
 		$asset_list = ['up' => null, 'down' => null, 'left' => null, 'right' => null];
 		foreach ($asset_list as $key => $value) {
 			if (!is_null($this->get('id_asset_'.$key))) {
-				$asset_list[$key] = new Asset();
-				$asset_list[$key]->find(['id' => $this->get('id_asset_'.$key)]);
+				$asset_list[$key] = Asset::findOne(['id' => $this->{'id_asset_' . $key}]);
 			}
 		}
 
 		$asset_list['drop'] = null;
-		if (!is_null($this->get('drop_id_item'))) {
+		if (!is_null($this->drop_id_item)) {
 			$drop_item = $this->getDropItem();
 			$asset_list['drop'] = $drop_item->getAsset();
 		}
@@ -249,8 +242,7 @@ class Character extends OModel {
 	 * @return void
 	 */
 	public function loadDropItem(): void {
-		$drop_item = new Item();
-		$drop_item->find(['id' => $this->get('drop_id_item')]);
+		$drop_item = Item::findOne(['id' => $this->drop_id_item]);
 		$this->setDropItem($drop_item);
 	}
 
@@ -290,13 +282,13 @@ class Character extends OModel {
 	 * @return void
 	 */
 	public function loadFrames(): void {
+		$db = new ODB();
 		$sql = "SELECT * FROM `character_frame` WHERE `id_character` = ? ORDER BY `orientation`, `order`";
-		$this->db->query($sql, [$this->get('id')]);
+		$db->query($sql, [$this->id]);
 		$list = ['up' => [], 'down' => [], 'left' => [], 'right' => []];
-		while ($res=$this->db->next()) {
-			$character_frame = new CharacterFrame();
-			$character_frame->update($res);
-			array_push($list[$character_frame->get('orientation')], $character_frame);
+		while ($res = $db->next()) {
+			$character_frame = CharacterFrame::from($res);
+			$list[$character_frame->orientation][] = $character_frame;
 		}
 		$this->setFrames($list);
 	}
@@ -315,16 +307,8 @@ class Character extends OModel {
 	}
 
 	public function loadNarratives(): void {
-		$sql = "SELECT * FROM `narrative` WHERE `id_character` = ? ORDER BY `order`";
-		$this->db->query($sql, [$this->get('id')]);
-		$narratives = [];
+		$list = Narrative::where(['id_character' => $this->id], ['order_by' => 'order']);
 
-		while ($res = $this->db->next()) {
-			$narrative = new Narrative();
-			$narrative->update($res);
-			array_push($narratives, $narrative);
-		}
-
-		$this->setNarratives($narratives);
+		$this->setNarratives($list);
 	}
 }

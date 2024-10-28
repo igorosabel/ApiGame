@@ -2,25 +2,25 @@
 null
 <?php else: ?>
 {
-	"id": <?php echo $item->get('id') ?>,
-	"type": <?php echo $item->get('type') ?>,
-	"idAsset": <?php echo $item->get('id_asset') ?>,
+	"id": <?php echo $item->id ?>,
+	"type": <?php echo $item->type ?>,
+	"idAsset": <?php echo $item->id_asset ?>,
 	"assetUrl": "<?php echo urlencode($item->getAsset()->getUrl()) ?>",
-	"name": "<?php echo urlencode($item->get('name')) ?>",
-	"money": <?php echo is_null($item->get('money')) ? 'null' : $item->get('money') ?>,
-	"health": <?php echo is_null($item->get('health')) ? 'null' : $item->get('health') ?>,
-	"attack": <?php echo is_null($item->get('attack')) ? 'null' : $item->get('attack') ?>,
-	"defense": <?php echo is_null($item->get('defense')) ? 'null' : $item->get('defense') ?>,
-	"speed": <?php echo is_null($item->get('speed')) ? 'null' : $item->get('speed') ?>,
-	"wearable": <?php echo is_null($item->get('wearable')) ? 'null' : $item->get('wearable') ?>,
+	"name": "<?php echo urlencode($item->name) ?>",
+	"money": <?php echo is_null($item->money) ? 'null' : $item->money ?>,
+	"health": <?php echo is_null($item->health) ? 'null' : $item->health ?>,
+	"attack": <?php echo is_null($item->attack) ? 'null' : $item->attack ?>,
+	"defense": <?php echo is_null($item->defense) ? 'null' : $item->defense ?>,
+	"speed": <?php echo is_null($item->speed) ? 'null' : $item->speed ?>,
+	"wearable": <?php echo is_null($item->wearable) ? 'null' : $item->wearable ?>,
 	"frames": [
 	<?php foreach ($item->getFrames() as $j => $item_frame): ?>
 		{
-			"id": <?php echo $item_frame->get('id') ?>,
-			"idAsset": <?php echo $item_frame->get('id_asset') ?>,
+			"id": <?php echo $item_frame->id ?>,
+			"idAsset": <?php echo $item_frame->id_asset ?>,
 			"assetUrl": "<?php echo urlencode($item_frame->getAsset()->getUrl()) ?>",
-			"order": <?php echo $item_frame->get('order') ?>
-		}<?php if ($j<count($item->getFrames())-1): ?>,<?php endif ?>
+			"order": <?php echo $item_frame->order ?>
+		}<?php if ($j < count($item->getFrames()) - 1): ?>,<?php endif ?>
 	<?php endforeach ?>
 	]
 }

@@ -2,51 +2,42 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 
 class Connection extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id_from',
-				type: OMODEL_PK,
-				incr: false,
-				ref: 'scenario.id',
-				comment: 'Id de un escenario'
-			),
-			new OModelField(
-				name: 'id_to',
-				type: OMODEL_PK,
-				incr: false,
-				ref: 'scenario.id',
-				comment: 'Id del escenario con el que conecta'
-			),
-			new OModelField(
-				name: 'orientation',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 5,
-				comment: 'Sentido de la conexión up / down / left / right'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id de un escenario',
+	  ref: 'scenario.id'
+	)]
+	public ?int $id_from;
 
-		parent::load($model);
-	}
+	#[OPK(
+	  comment: 'Id del escenario con el que conecta',
+	  ref: 'scenario.id'
+	)]
+	public ?int $id_to;
+
+	#[OField(
+	  comment: 'Sentido de la conexión up / down / left / right',
+	  nullable: false,
+	  max: 5,
+	  default: null
+	)]
+	public ?string $orientation;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Scenario $from = null;
 
@@ -79,8 +70,7 @@ class Connection extends OModel {
 	 * @return void
 	 */
 	public function loadFrom(): void {
-		$from = new Scenario();
-		$from->find(['id' => $this->get('id_from')]);
+		$from = Scenario::findOne(['id' => $this->id_from]);
 		$this->setFrom($from);
 	}
 
@@ -115,8 +105,7 @@ class Connection extends OModel {
 	 * @return void
 	 */
 	public function loadTo(): void {
-		$to = new Scenario();
-		$to->find(['id' => $this->get('id_to')]);
+		$to = Scenario::findOne(['id' => $this->id_to]);
 		$this->setTo($to);
 	}
 }

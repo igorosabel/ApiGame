@@ -2,124 +2,117 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Equipment;
 use Osumi\OsumiFramework\App\Model\Scenario;
 
 class Game extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único de cada partida'
-			),
-			new OModelField(
-				name: 'id_user',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'user.id',
-				comment: 'Id del usuario al que pertenece la partida'
-			),
-			new OModelField(
-				name: 'name',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 50,
-				comment: 'Nombre del personaje'
-			),
-			new OModelField(
-				name: 'id_scenario',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'scenario.id',
-				comment: 'Id del escenario en el que está el usuario'
-			),
-			new OModelField(
-				name: 'position_x',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Última posición X guardada del jugador'
-			),
-			new OModelField(
-				name: 'position_y',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Última posición Y guardada del jugador'
-			),
-			new OModelField(
-				name: 'orientation',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 5,
-				comment: 'Orientación del personaje al cargar el escenario'
-			),
-			new OModelField(
-				name: 'money',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Cantidad de dinero que tiene el jugador'
-			),
-			new OModelField(
-				name: 'health',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: 100,
-				comment: 'Salud actual del jugador'
-			),
-			new OModelField(
-				name: 'max_health',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: 100,
-				comment: 'Máxima salud del jugador'
-			),
-			new OModelField(
-				name: 'attack',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Puntos de daño que hace el personaje'
-			),
-			new OModelField(
-				name: 'defense',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Puntos de defensa del personaje'
-			),
-			new OModelField(
-				name: 'speed',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Puntos de velocidad del personaje'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único de cada partida'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id del usuario al que pertenece la partida',
+	  nullable: false,
+	  ref: 'user.id',
+	  default: null
+	)]
+	public ?int $id_user;
+
+	#[OField(
+	  comment: 'Nombre del personaje',
+	  nullable: false,
+	  max: 50,
+	  default: null
+	)]
+	public ?string $name;
+
+	#[OField(
+	  comment: 'Id del escenario en el que está el usuario',
+	  nullable: false,
+	  ref: 'scenario.id',
+	  default: null
+	)]
+	public ?int $id_scenario;
+
+	#[OField(
+	  comment: 'Última posición X guardada del jugador',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $position_x;
+
+	#[OField(
+	  comment: 'Última posición Y guardada del jugador',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $position_y;
+
+	#[OField(
+	  comment: 'Orientación del personaje al cargar el escenario',
+	  nullable: false,
+	  max: 5,
+	  default: null
+	)]
+	public ?string $orientation;
+
+	#[OField(
+	  comment: 'Cantidad de dinero que tiene el jugador',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $money;
+
+	#[OField(
+	  comment: 'Salud actual del jugador',
+	  nullable: false,
+	  default: 100
+	)]
+	public ?int $health;
+
+	#[OField(
+	  comment: 'Máxima salud del jugador',
+	  nullable: false,
+	  default: 100
+	)]
+	public ?int $max_health;
+
+	#[OField(
+	  comment: 'Puntos de daño que hace el personaje',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $attack;
+
+	#[OField(
+	  comment: 'Puntos de defensa del personaje',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $defense;
+
+	#[OField(
+	  comment: 'Puntos de velocidad del personaje',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $speed;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Scenario $scenario = null;
 
@@ -152,8 +145,7 @@ class Game extends OModel {
 	 * @return void
 	 */
 	public function loadScenario(): void {
-		$scenario = new Scenario();
-		$scenario->find(['id' => $this->get('id_scenario')]);
+		$scenario = Scenario::findOne(['id' => $this->id_scenario]);
 		$this->setScenario($scenario);
 	}
 
@@ -188,17 +180,8 @@ class Game extends OModel {
 	 * @return void
 	 */
 	public function loadInventory(): void {
-		$sql = "SELECT * FROM `inventory_item` WHERE `id_game` = ? ORDER BY `order`";
-		$this->db->query($sql, [$this->get('id')]);
-		$inventory = [];
-
-		while ($res = $this->db->next()) {
-			$inventory_item = new InventoryItem();
-			$inventory_item->update($res);
-			array_push($inventory, $inventory_item);
-		}
-
-		$this->setInventory($inventory);
+		$list = InventoryItem::where(['id_game' => $this->id], ['order_by' => 'order']);
+		$this->setInventory($list);
 	}
 
 	private ?Equipment $equipment = null;
@@ -232,8 +215,10 @@ class Game extends OModel {
 	 * @return void
 	 */
 	public function loadEquipment(): void {
-		$equipment = new Equipment();
-		$equipment->find(['id_game' => $this->get('id')]);
+		$equipment = Equipment::findOne(['id_game' => $this->id]);
+		if (is_null($equipment)) {
+			$equipment = Equipment::create();
+		}
 		$this->setEquipment($equipment);
 	}
 }

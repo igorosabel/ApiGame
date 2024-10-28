@@ -2,57 +2,50 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 
 class ScenarioObjectDrop extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único para cada recurso de un objeto'
-			),
-			new OModelField(
-				name: 'id_scenario_object',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'scenario_object.id',
-				comment: 'Id del objeto de escenario'
-			),
-			new OModelField(
-				name: 'id_item',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'item.id',
-				comment: 'Id del item obtenido'
-			),
-			new OModelField(
-				name: 'num',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Número de items que se obtienen'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único para cada recurso de un objeto'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id del objeto de escenario',
+	  nullable: false,
+	  ref: 'scenario_object.id',
+	  default: null
+	)]
+	public ?int $id_scenario_object;
+
+	#[OField(
+	  comment: 'Id del item obtenido',
+	  nullable: false,
+	  ref: 'item.id',
+	  default: null
+	)]
+	public ?int $id_item;
+
+	#[OField(
+	  comment: 'Número de items que se obtienen',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $num;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Item $item = null;
 
@@ -85,8 +78,7 @@ class ScenarioObjectDrop extends OModel {
 	 * @return void
 	 */
 	public function loadItem(): void {
-		$item = new Item();
-		$item->find(['id' => $this->get('id_item')]);
+		$item = Item::findOne(['id' => $this->id_item]);
 		$this->setItem($item);
 	}
 }

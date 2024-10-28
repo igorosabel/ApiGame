@@ -23,7 +23,7 @@ class SaveItemComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id       = $req->getParamInt('id');
 		$type     = $req->getParamInt('type');
 		$id_asset = $req->getParamInt('idAsset');
@@ -41,19 +41,19 @@ class SaveItemComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$item = new Item();
+			$item = Item::create();
 			if (!is_null($id)) {
-				$item->find(['id' => $id]);
+        $item = Item::findOne(['id' => $id]);
 			}
-			$item->set('type',     $type);
-			$item->set('id_asset', $id_asset);
-			$item->set('name',     $name);
-			$item->set('money',    $money);
-			$item->set('health',   $health);
-			$item->set('attack',   $attack);
-			$item->set('defense',  $defense);
-			$item->set('speed',    $speed);
-			$item->set('wearable', $wearable);
+			$item->type     = $type;
+			$item->id_asset = $id_asset;
+			$item->name     = $name;
+			$item->money    = $money;
+			$item->health   = $health;
+			$item->attack   = $attack;
+			$item->defense  = $defense;
+			$item->speed    = $speed;
+			$item->wearable = $wearable;
 			$item->save();
 
 			$this->as->updateItemFrames($item, $frames);

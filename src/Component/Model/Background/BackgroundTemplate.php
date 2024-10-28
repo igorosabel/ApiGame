@@ -2,11 +2,11 @@
 null
 <?php else: ?>
 {
-	"id": <?php echo $background->get('id') ?>,
-	"idBackgroundCategory": <?php echo $background->get('id_background_category') ?>,
-	"idAsset": <?php echo $background->get('id_asset') ?>,
+	"id": <?php echo $background->id ?>,
+	"idBackgroundCategory": <?php echo $background->id_background_category ?>,
+	"idAsset": <?php echo $background->id_asset ?>,
 	"assetUrl": "<?php echo urlencode($background->getAsset()->getUrl()) ?>",
-	"name": "<?php echo urlencode($background->get('name')) ?>",
-	"crossable": <?php echo $background->get('crossable') ? 'true' : 'false' ?>
+	"name": "<?php echo urlencode($background->name) ?>",
+	"crossable": <?php echo $background->crossable ? 'true' : 'false' ?>
 }
 <?php endif ?>

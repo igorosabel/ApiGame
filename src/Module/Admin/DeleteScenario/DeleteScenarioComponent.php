@@ -26,7 +26,7 @@ class DeleteScenarioComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id = $req->getParamInt('id');
 
 		if (is_null($id)) {
@@ -34,8 +34,8 @@ class DeleteScenarioComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$scenario = new Scenario();
-			if ($scenario->find(['id' => $id])) {
+			$scenario = Scenario::findOne(['id' => $id]);
+			if (!is_null($scenario)) {
 				$origin_world = $this->ws->getOriginWorld();
 				$this->as->deleteScenario($scenario, $origin_world);
 			}

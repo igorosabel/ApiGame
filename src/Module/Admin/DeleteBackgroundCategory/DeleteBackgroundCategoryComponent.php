@@ -24,7 +24,7 @@ class DeleteBackgroundCategoryComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id = $req->getParamInt('id');
 
 		if (is_null($id)) {
@@ -32,9 +32,9 @@ class DeleteBackgroundCategoryComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$background_category = new BackgroundCategory();
-			if ($background_category->find(['id' => $id])) {
-				$return  = $this->as->deleteBackgroundCategory($background_category);
+			$background_category = BackgroundCategory::findOne(['id' => $id]);
+			if (!is_null($background_category)) {
+				$return = $this->as->deleteBackgroundCategory($background_category);
 				$this->status  = $return['status'];
 				$this->message = $return['message'];
 			}

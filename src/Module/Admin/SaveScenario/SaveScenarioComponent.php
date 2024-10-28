@@ -15,7 +15,7 @@ class SaveScenarioComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id       = $req->getParamInt('id');
 		$id_world = $req->getParamInt('idWorld');
 		$name     = $req->getParamString('name');
@@ -26,13 +26,13 @@ class SaveScenarioComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$scenario = new Scenario();
+			$scenario = Scenario::create();
 			if (!is_null($id)) {
-				$scenario->find(['id' => $id]);
+        $scenario = Scenario::findOne(['id' => $id]);
 			}
-			$scenario->set('id_world', $id_world);
-			$scenario->set('name',     $name);
-			$scenario->set('friendly', $friendly);
+			$scenario->id_world = $id_world;
+			$scenario->name     = $name;
+			$scenario->friendly = $friendly;
 
 			$scenario->save();
 		}

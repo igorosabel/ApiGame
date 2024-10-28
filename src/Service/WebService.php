@@ -3,16 +3,27 @@
 namespace Osumi\OsumiFramework\App\Service;
 
 use Osumi\OsumiFramework\Core\OService;
-use Osumi\OsumiFramework\DB\ODB;
+use Osumi\OsumiFramework\ORM\ODB;
 use Osumi\OsumiFramework\App\Model\Game;
 use Osumi\OsumiFramework\App\Model\World;
+use Osumi\OsumiFramework\App\Model\User;
 
 class WebService extends OService {
 	/**
-	 * Load service tools
+	 * Función para iniciar sesión en el juego
+	 *
+	 * @param string $email Email del usuario
+	 *
+	 * @param string $pass Contraseña del usuario
+	 *
+	 * @return ?User Devuelve el usuario si los datos son correctos o null en caso contrario
 	 */
-	function __construct() {
-		$this->loadService();
+	public function userLogin(string $email, string $pass): ?User {
+		$user = User::findOne(['email' => $email]);
+		if (!is_null($user) && password_verify($pass, $user->pass)) {
+				return $user;
+		}
+		return null;
 	}
 
 	/**
@@ -27,18 +38,7 @@ class WebService extends OService {
 	 * @return World Mundo cuyas tres palabras coincidan, si lo hay
 	 */
 	public function getWorldByWords($word_one, $word_two, $word_three): ?World {
-		$db = new ODB();
-		$sql = "SELECT * FROM `world` WHERE `word_one` = ? AND `word_two` = ? AND `word_three` = ?";
-		$db->query($sql, [$word_one, $word_two, $word_three]);
-
-		if ($res = $db->next()) {
-			$world = new World();
-			$world->update($res);
-
-			return $world;
-		}
-
-		return null;
+		return World::findOne(['word_one' => $word_one, 'word_two' => $word_two, 'word_three' => $word_three]);
 	}
 
 	/**
@@ -62,18 +62,7 @@ class WebService extends OService {
 	 * @return array Lista de partidas
 	 */
 	public function getGames(int $id_user): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `game` WHERE `id_user` = ?";
-		$db->query($sql, [$id_user]);
-		$games = [];
-
-		while ($res = $db->next()) {
-			$game = new Game();
-			$game->update($res);
-			array_push($games, $game);
-		}
-
-		return $games;
+		return Game::where(['id_user' => $id_user]);
 	}
 
 	/**
@@ -90,9 +79,8 @@ class WebService extends OService {
 		$worlds = [];
 
 		while ($res = $db->next()) {
-			$world = new World();
-			$world->update($res);
-			array_push($worlds, $world);
+			$world = World::from($res);
+			$worlds[] = $world;
 		}
 
 		return $worlds;
@@ -108,23 +96,23 @@ class WebService extends OService {
 	public function deleteGame(Game $game): void {
 		$db = new ODB();
 		$sql = "DELETE FROM `inventory_item` WHERE `id_game` = ?";
-		$db->query($sql, [$game->get('id')]);
+		$db->query($sql, [$game->id]);
 		$sql = "DELETE FROM `equipment` WHERE `id_game` = ?";
-		$db->query($sql, [$game->get('id')]);
+		$db->query($sql, [$game->id]);
 		$sql = "DELETE FROM `world_unlocked` WHERE `id_game` = ?";
-		$db->query($sql, [$game->get('id')]);
+		$db->query($sql, [$game->id]);
 
-		$game->set('name',        null);
-		$game->set('id_scenario', null);
-		$game->set('position_x',  null);
-		$game->set('position_y',  null);
-		$game->set('orientation', null);
-		$game->set('money',       null);
-		$game->set('health',      $this->getConfig()->getExtra('start_health'));
-		$game->set('max_health',  null);
-		$game->set('attack',      null);
-		$game->set('defense',     null);
-		$game->set('speed',       null);
+		$game->name        = null;
+		$game->id_scenario = null;
+		$game->position_x  = null;
+		$game->position_y  = null;
+		$game->orientation = null;
+		$game->money       = null;
+		$game->health      = $this->getConfig()->getExtra('start_health');
+		$game->max_health  = null;
+		$game->attack      = null;
+		$game->defense     = null;
+		$game->speed       = null;
 		$game->save();
 
 		$this->updateGameStats($game);
@@ -146,16 +134,16 @@ class WebService extends OService {
 		$equipment = $game->getEquipment();
 		$items     = $equipment->getAllItems();
 		foreach ($items as $item) {
-			$max_health += (!is_null($item->get('health'))  ? $item->get('health')  : 0);
-			$attack     += (!is_null($item->get('attack'))  ? $item->get('attack')  : 0);
-			$defense    += (!is_null($item->get('defense')) ? $item->get('defense') : 0);
-			$speed      += (!is_null($item->get('speed'))   ? $item->get('speed')   : 0);
+			$max_health += (!is_null($item->health)  ? $item->health  : 0);
+			$attack     += (!is_null($item->attack)  ? $item->attack  : 0);
+			$defense    += (!is_null($item->defense) ? $item->defense : 0);
+			$speed      += (!is_null($item->speed)   ? $item->speed   : 0);
 		}
 
-		$game->set('max_health',  $max_health);
-		$game->set('attack',      $attack);
-		$game->set('defense',     $defense);
-		$game->set('speed',       $speed);
+		$game->max_health = $max_health;
+		$game->attack     = $attack;
+		$game->defense    = $defense;
+		$game->speed      = $speed;
 		$game->save();
 	}
 }

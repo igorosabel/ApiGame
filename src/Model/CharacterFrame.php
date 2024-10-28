@@ -2,66 +2,59 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Character;
 
 class CharacterFrame extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único de cada frame del tipo de personaje'
-			),
-			new OModelField(
-				name: 'id_character',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'character.id',
-				comment: 'Id del tipo de personaje al que pertenece el frame'
-			),
-			new OModelField(
-				name: 'id_asset',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Id del recurso usado como frame'
-			),
-			new OModelField(
-				name: 'orientation',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: null,
-				size: 5,
-				comment: 'Orientación de la imagen del frame up / down / left / right'
-			),
-			new OModelField(
-				name: 'order',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Orden del frame en la animación'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único de cada frame del tipo de personaje'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id del tipo de personaje al que pertenece el frame',
+	  nullable: false,
+	  ref: 'character.id',
+	  default: null
+	)]
+	public ?int $id_character;
+
+	#[OField(
+	  comment: 'Id del recurso usado como frame',
+	  nullable: false,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset;
+
+	#[OField(
+	  comment: 'Orientación de la imagen del frame up / down / left / right',
+	  nullable: false,
+	  max: 5,
+	  default: null
+	)]
+	public ?string $orientation;
+
+	#[OField(
+	  comment: 'Orden del frame en la animación',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $order;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?Character $character = null;
 
@@ -92,8 +85,7 @@ class CharacterFrame extends OModel {
 	 * @return void
 	 */
 	public function loadCharacter(): void {
-		$character = new Character();
-		$character->find(['id' => $this->get('id_character')]);
+		$character = Character::findOne(['id' => $this->id_character]);
 		$this->setCharacter($character);
 	}
 
@@ -128,8 +120,7 @@ class CharacterFrame extends OModel {
 	 * @return void
 	 */
 	public function loadAsset(): void {
-		$asset = new Asset();
-		$asset->find(['id' => $this->get('id_asset')]);
+		$asset = Asset::findOne(['id' => $this->id_asset]);
 		$this->setAsset($asset);
 	}
 }

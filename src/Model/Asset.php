@@ -2,59 +2,53 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
+use Osumi\OsumiFramework\ORM\ODB;
 use Osumi\OsumiFramework\App\Model\Tag;
 
 class Asset extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único de cada recurso'
-			),
-			new OModelField(
-				name: 'id_world',
-				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
-				ref: 'world.id',
-				comment: 'Id del mundo en el que se usa el recurso o NULL si sirve para todos'
-			),
-			new OModelField(
-				name: 'name',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: 'null',
-				size: 50,
-				comment: 'Nombre del recurso'
-			),
-			new OModelField(
-				name: 'ext',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: 'null',
-				size: 5,
-				comment: 'Extensión del archivo del recurso'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único de cada recurso'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id del mundo en el que se usa el recurso o NULL si sirve para todos',
+	  nullable: true,
+	  ref: 'world.id',
+	  default: null
+	)]
+	public ?int $id_world;
+
+	#[OField(
+	  comment: 'Nombre del recurso',
+	  nullable: false,
+	  max: 50,
+	  default: 'null'
+	)]
+	public ?string $name;
+
+	#[OField(
+	  comment: 'Extensión del archivo del recurso',
+	  nullable: false,
+	  max: 5,
+	  default: 'null'
+	)]
+	public ?string $ext;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	/**
 	 * Función para obtener la URL al recurso
@@ -63,7 +57,7 @@ class Asset extends OModel {
 	 */
 	public function getUrl(): string {
 		global $core;
-		return $core->config->getUrl('base').'/assets/'.$this->get('id').'.'.$this->get('ext');
+		return $core->config->getUrl('base') . '/assets/' . $this->id . '.' . $this->ext;
 	}
 
 	/**
@@ -73,7 +67,7 @@ class Asset extends OModel {
 	 */
 	public function getFile(): string {
 		global $core;
-		return $core->config->getDir('assets').$this->get('id').'.'.$this->get('ext');
+		return $core->config->getDir('assets') . $this->id . '.' . $this->ext;
 	}
 
 	private ?array $tags = null;
@@ -107,14 +101,14 @@ class Asset extends OModel {
 	 * @return void
 	 */
 	public function loadTags(): void {
+		$db = new ODB();
 		$sql = "SELECT * FROM `tag` WHERE `id` IN (SELECT `id_tag` FROM `asset_tag` WHERE `id_asset` = ?)";
-		$this->db->query($sql, [$this->get('id')]);
+		$db->query($sql, [$this->id]);
 		$list = [];
 
-		while ($res = $this->db->next()) {
-			$tag = new Tag();
-			$tag->update($res);
-			array_push($list, $tag);
+		while ($res = $db->next()) {
+			$tag = Tag::from($res);
+			$list[] = $tag;
 		}
 
 		$this->setTags($list);
@@ -129,7 +123,7 @@ class Asset extends OModel {
 		$list = $this->getTags();
 		$tags = [];
 		foreach ($list as $tag) {
-			array_push($tags, $tag->get('name'));
+			$tags[] = $tag->get('name');
 		}
 
 		return implode(', ', $tags);

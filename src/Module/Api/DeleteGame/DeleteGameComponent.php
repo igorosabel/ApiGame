@@ -23,7 +23,7 @@ class DeleteGameComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id_game = $req->getParamInt('id');
 
 		if (is_null($id_game)) {
@@ -31,8 +31,8 @@ class DeleteGameComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$game = new Game();
-			if ($game->find(['id' => $id_game])) {
+			$game = Game::findOne(['id' => $id_game]);
+			if (!is_null($game)) {
 				$this->ws->deleteGame($game);
 			}
 			else {

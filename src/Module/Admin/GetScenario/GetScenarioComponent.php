@@ -21,14 +21,14 @@ class GetScenarioComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
     $id = $req->getParamInt('id');
 		$this->scenario   = new ScenarioComponent();
 		$this->data       = new ScenarioDataListComponent();
 		$this->connection = new ConnectionListComponent();
 
-		$scenario = new Scenario();
-		if ($scenario->find(['id' => $id])) {
+		$scenario = Scenario::findOne(['id' => $id]);
+		if (!is_null($scenario)) {
 			$this->scenario->scenario = $scenario;
 			$this->data->list = $scenario->getData();
 			$this->connection->list = $scenario->getConnections();

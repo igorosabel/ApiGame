@@ -22,7 +22,7 @@ class GetScenarioConnectionsComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id_scenario = $req->getParamInt('id');
 
 		if (is_null($id_scenario)) {
@@ -30,8 +30,8 @@ class GetScenarioConnectionsComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$scenario = new Scenario();
-			if ($scenario->find(['id' => $id_scenario])){
+			$scenario = Scenario::findOne(['id' => $id_scenario]);
+			if (!is_null($scenario)) {
 				$this->list->list = $scenario->getConnections();
 			}
 			else {

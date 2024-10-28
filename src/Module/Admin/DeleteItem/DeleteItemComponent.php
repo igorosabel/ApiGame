@@ -23,7 +23,7 @@ class DeleteItemComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id = $req->getParamInt('id');
 
 		if (is_null($id)) {
@@ -31,7 +31,7 @@ class DeleteItemComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$return  = $this->as->deleteItem($id);
+			$return = $this->as->deleteItem($id);
 			$this->status  = $return['status'];
 			$this->message = $return['message'];
 		}

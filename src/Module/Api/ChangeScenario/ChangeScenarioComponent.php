@@ -15,7 +15,7 @@ class ChangeScenarioComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$to      = $req->getParamInt('to');
 		$x       = $req->getParamInt('x');
 		$y       = $req->getParamInt('y');
@@ -26,9 +26,9 @@ class ChangeScenarioComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$game = new Game();
+			$game = Game::findOne(['id' => $id_game]);
 
-			if ($game->find(['id' => $id_game])) {
+			if (!is_null($game)) {
 				$changed_x = false;
 				$changed_y = false;
 				$orientation = 'down';
@@ -51,10 +51,10 @@ class ChangeScenarioComponent extends OComponent {
 					$orientation = 'up';
 				}
 
-				$game->set('id_scenario', $to);
-				$game->set('position_x',  $x);
-				$game->set('position_y',  $y);
-				$game->set('orientation', $orientation);
+				$game->id_scenario = $to;
+				$game->position_x  = $x;
+				$game->position_y  = $y;
+				$game->orientation = $orientation;
 				$game->save();
 			}
 			else {

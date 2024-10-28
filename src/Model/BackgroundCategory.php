@@ -2,43 +2,35 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\Background;
 
 class BackgroundCategory extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único de cada categoría'
-			),
-			new OModelField(
-				name: 'name',
-				type: OMODEL_TEXT,
-				nullable: false,
-				default: 'null',
-				size: 50,
-				comment: 'Nombre de la categoría'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único de cada categoría'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Nombre de la categoría',
+	  nullable: false,
+	  max: 50
+	)]
+	public ?string $name;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?array $backgrounds = null;
 
@@ -71,16 +63,7 @@ class BackgroundCategory extends OModel {
 	 * @return void
 	 */
 	public function loadBackgrounds(): void {
-		$sql = "SELECT * FROM `background` WHERE `id_background_category` = ? ORDER BY `name`";
-		$this->db->query($sql, [$this->get('id')]);
-		$backgrounds = [];
-
-		while ($res = $this->db->next()) {
-			$background = new Background();
-			$background->update($res);
-			array_push($backgrounds, $background);
-		}
-
-		$this->setBackgrounds($backgrounds);
+		$list = Background::where(['id_background_category' => $this->id], ['order_by' => 'name']);
+		$this->setBackgrounds($list);
 	}
 }

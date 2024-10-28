@@ -3,7 +3,7 @@
 namespace Osumi\OsumiFramework\App\Service;
 
 use Osumi\OsumiFramework\Core\OService;
-use Osumi\OsumiFramework\DB\ODB;
+use Osumi\OsumiFramework\ORM\ODB;
 use Osumi\OsumiFramework\App\Model\ScenarioObjectDrop;
 use Osumi\OsumiFramework\App\Model\Background;
 use Osumi\OsumiFramework\App\Model\ScenarioObject;
@@ -22,13 +22,24 @@ use Osumi\OsumiFramework\App\Model\World;
 use Osumi\OsumiFramework\App\Model\ScenarioObjectFrame;
 use Osumi\OsumiFramework\App\Model\Asset;
 use Osumi\OsumiFramework\App\Model\AssetTag;
+use Osumi\OsumiFramework\App\Model\User;
 
 class AdminService extends OService {
 	/**
-	 * Load service tools
+	 * Función para iniciar sesión en el admin
+	 *
+	 * @param string $email Email del usuario
+	 *
+	 * @param string $pass Contraseña del usuario
+	 *
+	 * @return ?User Devuelve el usuario si los datos son correctos o null en caso contrario
 	 */
-	function __construct() {
-		$this->loadService();
+	public function adminLogin(string $email, string $pass): ?User {
+		$user = User::findOne(['email' => $email]);
+		if (!is_null($user) && password_verify($pass, $user->pass) && $user->admin) {
+				return $user;
+		}
+		return null;
 	}
 
 	/**
@@ -37,18 +48,7 @@ class AdminService extends OService {
 	 * @return array Listado de mundos
 	 */
 	public function getWorlds(): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `world` ORDER BY `name` ASC";
-		$db->query($sql);
-		$ret = [];
-
-		while ($res=$db->next()) {
-			$world = new World();
-			$world->update($res);
-			array_push($ret, $world);
-		}
-
-		return $ret;
+		return World::all(['order_by' => 'name#asc']);
 	}
 
 	/**
@@ -65,20 +65,20 @@ class AdminService extends OService {
 		$origin_world_initial_scenario = $origin_world->getInitialScenario();
 		$origin_world_initial_scenario_id = null;
 		if (!is_null($origin_world_initial_scenario)) {
-			$origin_world_initial_scenario_id = $origin_world_initial_scenario->get('id');
+			$origin_world_initial_scenario_id = $origin_world_initial_scenario->id;
 		}
 
 		foreach ($world->getScenarios() as $scenario) {
 			// Todos los que estuviesen en un escenario del mundo a borrar, los mando al escenario inicial
 			$sql = "UPDATE `game` SET `id_scenario` = ? WHERE `id_scenario` = ?";
-			$db->query($sql, [$origin_world_initial_scenario_id, $scenario->get('id')]);
+			$db->query($sql, [$origin_world_initial_scenario_id, $scenario->id]);
 			// Borro el escenario
 			$scenario->deleteFull();
 		}
 
 		// Borro todos los mundos desbloqueados
 		$sql = "DELETE FROM `world_unlocked` WHERE `id_world` = ?";
-		$db->query($sql, [$world->get('id')]);
+		$db->query($sql, [$world->id]);
 
 		// Borro el mundo
 		$world->delete();
@@ -92,18 +92,7 @@ class AdminService extends OService {
 	 * @return array Listado de escenarios
 	 */
 	public function getScenarios(int $id_world): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `scenario` WHERE `id_world` = ?";
-		$db->query($sql, [$id_world]);
-		$ret = [];
-
-		while ($res = $db->next()) {
-			$scenario = new Scenario();
-			$scenario->update($res);
-			array_push($ret, $scenario);
-		}
-
-		return $ret;
+		return Scenario::where(['id_world' => $id_world]);
 	}
 
 	/**
@@ -120,12 +109,12 @@ class AdminService extends OService {
 		$origin_world_initial_scenario = $origin_world->getInitialScenario();
 		$origin_world_initial_scenario_id = null;
 		if (!is_null($origin_world_initial_scenario)) {
-			$origin_world_initial_scenario_id = $origin_world_initial_scenario->get('id');
+			$origin_world_initial_scenario_id = $origin_world_initial_scenario->id;
 		}
 
 		// Todos los que estuviesen en un escenario a borrar, los mando al escenario inicial
 		$sql = "UPDATE `game` SET `id_scenario` = ? WHERE `id_scenario` = ?";
-		$db->query($sql, [$origin_world_initial_scenario_id, $scenario->get('id')]);
+		$db->query($sql, [$origin_world_initial_scenario_id, $scenario->id]);
 
 		// Borro el escenario
 		$scenario->deleteFull();
@@ -137,18 +126,7 @@ class AdminService extends OService {
 	 * @return array Lista de categorías de fondos
 	 */
 	public function getBackgroundCategories(): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `background_category` ORDER BY `name`";
-		$db->query($sql);
-		$ret = [];
-
-		while ($res=$db->next()) {
-			$background_category = new BackgroundCategory();
-			$background_category->update($res);
-			array_push($ret, $background_category);
-		}
-
-		return $ret;
+		return BackgroundCategory::all(['order_by' => 'name']);
 	}
 
 	/**
@@ -157,18 +135,7 @@ class AdminService extends OService {
 	 * @return array Lista de fondos
 	 */
 	public function getBackgrounds(): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `background` ORDER BY `name`";
-		$db->query($sql);
-		$ret = [];
-
-		while ($res=$db->next()) {
-			$background = new Background();
-			$background->update($res);
-			array_push($ret, $background);
-		}
-
-		return $ret;
+		return Background::all(['order_by' => 'name']);
 	}
 
 	/**
@@ -177,18 +144,7 @@ class AdminService extends OService {
 	 * @return array Lista de tags
 	 */
 	public function getTags(): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `tag` ORDER BY `name`";
-		$db->query($sql);
-		$ret = [];
-
-		while ($res=$db->next()) {
-			$tag = new Tag();
-			$tag->update($res);
-			array_push($ret, $tag);
-		}
-
-		return $ret;
+		return Tag::all(['order_by' => 'name']);
 	}
 
 	/**
@@ -197,18 +153,7 @@ class AdminService extends OService {
 	 * @return array Lista de recursos
 	 */
 	public function getAssets(): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `asset` ORDER BY `name`";
-		$db->query($sql);
-		$ret = [];
-
-		while ($res=$db->next()) {
-			$asset = new Asset();
-			$asset->update($res);
-			array_push($ret, $asset);
-		}
-
-		return $ret;
+		return Asset::all(['order_by' => 'name']);
 	}
 
 	/**
@@ -235,8 +180,7 @@ class AdminService extends OService {
 	 * @return void
 	 */
 	public function saveAssetImage(Asset $asset, string $url): void {
-		$route = $this->getConfig()->getDir('assets').$asset->get('id').'.'.$asset->get('ext');
-		$this->getLog()->debug($url);
+		$route = $this->getConfig()->getDir('assets') . $asset->id . '.' . $asset->ext;
 		OTools::base64ToFile($url, $route);
 	}
 
@@ -257,12 +201,13 @@ class AdminService extends OService {
 		// Busco o creo las tags introducidas
 		foreach ($tag_list as $str_tag) {
 			$str_tag = trim($str_tag);
-			$tag = new Tag();
-			if (!$tag->find(['name'=>$str_tag])) {
-				$tag->set('name', $str_tag);
+			$tag = Tag::findOne(['name' => $str_tag]);
+			if (is_null($tag)) {
+				$tag = Tag::create();
+				$tag->name = $str_tag;
 				$tag->save();
 			}
-			array_push($asset_tag_list, $tag);
+			$asset_tag_list[] = $tag;
 		}
 
 		// Borro todas las relaciones entre tags y asset
@@ -270,9 +215,9 @@ class AdminService extends OService {
 
 		// Creo las relaciones de las tags actuales
 		foreach ($asset_tag_list as $tag) {
-			$asset_tag = new AssetTag();
-			$asset_tag->set('id_asset', $asset->get('id'));
-			$asset_tag->set('id_tag', $tag->get('id'));
+			$asset_tag = AssetTag::create();
+			$asset_tag->id_asset = $asset->id;
+			$asset_tag->id_tag   = $tag->id;
 			$asset_tag->save();
 		}
 
@@ -288,7 +233,7 @@ class AdminService extends OService {
 	public function cleanAssetTags(Asset $asset): void {
 		$db = new ODB();
 		$sql = "DELETE FROM `asset_tag` WHERE `id_asset` = ?";
-		$db->query($sql, [$asset->get('id')]);
+		$db->query($sql, [$asset->id]);
 	}
 
 	/**
@@ -311,69 +256,54 @@ class AdminService extends OService {
 	 */
 	public function deleteAsset(int $id): array {
 		$ret = ['status' => 'ok', 'message' => ''];
-		$asset = new Asset();
-		$asset->find(['id' => $id]);
+		$asset = Asset::findOne(['id' => $id]);
 
 		$db = new ODB();
 		$messages = [];
 
 		// Backgrounds
-		$sql = "SELECT * FROM `background` WHERE `id_asset` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$background = new Background();
-			$background->update($res);
-			array_push($messages, 'Fondo '.$background->get('name').' ('.$background->get('id').')');
+		$backgrounds = Background::where(['id_asset' => $id]);
+		foreach ($backgrounds as $background) {
+			$messages[] = 'Fondo ' . $background->name . ' (' . $background->id . ')';
 		}
 
 		// Character
 		$sql = "SELECT * FROM `character` WHERE `id_asset_up` = ? OR `id_asset_down` = ? OR `id_asset_left` = ? OR `id_asset_right` = ?";
 		$db->query($sql, [$id, $id, $id, $id]);
 		while ($res = $db->next()) {
-			$character = new Character();
-			$character->update($res);
-			array_push($messages, 'Personaje '.$character->get('name').' ('.$character->get('id').')');
+			$character = Character::from($res);
+			$messages[] = 'Personaje ' . $character->name . ' (' . $character->id . ')';
 		}
 
 		// Character frame
-		$sql = "SELECT * FROM `character_frame` WHERE `id_asset` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$character_frame = new CharacterFrame();
-			$character_frame->update($res);
+		$character_frames = CharacterFrame::where(['id_asset' => $id]);
+		foreach ($character_frames as $character_frame) {
 			$character = $character_frame->getCharacter();
-			array_push($messages, 'Personaje '.$character->get('name').' ('.$character->get('id').') - Frame '.$character_frame->get('id'));
+			$messages[] = 'Personaje ' . $character->name . ' (' . $character->id . ') - Frame ' . $character_frame->id;
 		}
 
 		// Item
-		$sql = "SELECT * FROM `item` WHERE `id_asset` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$item = new Item();
-			$item->update($res);
-			array_push($messages, 'Item '.$item->get('name').' ('.$item->get('id').')');
+		$items = Item::where(['id_asset' => $id]);
+		foreach ($items as $item) {
+			$messages[] = 'Item ' . $item->name . ' (' . $item->id . ')';
 		}
 
 		// Scenario object
 		$sql = "SELECT * FROM `scenario_object` WHERE `id_asset` = ? OR `id_asset_active` = ?";
 		$db->query($sql, [$id, $id]);
 		while ($res = $db->next()) {
-			$scenario_object = new ScenarioObject();
-			$scenario_object->update($res);
-			array_push($messages, 'Objeto de escenario '.$scenario_object->get('name').' ('.$scenario_object->get('id').')');
+			$scenario_object = ScenarioObject::from($res);
+			$messages[] = 'Objeto de escenario ' . $scenario_object->name . ' (' . $scenario_object->id . ')';
 		}
 
 		// Scenario object frame
-		$sql = "SELECT * FROM `scenario_object_frame` WHERE `id_asset` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$scenario_object_frame = new ScenarioObjectFrame();
-			$scenario_object_frame->update($res);
+		$scenario_object_frames = ScenarioObjectFrame::where(['id_asset' => $id]);
+		foreach ($scenario_object_frames as $scenario_object_frame) {
 			$scenario_object = $scenario_object_frame->getScenarioObject();
-			array_push($messages, 'Objeto de escenario '.$scenario_object->get('name').' ('.$scenario_object->get('id').') - Frame '.$scenario_object_frame->get('id'));
+			$messages[] = 'Objeto de escenario ' . $scenario_object->name . ' (' . $scenario_object->id . ') - Frame ' . $scenario_object_frame->id;
 		}
 
-		if (count($messages)>0) {
+		if (count($messages) > 0) {
 			$ret['status'] = 'in-use';
 			$ret['messages'] = implode(', ', $messages);
 		}
@@ -398,10 +328,10 @@ class AdminService extends OService {
 		$messages = [];
 
 		$background_list = $background_category->getBackgrounds();
-		if (count($background_list)>0) {
+		if (count($background_list) > 0) {
 			$ret['status'] = 'in-use';
 			foreach ($background_list as $background) {
-				array_push($messages, 'Fondo '.$background->get('name').' ('.$background->get('id').')');
+				$messages[] = 'Fondo ' . $background->name . ' (' . $background->id . ')';
 			}
 			$ret['messages'] = implode(', ', $messages);
 		}
@@ -422,17 +352,12 @@ class AdminService extends OService {
 	public function deleteBackground(Background $background): array {
 		$ret = ['status' => 'ok', 'message' => ''];
 		$messages = [];
-		$db = new ODB();
-		$sql = "SELECT * FROM `scenario_data` WHERE `id_background` = ?";
-		$db->query($sql, [$background->get('id')]);
-
-		while ($res = $db->next()) {
-			$scenario_data = new ScenarioData();
-			$scenario_data->update($res);
-			array_push($messages, 'Escenario '.$scenario_data->getScenario()->get('name').' ('.$scenario_data->getScenario()->get('id').')');
+		$scenario_datas = ScenarioData::where(['id_background' => $background->id]);
+		foreach ($scenario_datas as $scenario_data) {
+			$messages[] = 'Escenario ' . $scenario_data->getScenario()->name . ' (' . $scenario_data->getScenario()->id . ')';
 		}
 
-		if (count($messages)>0) {
+		if (count($messages) > 0) {
 			$ret['status'] = 'in-use';
 			$ret['messages'] = implode(', ', $messages);
 		}
@@ -449,18 +374,7 @@ class AdminService extends OService {
 	 * @return array Lista de items
 	 */
 	public function getItems(): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `item` ORDER BY `name`";
-		$db->query($sql);
-		$ret = [];
-
-		while ($res=$db->next()) {
-			$item = new Item();
-			$item->update($res);
-			array_push($ret, $item);
-		}
-
-		return $ret;
+		return Item::all(['order_by' => 'name']);
 	}
 
 	/**
@@ -475,21 +389,21 @@ class AdminService extends OService {
 	public function updateItemFrames(Item $item, array $frames): void {
 		$updated_list = [];
 		foreach ($frames as $frame) {
-			$item_frame = new ItemFrame();
+			$item_frame = ItemFrame::create();
 			if (!is_null($frame['id'])) {
-				$item_frame->find(['id' => $frame['id']]);
+				$item_frame = ItemFrame::findOne(['id' => $frame['id']]);
 			}
-			$item_frame->set('id_item', $item->get('id'));
-			$item_frame->set('id_asset', $frame['idAsset']);
-			$item_frame->set('order', $frame['order']);
+			$item_frame->id_item  = $item->id;
+			$item_frame->id_asset = $frame['idAsset'];
+			$item_frame->order    = $frame['order'];
 			$item_frame->save();
 
-			array_push($updated_list, $item_frame->get('id'));
+			$updated_list[] = $item_frame->id;
 		}
 
 		$frame_list = $item->getFrames();
 		foreach ($frame_list as $item_frame) {
-			if (!in_array($item_frame->get('id'), $updated_list)) {
+			if (!in_array($item_frame->id, $updated_list)) {
 				$item_frame->delete();
 			}
 		}
@@ -504,49 +418,38 @@ class AdminService extends OService {
 	 */
 	public function deleteItem(int $id): array {
 		$ret = ['status' => 'ok', 'message' => ''];
-		$item = new Item();
-		$item->find(['id' => $id]);
+		$item = Item::findOne(['id' => $id]);
 
 		$db = new ODB();
 		$messages = [];
 
 		// Inventory
-		$sql = "SELECT * FROM `inventory` WHERE `id_item` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$inventory = new Inventory();
-			$inventory->update($res);
-			array_push($messages, 'Inventario '.$inventory->get('id'));
+		$inventories = Inventory::where(['id_item' => $id]);
+		foreach ($inventories as $inventory) {
+			$messages[] = 'Inventario ' . $inventory->id;
 		}
 
 		// Character
-		$sql = "SELECT * FROM `character` WHERE `drop_id_item` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$character = new Character();
-			$character->update($res);
-			array_push($messages, 'Personaje '.$character->get('name').' lo suelta');
+		$characters = Character::where(['drop_id_item' => $id]);
+		foreach ($characters as $character) {
+			$messages[] = 'Personaje ' . $character->name . ' lo suelta';
 		}
 
 		// Scenario object drop
-		$sql = "SELECT * FROM `scenario_object_drop` WHERE `id_item` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$scenario_object_drop = new ScenarioObjectDrop();
-			$scenario_object_drop->update($res);
-			array_push($messages, 'Objeto de escenario '.$scenario_object_drop->getScenarioObject()->get('name').' lo suelta');
+		$scenario_object_drops = ScenarioObjectDrop::where(['id_item' => $id]);
+		foreach ($scenario_object_drops as $scenario_object_drop) {
+			$messages[] = 'Objeto de escenario ' . $scenario_object_drop->getScenarioObject()->name . ' lo suelta';
 		}
 
 		// Equipment
 		$sql = "SELECT * FROM `equipment` WHERE `head` = ? OR `necklace` = ? OR `body` = ? OR `boots` = ? OR `weapon` = ?";
 		$db->query($sql, [$id, $id, $id, $id, $id]);
 		while ($res = $db->next()) {
-			$equipment = new Equipment();
-			$equipment->update($res);
-			array_push($messages, 'Partida '.$equipment->get('id'));
+			$equipment = Equipment::from($res);
+			$messages[] = 'Partida ' . $equipment->id;
 		}
 
-		if (count($messages)>0) {
+		if (count($messages) > 0) {
 			$ret['status'] = 'in-use';
 			$ret['messages'] = implode(', ', $messages);
 		}
@@ -563,18 +466,7 @@ class AdminService extends OService {
 	 * @return array Listado de Personajes
 	 */
 	public function getCharacters(): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `character` ORDER BY `name`";
-		$db->query($sql);
-		$ret = [];
-
-		while ($res = $db->next()) {
-			$character = new Character();
-			$character->update($res);
-			array_push($ret, $character);
-		}
-
-		return $ret;
+		return Character::all(['order_by' => 'name']);
 	}
 
 	/**
@@ -591,22 +483,22 @@ class AdminService extends OService {
 	public function updateCharacterFrames(Character $character, array $frames, string $sent): void {
 		$updated_list = [];
 		foreach ($frames as $frame) {
-			$character_frame = new CharacterFrame();
+			$character_frame = CharacterFrame::create();
 			if (!is_null($frame['id'])) {
-				$character_frame->find(['id' => $frame['id']]);
+				$character_frame = CharacterFrame::findOne(['id' => $frame['id']]);
 			}
-			$character_frame->set('id_character', $character->get('id'));
-			$character_frame->set('id_asset', $frame['idAsset']);
-			$character_frame->set('orientation', $sent);
-			$character_frame->set('order', $frame['order']);
+			$character_frame->id_character = $character->id;
+			$character_frame->id_asset = $frame['idAsset'];
+			$character_frame->orientation = $sent;
+			$character_frame->order = $frame['order'];
 			$character_frame->save();
 
-			array_push($updated_list, $character_frame->get('id'));
+			$updated_list[] = $character_frame->id;
 		}
 
 		$frame_list = $character->getFrames($sent);
 		foreach ($frame_list as $character_frame) {
-			if (!in_array($character_frame->get('id'), $updated_list)) {
+			if (!in_array($character_frame->id, $updated_list)) {
 				$character_frame->delete();
 			}
 		}
@@ -618,21 +510,21 @@ class AdminService extends OService {
 	public function updateCharacterNarratives(Character $character, array $narratives): void {
 		$updated_list = [];
 		foreach ($narratives as $narrative) {
-			$character_narrative = new Narrative();
+			$character_narrative = Narrative::create();
 			if (!is_null($narrative['id'])) {
-				$character_narrative->find(['id' => $narrative['id']]);
+				$character_narrative = Narrative::findOne(['id' => $narrative['id']]);
 			}
-			$character_narrative->set('id_character', $character->get('id'));
-			$character_narrative->set('dialog', $narrative['dialog']);
-			$character_narrative->set('order', $narrative['order']);
+			$character_narrative->id_character = $character->id;
+			$character_narrative->dialog = $narrative['dialog'];
+			$character_narrative->order = $narrative['order'];
 			$character_narrative->save();
 
-			array_push($updated_list, $character_narrative->get('id'));
+			$updated_list[] = $character_narrative->id;
 		}
 
 		$narrative_list = $character->getNarratives();
 		foreach ($narrative_list as $character_narrative) {
-			if (!in_array($character_narrative->get('id'), $updated_list)) {
+			if (!in_array($character_narrative->id, $updated_list)) {
 				$character_narrative->delete();
 			}
 		}
@@ -647,22 +539,16 @@ class AdminService extends OService {
 	 */
 	public function deleteCharacter(int $id): array {
 		$ret = ['status' => 'ok', 'message' => ''];
-		$character = new Character();
-		$character->find(['id' => $id]);
-
-		$db = new ODB();
+		$character = Character::findOne(['id' => $id]);
 		$messages = [];
 
 		// Scenario Data
-		$sql = "SELECT * FROM `scenario_data` WHERE `id_character` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$scenario_data = new ScenarioData();
-			$scenario_data->update($res);
-			array_push($messages, 'Escenario '.$scenario_data->getScenario()->get('name'));
+		$scenario_datas = ScenarioData::where(['id_character' => $id]);
+		foreach ($scenario_datas as $scenario_data) {
+			$messages[] = 'Escenario ' . $scenario_data->getScenario()->name;
 		}
 
-		if (count($messages)>0) {
+		if (count($messages) > 0) {
 			$ret['status'] = 'in-use';
 			$ret['messages'] = implode(', ', $messages);
 		}
@@ -679,18 +565,7 @@ class AdminService extends OService {
 	 * @return array Listado de Objetos de escenario
 	 */
 	public function getScenarioObjects(): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `scenario_object` ORDER BY `name`";
-		$db->query($sql);
-		$ret = [];
-
-		while ($res = $db->next()) {
-			$scenario_object = new ScenarioObject();
-			$scenario_object->update($res);
-			array_push($ret, $scenario_object);
-		}
-
-		return $ret;
+		return ScenarioObject::all(['order_by' => 'name']);
 	}
 
 	/**
@@ -705,21 +580,21 @@ class AdminService extends OService {
 	public function updateScenarioObjectFrames(ScenarioObject $scenario_object, array $frames): void {
 		$updated_list = [];
 		foreach ($frames as $frame) {
-			$scenario_object_frame = new ScenarioObjectFrame();
+			$scenario_object_frame = ScenarioObjectFrame::create();
 			if (!is_null($frame['id'])) {
-				$scenario_object_frame->find(['id' => $frame['id']]);
+				$scenario_object_frame = ScenarioObjectFrame::findOne(['id' => $frame['id']]);
 			}
-			$scenario_object_frame->set('id_scenario_object', $scenario_object->get('id'));
-			$scenario_object_frame->set('id_asset', $frame['idAsset']);
-			$scenario_object_frame->set('order', $frame['order']);
+			$scenario_object_frame->id_scenario_object = $scenario_object->id;
+			$scenario_object_frame->id_asset = $frame['idAsset'];
+			$scenario_object_frame->order = $frame['order'];
 			$scenario_object_frame->save();
 
-			array_push($updated_list, $scenario_object_frame->get('id'));
+			$updated_list[] = $scenario_object_frame->id;
 		}
 
 		$frame_list = $scenario_object->getFrames();
 		foreach ($frame_list as $scenario_object_frame) {
-			if (!in_array($scenario_object_frame->get('id'), $updated_list)) {
+			if (!in_array($scenario_object_frame->id, $updated_list)) {
 				$scenario_object_frame->delete();
 			}
 		}
@@ -737,21 +612,21 @@ class AdminService extends OService {
 	public function updateScenarioObjectDrops(ScenarioObject $scenario_object, array $drops): void {
 		$updated_list = [];
 		foreach ($drops as $drop) {
-			$scenario_object_drop = new ScenarioObjectDrop();
+			$scenario_object_drop = ScenarioObjectDrop::create();
 			if (!is_null($drop['id'])) {
-				$scenario_object_drop->find(['id' => $drop['id']]);
+				$scenario_object_drop = ScenarioObjectDrop::findOne(['id' => $drop['id']]);
 			}
-			$scenario_object_drop->set('id_scenario_object', $scenario_object->get('id'));
-			$scenario_object_drop->set('id_item', $drop['idItem']);
-			$scenario_object_drop->set('num', $drop['num']);
+			$scenario_object_drop->id_scenario_object = $scenario_object->id;
+			$scenario_object_drop->id_item = $drop['idItem'];
+			$scenario_object_drop->num = $drop['num'];
 			$scenario_object_drop->save();
 
-			array_push($updated_list, $scenario_object_drop->get('id'));
+			$updated_list[] = $scenario_object_drop->id;
 		}
 
 		$drop_list = $scenario_object->getDrops();
 		foreach ($drop_list as $scenario_object_drop) {
-			if (!in_array($scenario_object_drop->get('id'), $updated_list)) {
+			if (!in_array($scenario_object_drop->id, $updated_list)) {
 				$scenario_object_drop->delete();
 			}
 		}
@@ -766,22 +641,16 @@ class AdminService extends OService {
 	 */
 	public function deleteScenarioObject(int $id): array {
 		$ret = ['status' => 'ok', 'message' => ''];
-		$scenario_object = new ScenarioObject();
-		$scenario_object->find(['id' => $id]);
-
-		$db = new ODB();
+		$scenario_object = ScenarioObject::findOne(['id' => $id]);
 		$messages = [];
 
 		// Scenario Data
-		$sql = "SELECT * FROM `scenario_data` WHERE `id_scenario_object` = ?";
-		$db->query($sql, [$id]);
-		while ($res = $db->next()) {
-			$scenario_data = new ScenarioData();
-			$scenario_data->update($res);
-			array_push($messages, 'Escenario '.$scenario_data->getScenario()->get('name'));
+		$scenario_datas = ScenarioData::where(['id_scenario_object' => $id]);
+		foreach ($scenario_datas as $scenario_data) {
+			$messages[] = 'Escenario ' . $scenario_data->getScenario()->name;
 		}
 
-		if (count($messages)>0) {
+		if (count($messages) > 0) {
 			$ret['status'] = 'in-use';
 			$ret['messages'] = implode(', ', $messages);
 		}
@@ -804,10 +673,10 @@ class AdminService extends OService {
 	public function updateConnection(int $id_from, int $id_to, string $orientation): void {
 		$this->deleteConnection($id_from, $id_to, $orientation);
 
-		$connection = new Connection();
-		$connection->set('id_from', $id_from);
-		$connection->set('id_to', $id_to);
-		$connection->set('orientation', $orientation);
+		$connection = Connection::create();
+		$connection->id_from = $id_from;
+		$connection->id_to = $id_to;
+		$connection->orientation = $orientation;
 		$connection->save();
 	}
 
@@ -837,14 +706,13 @@ class AdminService extends OService {
 		$ret = ['status' => 'ok', 'message' => ''];
 		$db = new ODB();
 		$sql = "SELECT * FROM `scenario` WHERE `id_world` = ? AND `id` != ? AND `initial` = 1";
-		$db->query($sql, [$scenario->get('id_world'), $scenario->get('id')]);
+		$db->query($sql, [$scenario->id_world, $scenario->id]);
 
 		if ($res = $db->next()) {
-			$scenario_check = new Scenario();
-			$scenario_check->update($res);
+			$scenario_check = Scenario::from($res);
 
 			$ret['status'] = 'in-use';
-			$ret['message'] = $scenario_check->get('name');
+			$ret['message'] = $scenario_check->name;
 		}
 
 		return $ret;
@@ -860,6 +728,6 @@ class AdminService extends OService {
 	public function clearWorldStart(Scenario $scenario): void {
 		$db = new ODB();
 		$sql = "UPDATE `scenario` SET `initial` = 0, `start_x` = NULL, `start_y` = NULL WHERE `id_world` = ?";
-		$db->query($sql, [$scenario->get('id_world')]);
+		$db->query($sql, [$scenario->id_world]);
 	}
 }

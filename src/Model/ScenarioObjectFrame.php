@@ -2,59 +2,52 @@
 
 namespace Osumi\OsumiFramework\App\Model;
 
-use Osumi\OsumiFramework\DB\OModel;
-use Osumi\OsumiFramework\DB\OModelGroup;
-use Osumi\OsumiFramework\DB\OModelField;
+use Osumi\OsumiFramework\ORM\OModel;
+use Osumi\OsumiFramework\ORM\OPK;
+use Osumi\OsumiFramework\ORM\OField;
+use Osumi\OsumiFramework\ORM\OCreatedAt;
+use Osumi\OsumiFramework\ORM\OUpdatedAt;
 use Osumi\OsumiFramework\App\Model\ScenarioObject;
 use Osumi\OsumiFramework\App\Model\Scenario;
 
 class ScenarioObjectFrame extends OModel {
-	function __construct() {
-		$model = new OModelGroup(
-			new OModelField(
-				name: 'id',
-				type: OMODEL_PK,
-				comment: 'Id único para cada frame de un objeto de escenario'
-			),
-			new OModelField(
-				name: 'id_scenario_object',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'scenario_object.id',
-				comment: 'Id del objeto de escenario que tiene la animación'
-			),
-			new OModelField(
-				name: 'id_asset',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				ref: 'asset.id',
-				comment: 'Id del recurso usado como frame'
-			),
-			new OModelField(
-				name: 'order',
-				type: OMODEL_NUM,
-				nullable: false,
-				default: null,
-				comment: 'Orden del frame en la animación'
-			),
-			new OModelField(
-				name: 'created_at',
-				type: OMODEL_CREATED,
-				comment: 'Fecha de creación del registro'
-			),
-			new OModelField(
-				name: 'updated_at',
-				type: OMODEL_UPDATED,
-				nullable: true,
-				default: null,
-				comment: 'Fecha de última modificación del registro'
-			)
-		);
+	#[OPK(
+	  comment: 'Id único para cada frame de un objeto de escenario'
+	)]
+	public ?int $id;
 
-		parent::load($model);
-	}
+	#[OField(
+	  comment: 'Id del objeto de escenario que tiene la animación',
+	  nullable: false,
+	  ref: 'scenario_object.id',
+	  default: null
+	)]
+	public ?int $id_scenario_object;
+
+	#[OField(
+	  comment: 'Id del recurso usado como frame',
+	  nullable: false,
+	  ref: 'asset.id',
+	  default: null
+	)]
+	public ?int $id_asset;
+
+	#[OField(
+	  comment: 'Orden del frame en la animación',
+	  nullable: false,
+	  default: null
+	)]
+	public ?int $order;
+
+	#[OCreatedAt(
+	  comment: 'Fecha de creación del registro'
+	)]
+	public ?string $created_at;
+
+	#[OUpdatedAt(
+	  comment: 'Fecha de última modificación del registro'
+	)]
+	public ?string $updated_at;
 
 	private ?ScenarioObject $scenario_object = null;
 
@@ -87,8 +80,7 @@ class ScenarioObjectFrame extends OModel {
 	 * @return void
 	 */
 	public function loadScenarioObject(): void {
-		$scenario_object = new ScenarioObject();
-		$scenario_object->find(['id' => $this->get('id_scenario_object')]);
+		$scenario_object = ScenarioObject::findOne(['id' => $this->id_scenario_object]);
 		$this->setScenarioObject($scenario_object);
 	}
 
@@ -123,8 +115,7 @@ class ScenarioObjectFrame extends OModel {
 	 * @return void
 	 */
 	public function loadAsset(): void {
-		$asset = new Asset();
-		$asset->find(['id' => $this->get('id_asset')]);
+		$asset = Asset::findOne(['id' => $this->id_asset]);
 		$this->setAsset($asset);
 	}
 }

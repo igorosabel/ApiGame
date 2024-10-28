@@ -2,7 +2,7 @@
 null
 <?php else: ?>
 {
-	"id": <?php echo $backgroundcategory->get('id') ?>,
-	"name": "<?php echo urlencode($backgroundcategory->get('name')) ?>"
+	"id": <?php echo $backgroundcategory->id ?>,
+	"name": "<?php echo urlencode($backgroundcategory->name) ?>"
 }
 <?php endif ?>

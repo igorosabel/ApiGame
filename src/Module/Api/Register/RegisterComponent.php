@@ -20,7 +20,7 @@ class RegisterComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$email  = $req->getParamString('email');
 		$pass   = $req->getParamString('pass');
 
@@ -29,32 +29,33 @@ class RegisterComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$user = new User();
+			$user = User::findOne(['email' => $email]);
 
-			if ($user->find(['email' => $email])) {
+			if (!is_null($user)) {
 				$this->status = 'in-use';
 			}
 			else {
-				$user->set('email', $email);
-				$user->set('pass',  password_hash($pass, PASSWORD_BCRYPT));
-				$user->set('admin', false);
+        $user = User::create();
+				$user->email = $email;
+				$user->pass  = password_hash($pass, PASSWORD_BCRYPT);
+				$user->admin = false;
 				$user->save();
 
-				$this->id = $user->get('id');
+				$this->id = $user->id;
 
 				for ($i = 0; $i < 3; $i++) {
-					$game = new Game();
-					$game->set('id_user',     $user->get('id'));
-					$game->set('name',        null);
-					$game->set('id_scenario', null);
-					$game->set('position_x',  null);
-					$game->set('position_y',  null);
-					$game->set('money',       $this->getConfig()->getExtra('start_money'));
-					$game->set('health',      $this->getConfig()->getExtra('start_health'));
-					$game->set('max_health',  $this->getConfig()->getExtra('start_health'));
-					$game->set('attack',      $this->getConfig()->getExtra('start_attack'));
-					$game->set('defense',     $this->getConfig()->getExtra('start_defense'));
-					$game->set('speed',       $this->getConfig()->getExtra('start_speed'));
+					$game = Game::create();
+					$game->id_user     = $user->id;
+					$game->name        = null;
+					$game->id_scenario = null;
+					$game->position_x  = null;
+					$game->position_y  = null;
+					$game->money       = $this->getConfig()->getExtra('start_money');
+					$game->health      = $this->getConfig()->getExtra('start_health');
+					$game->max_health  = $this->getConfig()->getExtra('start_health');
+					$game->attack      = $this->getConfig()->getExtra('start_attack');
+					$game->defense     = $this->getConfig()->getExtra('start_defense');
+					$game->speed       = $this->getConfig()->getExtra('start_speed');
 					$game->save();
 				}
 

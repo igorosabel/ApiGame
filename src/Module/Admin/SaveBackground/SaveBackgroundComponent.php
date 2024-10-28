@@ -15,7 +15,7 @@ class SaveBackgroundComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id                     = $req->getParamInt('id');
 		$id_background_category = $req->getParamInt('idBackgroundCategory');
 		$id_asset               = $req->getParamInt('idAsset');
@@ -27,14 +27,14 @@ class SaveBackgroundComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$background = new Background();
+			$background = Background::create();
 			if (!is_null($id)) {
-				$background->find(['id' => $id]);
+        $background = Background::findOne(['id' => $id]);
 			}
-			$background->set('id_background_category', $id_background_category);
-			$background->set('id_asset',               $id_asset);
-			$background->set('name',                   $name);
-			$background->set('crossable',              $crossable);
+			$background->id_background_category = $id_background_category;
+			$background->id_asset               = $id_asset;
+			$background->name                   = $name;
+			$background->crossable              = $crossable;
 			$background->save();
 		}
 	}

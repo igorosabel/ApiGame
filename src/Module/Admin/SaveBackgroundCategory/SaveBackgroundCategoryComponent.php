@@ -15,7 +15,7 @@ class SaveBackgroundCategoryComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id   = $req->getParamInt('id');
 		$name = $req->getParamString('name');
 
@@ -24,11 +24,11 @@ class SaveBackgroundCategoryComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$background_category = new BackgroundCategory();
+			$background_category = BackgroundCategory::create();
 			if (!is_null($id)) {
-				$background_category->find(['id' => $id]);
+        $background_category = BackgroundCategory::findOne(['id' => $id]);
 			}
-			$background_category->set('name', $name);
+			$background_category->name = $name;
 			$background_category->save();
 		}
 	}

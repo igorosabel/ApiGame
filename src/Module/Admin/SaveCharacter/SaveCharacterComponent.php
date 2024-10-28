@@ -23,7 +23,7 @@ class SaveCharacterComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$id             = $req->getParamInt('id');
 		$type           = $req->getParamInt('type');
 		$fixed_position = $req->getParamBool('fixedPosition');
@@ -54,28 +54,28 @@ class SaveCharacterComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$character = new Character();
+			$character = Character::create();
 			if (!is_null($id)) {
-				$character->find(['id' => $id]);
+        $character = Character::findOne(['id' => $id]);
 			}
-			$character->set('type',           $type);
-			$character->set('fixed_position', $fixed_position);
-			$character->set('id_asset_up',    $id_asset_up);
-			$character->set('id_asset_down',  $id_asset_down);
-			$character->set('id_asset_left',  $id_asset_left);
-			$character->set('id_asset_right', $id_asset_right);
-			$character->set('name',           $name);
-			$character->set('width',          $width);
-			$character->set('blockWidth',     $block_width);
-			$character->set('height',         $height);
-			$character->set('block_height',   $block_height);
-			$character->set('health',         $health);
-			$character->set('attack',         $attack);
-			$character->set('defense',        $defense);
-			$character->set('speed',          $speed);
-			$character->set('drop_id_item',   $drop_id_item);
-			$character->set('drop_chance',    $drop_chance);
-			$character->set('respawn',        $respawn);
+			$character->type           = $type;
+			$character->fixed_position = $fixed_position;
+			$character->id_asset_up    = $id_asset_up;
+			$character->id_asset_down  = $id_asset_down;
+			$character->id_asset_left  = $id_asset_left;
+			$character->id_asset_right = $id_asset_right;
+			$character->name           = $name;
+			$character->width          = $width;
+			$character->blockWidth     = $block_width;
+			$character->height         = $height;
+			$character->block_height   = $block_height;
+			$character->health         = $health;
+			$character->attack         = $attack;
+			$character->defense        = $defense;
+			$character->speed          = $speed;
+			$character->drop_id_item   = $drop_id_item;
+			$character->drop_chance    = $drop_chance;
+			$character->respawn        = $respawn;
 			$character->save();
 
 			$this->as->updateCharacterFrames($character, $framesUp,    'up');

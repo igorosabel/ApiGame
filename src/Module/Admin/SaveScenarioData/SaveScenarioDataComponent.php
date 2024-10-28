@@ -16,7 +16,7 @@ class SaveScenarioDataComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$this->id           = $req->getParamInt('id');
 		$id_scenario        = $req->getParamInt('idScenario');
 		$x                  = $req->getParamInt('x');
@@ -31,17 +31,17 @@ class SaveScenarioDataComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$scenario_data = new ScenarioData();
+			$scenario_data = ScenarioData::create();
 			if (!is_null($this->id)) {
-				$scenario_data->find(['id' => $this->id]);
+        $scenario_data = ScenarioData::findOne(['id' => $this->id]);
 			}
-			$scenario_data->set('id_scenario',        $id_scenario);
-			$scenario_data->set('x',                  $x);
-			$scenario_data->set('y',                  $y);
-			$scenario_data->set('id_background',      $id_background);
-			$scenario_data->set('id_scenario_object', $id_scenario_object);
-			$scenario_data->set('id_character',       $id_character);
-			$scenario_data->set('character_health',   $character_health);
+			$scenario_data->id_scenario        = $id_scenario;
+			$scenario_data->x                  = $x;
+			$scenario_data->y                  = $y;
+			$scenario_data->id_background      = $id_background;
+			$scenario_data->id_scenario_object = $id_scenario_object;
+			$scenario_data->id_character       = $id_character;
+			$scenario_data->character_health   = $character_health;
 			$scenario_data->save();
 
 			$this->id = $scenario_data->get('id');

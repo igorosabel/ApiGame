@@ -24,7 +24,7 @@ class GetGamesComponent extends OComponent {
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(ORequest $req): void {
 		$filter = $req->getFilter('Game');
 		$games  = $this->ws->getGames($filter['id']);
 		$this->list = new GamesComponent(['list' => $games]);
