@@ -5,4 +5,4 @@ namespace Osumi\OsumiFramework\Routes;
 use Osumi\OsumiFramework\Routing\ORoute;
 use Osumi\OsumiFramework\App\Module\Home\Index\IndexComponent;
 
-ORoute::post('/', IndexComponent::class);
+ORoute::get('/', IndexComponent::class);
