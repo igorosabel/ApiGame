@@ -1,9 +1,9 @@
 {
-  "name": "igorosabel/game",
-  "description": "Juego de aventuras y exploración",
+  "name": "igorosabel/api-game",
+  "description": "API para la aplicación Game",
   "type": "project",
   "keywords": ["igorosabel", "game", "angular", "osumi"],
-  "homepage": "https://github.com/igorosabel/Game",
+  "homepage": "https://github.com/igorosabel/ApiGame",
   "license": "MIT",
   "authors": [
     {
@@ -13,8 +13,8 @@
     }
   ],
   "require": {
-    "php": ">=8.2",
-    "osumionline/framework": "^9.0",
+    "php": ">=8.5",
+    "osumionline/framework": "^9.12.1",
     "osumionline/plugin-email": "^3.0",
     "osumionline/plugin-token": "^3.0",
     "osumionline/plugin-websocket": "^1.0"
@@ -26,7 +26,10 @@
   },
   "config": {
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "osumionline/plugin-updater": true
+    }
   },
   "minimum-stability": "stable",
   "prefer-stable": true

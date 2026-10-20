@@ -25,7 +25,7 @@ class GetGamesComponent extends OComponent {
 	 * @return void
 	 */
 	public function run(ORequest $req): void {
-		$filter = $req->getFilter('Game');
+		$filter = $req->getMiddleware('Game');
 		$games  = $this->ws->getGames($filter['id']);
 		$this->list = new GamesComponent(['list' => $games]);
 	}
