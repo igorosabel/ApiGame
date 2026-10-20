@@ -1,0 +1,6 @@
+{
+  "status": "{{ status }}",
+  "data": {
+    "message": "{{ message }}"
+  }
+}

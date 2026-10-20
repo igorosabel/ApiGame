@@ -1,9 +1,9 @@
 {
-  "name": "osumionline/new",
-  "description": "Aplicación esqueleto basada en Osumi Framework.",
+  "name": "igorosabel/game",
+  "description": "Juego de aventuras y exploración",
   "type": "project",
-  "keywords": ["osumi", "framework", "skeleton"],
-  "homepage": "https://github.com/osumionline/new",
+  "keywords": ["igorosabel", "game", "angular", "osumi"],
+  "homepage": "https://github.com/igorosabel/Game",
   "license": "MIT",
   "authors": [
     {
@@ -16,7 +16,8 @@
     "php": ">=8.2",
     "osumionline/framework": "^9.0",
     "osumionline/plugin-email": "^3.0",
-    "osumionline/plugin-token": "^3.0"
+    "osumionline/plugin-token": "^3.0",
+    "osumionline/plugin-websocket": "^1.0"
   },
   "autoload": {
     "psr-4": {

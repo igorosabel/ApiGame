@@ -20,8 +20,11 @@ class SaveScenarioComponent extends OComponent {
 		$id_world = $req->getParamInt('idWorld');
 		$name     = $req->getParamString('name');
 		$friendly = $req->getParamBool('friendly');
+    $initial  = $req->getParamBool('initial');
+    $start_x  = $req->getParamInt('startX');
+    $start_y  = $req->getParamInt('startY');
 
-		if (is_null($name) || is_null($id_world) || is_null($friendly)) {
+		if (is_null($name) || is_null($id_world) || is_null($friendly) || is_null($initial)) {
 			$this->status = 'error';
 		}
 
@@ -33,6 +36,9 @@ class SaveScenarioComponent extends OComponent {
 			$scenario->id_world = $id_world;
 			$scenario->name     = $name;
 			$scenario->friendly = $friendly;
+      $scenario->initial  = $initial;
+      $scenario->start_x  = $start_x;
+      $scenario->start_y  = $start_y;
 
 			$scenario->save();
 		}

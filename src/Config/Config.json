@@ -29,7 +29,15 @@
 		"start_weapon": 4
 	},
 	"dir": {
-		"assets": "{{web}}assets/",
-		"maps": "{{web}}maps/"
-	}
+		"assets": "/var/www/vhosts/osumi.es/apigame.osumi.es/public/assets/",
+		"maps": "/var/www/vhosts/osumi.es/apigame.osumi.es/public/maps/"
+	},
+	"plugins": {
+    "websocket": {
+      "host": "localhost",
+      "port": 8080,
+      "path": "/ws",
+      "debug": true
+    }
+  }
 }

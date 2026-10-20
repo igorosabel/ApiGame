@@ -60,8 +60,8 @@ class MapTask extends OTask {
 			$silent = true;
 		}
 
-		$scenario = new Scenario();
-		if (!$scenario->find(['id' => $id_scenario])) {
+		$scenario = Scenario::findOne(['id' => $id_scenario]);
+		if (is_null($scenario)) {
 			echo "\n  ERROR: No se ha encontrado el escenario indicado: ".$id_scenario."\n\n";
 			exit;
 		}
